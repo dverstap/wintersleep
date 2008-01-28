@@ -21,7 +21,7 @@
         <property name="dataSource" ref="dataSource"/>
         <property name="annotatedClasses">
             <list>
-                <value>org.wintersleep.springtryout.Person</value>
+                <value>org.wintersleep.repository.Person</value>
             </list>
         </property>
         <property name="hibernateProperties">

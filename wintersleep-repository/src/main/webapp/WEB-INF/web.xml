@@ -14,7 +14,7 @@
 
     <servlet>
         <servlet-name>mine</servlet-name>
-        <servlet-class>org.wintersleep.springtryout.MyServlet</servlet-class>
+        <servlet-class>org.wintersleep.repository.MyServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>

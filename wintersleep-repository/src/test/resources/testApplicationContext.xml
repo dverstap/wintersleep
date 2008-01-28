@@ -13,7 +13,7 @@
     <import resource="classpath:/model-beans.xml"/>
 
     <bean id="dataSource"
-          class="org.wintersleep.springtryout.TestDataSource">
+          class="org.wintersleep.repository.TestDataSource">
         <constructor-arg>
             <bean class="org.apache.commons.dbcp.BasicDataSource"
                   destroy-method="close" lazy-init="true">
