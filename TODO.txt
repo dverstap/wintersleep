@@ -1,0 +1,3 @@
+
+- integrate hibernate validator
+- integrate hibernate search

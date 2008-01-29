@@ -15,23 +15,36 @@
  */
 package org.wintersleep.repository;
 
+import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
 
-public interface Repository<T extends Serializable, ID extends Serializable> {
+@Entity
+public class Person implements Serializable {
 
-    T findById(ID id);
+    @Id
+    @GeneratedValue
+    private Long id;
 
-    T loadById(ID id, boolean lock);
+    @Basic(optional = false)
+    @Column(nullable = false, unique = true, updatable = false)
+    private String name;
 
-    List<T> findAll();
+    protected Person() {
+    }
 
-    T makePersistent(T entity);
+    public Person(String name) {
+        this.name = name;
+    }
 
-    void makeTransient(T entity);
+    public Long getId() {
+        return id;
+    }
 
-    void flush();
+    public String getName() {
+        return name;
+    }
 
-    T merge(T entity);
-
+    public String toString() {
+        return "Person: " + id + ": " + name;
+    }
 }

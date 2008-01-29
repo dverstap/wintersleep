@@ -15,23 +15,23 @@
  */
 package org.wintersleep.repository;
 
-import java.io.Serializable;
-import java.util.List;
+import org.springframework.stereotype.Repository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.hibernate.SessionFactory;
 
-public interface Repository<T extends Serializable, ID extends Serializable> {
+@Repository
+public class PersonRepositoryImpl extends RepositoryImpl<Person, Long> implements PersonRepository {
 
-    T findById(ID id);
 
-    T loadById(ID id, boolean lock);
+/*
+    public PersonRepositoryImpl() {
+    }
+*/
 
-    List<T> findAll();
-
-    T makePersistent(T entity);
-
-    void makeTransient(T entity);
-
-    void flush();
-
-    T merge(T entity);
+    @Autowired
+    public PersonRepositoryImpl(SessionFactory sessionFactory) {
+        super(sessionFactory);
+    }
+    
 
 }

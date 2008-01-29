@@ -44,7 +44,7 @@ public class RepositoryImpl<T extends Serializable, ID extends Serializable> imp
 
     @SuppressWarnings("unchecked")
     public T findById(ID id) {
-        //return findById(id, false);
+        //return loadById(id, false);
         return (T) getSession().get(getPersistentClass(), id);
     }
 
@@ -53,7 +53,7 @@ public class RepositoryImpl<T extends Serializable, ID extends Serializable> imp
     }
 
     @SuppressWarnings("unchecked")
-    public T findById(ID id, boolean lock) {
+    public T loadById(ID id, boolean lock) {
         T entity;
         if (lock)
             entity = (T) getSession().load(getPersistentClass(), id, LockMode.UPGRADE);

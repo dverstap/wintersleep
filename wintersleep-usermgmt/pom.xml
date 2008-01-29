@@ -10,12 +10,30 @@
     </parent>
 
     <groupId>org.wintersleep</groupId>
-    <artifactId>wintersleep-repository</artifactId>
+    <artifactId>wintersleep-usermgmt</artifactId>
     <version>0.1-SNAPSHOT</version>
-    <packaging>jar</packaging>
-    <name>Wintersleep Repository (DAO) Library</name>
+    <packaging>war</packaging>
+    <name>Wintersleep User Management Web Application</name>
 
     <dependencies>
+        <dependency>
+            <groupId>org.wintersleep</groupId>
+            <artifactId>wintersleep-spring-util</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.wintersleep</groupId>
+            <artifactId>wintersleep-repository</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.wintersleep</groupId>
+            <artifactId>wintersleep-repository</artifactId>
+            <version>0.1-SNAPSHOT</version>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-orm</artifactId>
@@ -132,9 +150,5 @@
             </plugin>
         </plugins>
     </build>
-    <properties>
-        <jetty.version>6.1.7</jetty.version>
-        <spring.version>2.5.1</spring.version>
-    </properties>
 
 </project>

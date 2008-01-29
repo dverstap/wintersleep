@@ -16,12 +16,18 @@
 package org.wintersleep.repository;
 
 import org.springframework.test.AbstractTransactionalSpringContextTests;
+import org.hibernate.ObjectNotFoundException;
 
 import java.util.List;
 
-public class PersonTest extends AbstractTransactionalSpringContextTests {
+public class RepositoryTest extends AbstractTransactionalSpringContextTests {
 
+    private TestDataSource dataSource;
     private PersonRepository personRepository;
+
+    public void setDataSource(TestDataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
     public void setPersonRepository(PersonRepository personRepository) {
         this.personRepository = personRepository;
@@ -31,9 +37,24 @@ public class PersonTest extends AbstractTransactionalSpringContextTests {
         return "/testApplicationContext.xml";
     }
 
+    protected void onSetUpInTransaction() throws Exception {
+        dataSource.deleteAllData();
+    }
+
     public void testFindById() {
         Person person = personRepository.findById(1L);
         assertNull(person);
+    }
+
+    public void testLoadById() {
+        Person person = personRepository.loadById(1L, false);
+        assertNotNull(person);
+        try {
+            person.getName();
+            fail();
+        } catch (ObjectNotFoundException e) {
+            // expected
+        }
     }
 
     public void testFindAll() {
