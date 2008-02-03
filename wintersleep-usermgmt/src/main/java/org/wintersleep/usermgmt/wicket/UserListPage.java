@@ -46,11 +46,15 @@ import org.hibernate.criterion.Restrictions;
 import org.wintersleep.usermgmt.model.User;
 import org.wintersleep.usermgmt.wicket.base.ActionsPanel;
 import org.wintersleep.usermgmt.wicket.base.BasePage;
+import org.wintersleep.usermgmt.wicket.base.GoAndClearAndNewFilter;
 
 public class UserListPage extends BasePage {
 
     public UserListPage() {
         super();
+
+        UserFilter filter = new UserFilter();
+        final FilterForm filterForm = new FilterForm("filterForm", filter);
 
         // list of columns allows table to render itself without any markup from us
         IColumn[] columns = new IColumn[]{
@@ -86,8 +90,11 @@ public class UserListPage extends BasePage {
 
                     // return the go-and-clear filter for the filter toolbar
                     public Component getFilter(String componentId, FilterForm form) {
-                        // TODO add a new button here
-                        return new GoAndClearFilter(componentId, form);
+                        return new GoAndClearAndNewFilter(componentId, form) {
+                            public Page createNewPage() {
+                                return new UserEditPage(UserListPage.this, new HibernateObjectModel(new User()));
+                            }
+                        };
                     }
                 },
                 new TextFilteredPropertyColumn(new Model("Login"), "login", "login"),
@@ -99,9 +106,7 @@ public class UserListPage extends BasePage {
                 new PropertyColumn(new Model("Final game"), "finalGame", "finalGame")
 */
         };
-        PlayerFilter filter = new PlayerFilter();
-        PlayerSorter sorter = new PlayerSorter();
-        FilterForm filterForm = new FilterForm("filterForm", filter);
+        UserSorter sorter = new UserSorter();
         DatabinderProvider provider = new DatabinderProvider(User.class, filter, sorter);
         provider.setWrapWithPropertyModel(false);
         DataTable table = new DataTable("userTable", columns, provider, 25) {
@@ -140,7 +145,7 @@ public class UserListPage extends BasePage {
         }
     }
 
-    class PlayerFilter implements IFilterStateLocator, ICriteriaBuilder {
+    class UserFilter implements IFilterStateLocator, ICriteriaBuilder {
         private User filterState = new User();
 
         /**
@@ -164,17 +169,12 @@ public class UserListPage extends BasePage {
         }
     }
 
-    class PlayerSorter implements ISortStateLocator, ICriteriaBuilder {
+    class UserSorter implements ISortStateLocator, ICriteriaBuilder {
         private SingleSortState sortState = new SingleSortState();
 
         public void build(Criteria criteria) {
             SortParam sort = sortState.getSort();
             if (sort != null) {
-                if (sort.getProperty().startsWith("login")) {
-                    criteria.createAlias("login", "login");
-                } else if (sort.getProperty().startsWith("fullName")) {
-                    criteria.createAlias("fullName", "fullName");
-                }
                 criteria.addOrder(sort.isAscending() ? Order.asc(sort.getProperty()) : Order.desc(sort.getProperty()));
             }
         }

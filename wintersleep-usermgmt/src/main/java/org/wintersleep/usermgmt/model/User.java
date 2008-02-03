@@ -19,6 +19,7 @@ package org.wintersleep.usermgmt.model;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
+import java.util.HashSet;
 
 @Entity
 public class User implements Serializable {
@@ -38,7 +39,7 @@ public class User implements Serializable {
     private String fullName;
 
     @ManyToMany
-    private Set<Role> roles;
+    private Set<Role> roles = new HashSet<Role>();
 
     public User() {
     }

@@ -24,17 +24,21 @@ import org.apache.wicket.validation.validator.StringValidator;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.wintersleep.usermgmt.model.User;
 import org.wintersleep.usermgmt.wicket.base.Saver;
 import org.wintersleep.usermgmt.wicket.base.BasePage;
+import org.hibernate.SessionFactory;
 import net.databinder.models.HibernateObjectModel;
 import net.databinder.models.HibernateListModel;
 import net.databinder.components.hibernate.DataForm;
-import net.databinder.DataStaticService;
 
 
 public class UserEditPage extends BasePage {
     private static final long serialVersionUID = 1;
+
+    @SpringBean
+    private SessionFactory sessionFactory;
 
     @SpringBean
     private Saver saver;
@@ -53,7 +57,9 @@ public class UserEditPage extends BasePage {
         };
         add(form);
 
-        form.add(new RequiredTextField("login").add(StringValidator.maximumLength(16)));
+        // TODO allow model-based validation
+        form.add(new RequiredTextField("login").add(StringValidator.maximumLength(8)));
+        form.add(new PasswordTextField("password").add(StringValidator.maximumLength(16)));
         form.add(new RequiredTextField("fullName").add(StringValidator.maximumLength(32)));
         form.add(new Palette("roles", new PropertyModel(model, "roles"), roles, new ChoiceRenderer("name", "id"), 10, false));
 
@@ -66,7 +72,7 @@ public class UserEditPage extends BasePage {
         form.add(new Button("cancel") {
             public void onSubmit() {
                 getSession().info("Cancelled edit");
-                DataStaticService.getHibernateSession().clear();
+                sessionFactory.getCurrentSession().clear();
                 setResponsePage(backPage);
             }
         }.setDefaultFormProcessing(false));
