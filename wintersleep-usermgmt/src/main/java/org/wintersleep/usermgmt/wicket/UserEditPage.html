@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org">
+<head>
+
+<link href="../../../../../dep_preview/DataStyleSheet.css" type="text/css" rel="stylesheet" />
+
+<title>Edit User</title>
+
+</head>
+<body>
+
+<wicket:extend>
+<form wicket:id="editform">
+<table cellspacing="0" cellpadding="2">
+	<tr>
+		<td>Login</td>
+		<td><input type="text" wicket:id="login" size="40" maxlength="32"/></td>
+	</tr>
+	<tr>
+		<td>Full name</td>
+		<td><input type="text" wicket:id="fullName" size="40" maxlength="32"/></td>
+	</tr>
+<!--
+	<tr>
+		<td>Country</td>
+		<td><select wicket:id="country"></select></td>
+	</tr>
+	<tr>
+		<td>Birth City</td>
+		<td><select wicket:id="birthCity"></select></td>
+	</tr>
+-->
+    <tr>
+       <td colspan="2"><span wicket:id="roles"/></td> 
+    </tr>
+    <tr>
+		<td>&nbsp;</td>
+		<td>
+			<input type="submit" wicket:id="new" value="New"/>
+			<input type="submit" value="Save">
+			<input type="submit" wicket:id="cancel" value="Cancel"/>
+		</td>
+	</tr>
+</table>
+</form>
+</wicket:extend>
+
+</body>
+</html>

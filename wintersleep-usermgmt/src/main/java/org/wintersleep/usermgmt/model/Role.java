@@ -30,6 +30,9 @@ public class Role implements Serializable {
     @Column(nullable = false, unique = true, updatable = false, length = 32)
     private String name;
 
+    public Role() {
+        
+    }
 
     public Role(String name) {
         this.name = name;
@@ -39,8 +42,15 @@ public class Role implements Serializable {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }
-    
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

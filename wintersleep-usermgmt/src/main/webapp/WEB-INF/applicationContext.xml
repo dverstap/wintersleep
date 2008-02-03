@@ -12,5 +12,6 @@
 
     <import resource="classpath:/model-beans.xml"/>
     <import resource="classpath:/datasource-beans.xml"/>
+    <import resource="classpath:/wicket-beans.xml"/>
 
 </beans>
