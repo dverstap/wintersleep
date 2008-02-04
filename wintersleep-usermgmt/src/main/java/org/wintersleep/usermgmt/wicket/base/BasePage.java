@@ -16,15 +16,19 @@
 
 package org.wintersleep.usermgmt.wicket.base;
 
-import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import net.databinder.components.DataStyleLink;
+import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.link.PageLink;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.wintersleep.usermgmt.wicket.UserListPage;
+import org.wintersleep.usermgmt.wicket.UserProfileListPage;
 
-public class BasePage extends WebPage
-{
-	public BasePage()
-	{
-		add(new DataStyleLink("css"));
-		add(new FeedbackPanel("status"));
-	}
+public class BasePage extends WebPage {
+    public BasePage() {
+        add(new DataStyleLink("css"));
+        add(new FeedbackPanel("status"));
+        add(new PageLink("userListPageLink", UserListPage.class));
+        add(new PageLink("userProfileListPageLink", UserProfileListPage.class));
+    }
+
 }

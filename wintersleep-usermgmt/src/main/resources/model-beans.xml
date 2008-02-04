@@ -22,6 +22,7 @@
         <property name="annotatedClasses">
             <list>
                 <value>org.wintersleep.usermgmt.model.Role</value>
+                <value>org.wintersleep.usermgmt.model.UserProfile</value>
                 <value>org.wintersleep.usermgmt.model.User</value>
             </list>
         </property>

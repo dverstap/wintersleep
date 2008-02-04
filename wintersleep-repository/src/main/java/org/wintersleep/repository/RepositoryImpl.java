@@ -21,12 +21,20 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Example;
+import org.hibernate.criterion.Property;
+import org.apache.log4j.Logger;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
+import java.beans.Introspector;
+import java.beans.BeanInfo;
+import java.beans.PropertyDescriptor;
+import java.beans.IntrospectionException;
 
 public class RepositoryImpl<T extends Serializable, ID extends Serializable> implements Repository<T, ID> {
+
+    private static final Logger logger = Logger.getLogger(RepositoryImpl.class);
 
     protected final SessionFactory sessionFactory;
     protected final Class<T> persistentClass;
@@ -42,28 +50,25 @@ public class RepositoryImpl<T extends Serializable, ID extends Serializable> imp
         return sessionFactory.getCurrentSession();
     }
 
-    @SuppressWarnings("unchecked")
     public T findById(ID id) {
         //return loadById(id, false);
-        return (T) getSession().get(getPersistentClass(), id);
+        return getPersistentClass().cast(getSession().get(getPersistentClass(), id));
     }
 
     public Class<T> getPersistentClass() {
         return persistentClass;
     }
 
-    @SuppressWarnings("unchecked")
     public T loadById(ID id, boolean lock) {
         T entity;
         if (lock)
-            entity = (T) getSession().load(getPersistentClass(), id, LockMode.UPGRADE);
+            entity = getPersistentClass().cast(getSession().load(getPersistentClass(), id, LockMode.UPGRADE));
         else
-            entity = (T) getSession().load(getPersistentClass(), id);
+            entity = getPersistentClass().cast(getSession().load(getPersistentClass(), id));
 
         return entity;
     }
 
-    @SuppressWarnings("unchecked")
     public List<T> findAll() {
         return findByCriteria();
     }
@@ -79,7 +84,6 @@ public class RepositoryImpl<T extends Serializable, ID extends Serializable> imp
         return crit.list();
     }
 
-    @SuppressWarnings("unchecked")
     public T makePersistent(T entity) {
         getSession().saveOrUpdate(entity);
         return entity;
@@ -93,9 +97,8 @@ public class RepositoryImpl<T extends Serializable, ID extends Serializable> imp
         getSession().flush();
     }
 
-    @SuppressWarnings("unchecked")
     public T merge(T entity) {
-        return (T) getSession().merge(entity);
+        return getPersistentClass().cast(getSession().merge(entity));
     }
 
     public void clear() {
@@ -116,5 +119,34 @@ public class RepositoryImpl<T extends Serializable, ID extends Serializable> imp
         return crit.list();
     }
 
+    protected T uniqueResult(Criterion... criteria) {
+        Criteria crit = getSession().createCriteria(getPersistentClass());
+        for (Criterion c : criteria) {
+            crit.add(c);
+        }
+        return getPersistentClass().cast(crit.uniqueResult());
+    }
+
+    // explicit logging in here, because this executed during class loading,
+    // and there's often no good error logging at that point.
+    protected static <T> Property findProperty(Class<T> persistentClass, String propertyName) {
+        BeanInfo beanInfo;
+        try {
+            beanInfo = Introspector.getBeanInfo(persistentClass);
+        } catch (IntrospectionException e) {
+            String message = "Couldn't get BeanInfo for " + persistentClass + " while looking for property " + propertyName;
+            logger.error(message, e);
+            throw new RuntimeException(message, e);
+        }
+        for (PropertyDescriptor propertyDescriptor : beanInfo.getPropertyDescriptors()) {
+            if (propertyDescriptor.getName().equals(propertyName)) {
+                return Property.forName(propertyName);
+            }
+        }
+        String message = "Couldn't find property " + propertyName + " in " + persistentClass;
+        RuntimeException exception = new RuntimeException(message);
+        logger.error(message, exception);
+        throw exception;
+    }
 
 }

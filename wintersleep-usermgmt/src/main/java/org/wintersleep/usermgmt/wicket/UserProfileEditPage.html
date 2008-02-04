@@ -4,31 +4,21 @@
 
 <link href="../../../../../dep_preview/DataStyleSheet.css" type="text/css" rel="stylesheet" />
 
-<title>Edit User</title>
+<title>Edit User Profile</title>
 
 </head>
 <body>
 
 <wicket:extend>
-<form wicket:id="editform">
+<form wicket:id="form">
 <table cellspacing="0" cellpadding="2">
 	<tr>
-		<td>Login</td>
-		<td><input type="text" wicket:id="login" size="40" maxlength="32"/></td>
+		<td>Name</td>
+		<td><input type="text" wicket:id="name" size="40" maxlength="32"/></td>
 	</tr>
     <tr>
-        <td>Password</td>
-        <td><input type="password" wicket:id="password" size="40" maxlength="32"/></td>
+       <td colspan="2"><span wicket:id="roles"/></td>
     </tr>
-	<tr>
-		<td>Full name</td>
-		<td><input type="text" wicket:id="fullName" size="40" maxlength="32"/></td>
-	</tr>
-
-	<tr>
-		<td>Profile</td>
-		<td><select wicket:id="userProfile"></select></td>
-	</tr>
     <tr>
 		<td>&nbsp;</td>
 		<td>

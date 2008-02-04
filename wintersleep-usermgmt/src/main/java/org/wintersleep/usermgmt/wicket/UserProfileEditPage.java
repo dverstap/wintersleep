@@ -20,10 +20,11 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.Page;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.extensions.markup.html.form.palette.Palette;
-import org.apache.wicket.extensions.markup.html.form.select.Select;
 import org.apache.wicket.validation.validator.StringValidator;
-import org.apache.wicket.markup.html.form.*;
-import org.wintersleep.usermgmt.model.User;
+import org.apache.wicket.markup.html.form.RequiredTextField;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
+import org.apache.wicket.markup.html.form.Button;
+import org.wintersleep.usermgmt.model.UserProfile;
 import org.wintersleep.usermgmt.wicket.base.Saver;
 import org.wintersleep.usermgmt.wicket.base.BasePage;
 import org.hibernate.SessionFactory;
@@ -32,7 +33,7 @@ import net.databinder.models.HibernateListModel;
 import net.databinder.components.hibernate.DataForm;
 
 
-public class UserEditPage extends BasePage {
+public class UserProfileEditPage extends BasePage {
     private static final long serialVersionUID = 1;
 
     @SpringBean
@@ -41,34 +42,29 @@ public class UserEditPage extends BasePage {
     @SpringBean
     private Saver saver;
 
-    public UserEditPage(final Page backPage, HibernateObjectModel model) {
-        // TODO replace queries with calls to Repository
-        HibernateListModel userProfiles = new HibernateListModel("from UserProfile order by name");
+    public UserProfileEditPage(final Page backPage, HibernateObjectModel model) {
+        HibernateListModel roles = new HibernateListModel("from Role order by name");
 
-        final DataForm form = new DataForm("editform", model) {
+        final DataForm form = new DataForm("form", model) {
             protected void onSubmit() {
-                User user = (User) getModelObject();
-                setPersistentObject(user);
-                saver.save(user);
-                //getSession().info(String.format("Saved user %s %s", user.getNameFirst(), user.getNameLast()));
+                UserProfile userProfile = (UserProfile) getModelObject();
+                setPersistentObject(userProfile);
+                saver.save(userProfile);
+                //getSession().info(String.format("Saved userProfile %s %s", userProfile.getNameFirst(), userProfile.getNameLast()));
                 setResponsePage(backPage);
             }
         };
         add(form);
 
         // TODO allow model-based validation
-        form.add(new RequiredTextField("login").add(StringValidator.maximumLength(8)));
-        form.add(new PasswordTextField("password").add(StringValidator.maximumLength(16)));
-        form.add(new RequiredTextField("fullName").add(StringValidator.maximumLength(32)));
-        form.add(new ListChoice("userProfile", new PropertyModel(model.getObject(), "userProfile"), userProfiles, new ChoiceRenderer("name", "id")));
+        form.add(new RequiredTextField("name").add(StringValidator.maximumLength(8)));
+        form.add(new Palette("roles", new PropertyModel(model, "roles"), roles, new ChoiceRenderer("name", "id"), 10, false));
 
-/*
-        form.add(new Button("new") {
-            public void onSubmit() {
-                form.clearPersistentObject();
-            }
-        }.setDefaultFormProcessing(false));
-*/
+//        form.add(new Button("new") {
+//            public void onSubmit() {
+//                form.clearPersistentObject();
+//            }
+//        }.setDefaultFormProcessing(false));
 
         form.add(new Button("cancel") {
             public void onSubmit() {

@@ -18,6 +18,7 @@ package org.wintersleep.usermgmt.wicket;
 
 import net.databinder.components.hibernate.PageSourceLink;
 import net.databinder.models.DatabinderProvider;
+import net.databinder.models.HibernateListModel;
 import net.databinder.models.HibernateObjectModel;
 import net.databinder.models.ICriteriaBuilder;
 import org.apache.wicket.Component;
@@ -44,17 +45,18 @@ import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.wintersleep.usermgmt.model.User;
+import org.wintersleep.usermgmt.model.UserProfile;
 import org.wintersleep.usermgmt.wicket.base.ActionsPanel;
 import org.wintersleep.usermgmt.wicket.base.BasePage;
 import org.wintersleep.usermgmt.wicket.base.GoAndClearAndNewFilter;
 
-public class UserListPage extends BasePage {
+public class UserProfileListPage extends BasePage {
 
-    public UserListPage() {
+    public UserProfileListPage() {
         super();
 
-        UserFilter filter = new UserFilter();
-        final FilterForm filterForm = new FilterForm("form", filter);
+        UserProfileFilter filter = new UserProfileFilter();
+        final FilterForm form = new FilterForm("form", filter);
 
         // list of columns allows table to render itself without any markup from us
         IColumn[] columns = new IColumn[]{
@@ -64,20 +66,20 @@ public class UserListPage extends BasePage {
                     // add the ActionsPanel to the cell item
                     public void populateItem(Item cellItem, String componentId, final IModel model) {
                         cellItem.add(new ActionsPanel(componentId,
-                                new PageSourceLink("showLink", UserEditPage.class, model),
+                                new PageSourceLink("showLink", UserProfileEditPage.class, model),
                                 new IPageLink() {
                                     public Page getPage() {
-                                        return new UserEditPage(UserListPage.this, (HibernateObjectModel) model);
+                                        return new UserProfileEditPage(UserProfileListPage.this, (HibernateObjectModel) model);
                                     }
 
                                     public Class getPageIdentity() {
-                                        return UserEditPage.class;
+                                        return UserProfileEditPage.class;
                                     }
                                 },
                                 new IPageLink() {
                                     public Page getPage() {
-                                        User user = (User) model.getObject();
-                                        return new DeletePage(UserListPage.this, (HibernateObjectModel) model, "User: " + user.getFullName());
+                                        UserProfile userProfile = (UserProfile) model.getObject();
+                                        return new DeletePage(UserProfileListPage.this, (HibernateObjectModel) model, "User Profile: " + userProfile.getName());
                                     }
 
                                     public Class getPageIdentity() {
@@ -92,22 +94,20 @@ public class UserListPage extends BasePage {
                     public Component getFilter(String componentId, FilterForm form) {
                         return new GoAndClearAndNewFilter(componentId, form) {
                             public Page createNewPage() {
-                                return new UserEditPage(UserListPage.this, new HibernateObjectModel(new User()));
+                                return new UserProfileEditPage(UserProfileListPage.this, new HibernateObjectModel(new UserProfile()));
                             }
                         };
                     }
                 },
-                new TextFilteredPropertyColumn(new Model("Login"), "login", "login"),
-                new TextFilteredPropertyColumn(new Model("Name"), "fullName", "fullName"),
-/*
-                // custom column to enable countries be be in the list and labeled correctly
-                new MyChoiceFilteredPropertyColumn(new Model("Birth country"), "country.name", "country.name", "country", "name", countries),
+                new TextFilteredPropertyColumn(new Model("Name"), "name", "name"),
+                //new MyChoiceFilteredPropertyColumn(new Model("Role"), "role.name", "role.name", "role", "name", roles),
+                /*
                 new MyChoiceFilteredPropertyColumn(new Model("Birth city"), "birthCity.name", "birthCity.name", "birthCity", "name", cities),
                 new PropertyColumn(new Model("Final game"), "finalGame", "finalGame")
-*/
+                */
         };
-        UserSorter sorter = new UserSorter();
-        DatabinderProvider provider = new DatabinderProvider(User.class, filter, sorter);
+        UserProfileSorter sorter = new UserProfileSorter();
+        DatabinderProvider provider = new DatabinderProvider(UserProfile.class, filter, sorter);
         provider.setWrapWithPropertyModel(false);
         DataTable table = new DataTable("table", columns, provider, 25) {
             protected Item newRowItem(String id, int index, IModel model) {
@@ -116,35 +116,61 @@ public class UserListPage extends BasePage {
         };
         table.addTopToolbar(new NavigationToolbar(table));
         table.addTopToolbar(new HeadersToolbar(table, sorter));
-        table.addTopToolbar(new FilterToolbar(table, filterForm, filter));
-        add(filterForm.add(table));
+        table.addTopToolbar(new FilterToolbar(table, form, filter));
+        add(form.add(table));
     }
 
-    class UserFilter implements IFilterStateLocator, ICriteriaBuilder {
-        private User filterState = new User();
+    class MyChoiceFilteredPropertyColumn extends ChoiceFilteredPropertyColumn {
+        private ChoiceRenderer choiceRenderer;
+        private String displayProperty;
+
+        public MyChoiceFilteredPropertyColumn(IModel displayModel, String sortProperty, String displayProperty, String propertyExpression, String filterLabelProperty, IModel filterChoices) {
+            super(displayModel, sortProperty, propertyExpression, filterChoices);
+            choiceRenderer = new ChoiceRenderer(filterLabelProperty);
+            this.displayProperty = displayProperty;
+        }
+
+        protected IChoiceRenderer getChoiceRenderer() {
+            return choiceRenderer;
+        }
+
+        protected IModel createLabelModel(IModel embeddedModel) {
+            return new PropertyModel(embeddedModel, displayProperty);
+        }
+
+        public Component getFilter(String componentId, FilterForm form) {
+            ChoiceFilter cf = (ChoiceFilter) super.getFilter(componentId, form);
+            cf.getChoice().setNullValid(true);
+            return cf;
+        }
+    }
+
+    class UserProfileFilter implements IFilterStateLocator, ICriteriaBuilder {
+        private UserProfile filterState = new UserProfile();
 
         /**
          * Apply filter to criteria.
          */
         public void build(Criteria criteria) {
-            if (filterState.getLogin() != null) {
-                criteria.add(Restrictions.ilike("login", filterState.getLogin(), MatchMode.START));
-            }
-            if (filterState.getFullName() != null) {
-                criteria.add(Restrictions.ilike("fullName", filterState.getFullName(), MatchMode.START));
+            if (filterState.getName() != null && filterState.getName().length() > 0) {
+                criteria.add(Restrictions.ilike("name", filterState.getName(), MatchMode.START));
             }
         }
 
-        public User getFilterState() {
+        public UserProfile getFilterState() {
+            // TODO ugly stuff
+            if (filterState.getName() == null) {
+                filterState.setName("");
+            }
             return filterState;
         }
 
         public void setFilterState(Object filterState) {
-            this.filterState = (User) filterState;
+            this.filterState = (UserProfile) filterState;
         }
     }
 
-    class UserSorter implements ISortStateLocator, ICriteriaBuilder {
+    class UserProfileSorter implements ISortStateLocator, ICriteriaBuilder {
         private SingleSortState sortState = new SingleSortState();
 
         public void build(Criteria criteria) {

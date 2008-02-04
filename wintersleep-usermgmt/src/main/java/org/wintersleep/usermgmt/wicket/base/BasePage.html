@@ -4,7 +4,14 @@
 		<link wicket:id="css" href="../../../../../dep_preview/DataStyleSheet.css" type="text/css" rel="stylesheet" />
 	</head>
 	<body>
-		<div wicket:id="status" class="status">[[status messages]]</div>
+        <table>
+            <tr>
+                <td><a wicket:id="userListPageLink">Users</a></td>
+                <td><a wicket:id="userProfileListPageLink">User Profiles</a></td>
+            </tr>
+        </table>
+
+        <div wicket:id="status" class="status">[[status messages]]</div>
 		<wicket:child/>
 	</body>
 </html>

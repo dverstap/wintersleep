@@ -18,8 +18,6 @@ package org.wintersleep.usermgmt.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Set;
-import java.util.HashSet;
 
 @Entity
 public class User implements Serializable {
@@ -38,8 +36,8 @@ public class User implements Serializable {
     @Column(nullable = false, length = 32)
     private String fullName;
 
-    @ManyToMany
-    private Set<Role> roles = new HashSet<Role>();
+    @ManyToOne(optional = false)
+    private UserProfile userProfile;
 
     public User() {
     }
@@ -82,11 +80,11 @@ public class User implements Serializable {
         this.fullName = fullName;
     }
 
-    public Set<Role> getRoles() {
-        return roles;
+    public UserProfile getUserProfile() {
+        return userProfile;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+    public void setUserProfile(UserProfile userProfile) {
+        this.userProfile = userProfile;
     }
 }

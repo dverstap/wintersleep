@@ -1,3 +1,10 @@
 
 - integrate hibernate validator
 - integrate hibernate search
+- security
+- web services
+- report page
+- progress bar
+- menu component
+- rather than write reusable UserManagement pages, we should write reusable panels
+(issue is then: how do you do navigation...)
