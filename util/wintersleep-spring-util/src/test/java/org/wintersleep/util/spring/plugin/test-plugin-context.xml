@@ -1,0 +1,36 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+    <bean id="eater"
+          class="org.wintersleep.util.spring.plugin.Eater">
+        <property name="fruits">
+            <list>
+                
+            </list>
+        </property>
+    </bean>
+
+    <bean id="apple"
+          class="org.wintersleep.util.spring.plugin.Fruit">
+        <constructor-arg value="apple"/>
+    </bean>
+
+    <bean id="banana"
+          class="org.wintersleep.util.spring.plugin.Fruit">
+        <constructor-arg value="banana"/>
+    </bean>
+
+    <bean class="org.wintersleep.util.spring.plugin.PluginBeanFactoryPostProcessor">
+        <property name="extensionBeanName" value="eater"/>
+        <property name="propertyName" value="fruits"/>
+        <property name="pluginBeanName" value="apple"/>
+    </bean>
+
+    <bean class="org.wintersleep.util.spring.plugin.PluginBeanFactoryPostProcessor">
+        <property name="extensionBeanName" value="eater"/>
+        <property name="propertyName" value="fruits"/>
+        <property name="pluginBeanName" value="banana"/>
+    </bean>
+
+</beans>
