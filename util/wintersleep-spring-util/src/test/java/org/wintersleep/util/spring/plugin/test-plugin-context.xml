@@ -6,7 +6,7 @@
           class="org.wintersleep.util.spring.plugin.Eater">
         <property name="fruits">
             <list>
-                
+                <!-- this may look verbose, but it actually makes the intention clear -->
             </list>
         </property>
     </bean>
@@ -22,15 +22,15 @@
     </bean>
 
     <bean class="org.wintersleep.util.spring.plugin.PluginBeanFactoryPostProcessor">
-        <property name="extensionBeanName" value="eater"/>
-        <property name="propertyName" value="fruits"/>
-        <property name="pluginBeanName" value="apple"/>
+        <property name="extensionPointBeanName" value="eater"/>
+        <property name="extensionPointPropertyName" value="fruits"/>
+        <property name="extensionBeanName" value="apple"/>
     </bean>
 
     <bean class="org.wintersleep.util.spring.plugin.PluginBeanFactoryPostProcessor">
-        <property name="extensionBeanName" value="eater"/>
-        <property name="propertyName" value="fruits"/>
-        <property name="pluginBeanName" value="banana"/>
+        <property name="extensionPointBeanName" value="eater"/>
+        <property name="extensionPointPropertyName" value="fruits"/>
+        <property name="extensionBeanName" value="banana"/>
     </bean>
 
 </beans>

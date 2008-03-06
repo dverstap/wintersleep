@@ -31,46 +31,46 @@ import java.util.List;
  */
 public class PluginBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
 
+    private String extensionPointBeanName;
+    private String extensionPointPropertyName;
     private String extensionBeanName;
-    private String propertyName;
-    private String pluginBeanName;
     
+    public void setExtensionPointBeanName(String extensionPointBeanName) {
+        this.extensionPointBeanName = extensionPointBeanName;
+    }
+
+    public void setExtensionPointPropertyName(String extensionPointPropertyName) {
+        this.extensionPointPropertyName = extensionPointPropertyName;
+    }
+
     public void setExtensionBeanName(String extensionBeanName) {
         this.extensionBeanName = extensionBeanName;
     }
 
-    public void setPropertyName(String propertyName) {
-        this.propertyName = propertyName;
-    }
-
-    public void setPluginBeanName(String pluginBeanName) {
-        this.pluginBeanName = pluginBeanName;
-    }
-
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
         // find the bean definition we wish to modify
-        BeanDefinition beanDef = beanFactory.getBeanDefinition(extensionBeanName);
+        BeanDefinition beanDef = beanFactory.getBeanDefinition(extensionPointBeanName);
 
         // within that bean def look for its properties and find
         // the specific property we will modify.
         MutablePropertyValues propValues = beanDef.getPropertyValues();
-        if (!propValues.contains(propertyName)) {
+        if (!propValues.contains(extensionPointPropertyName)) {
             throw new IllegalArgumentException("Cannot find property " +
-                    propertyName + " in bean " + extensionBeanName);
+                    extensionPointPropertyName + " in bean " + extensionPointBeanName);
         }
-        PropertyValue pv = propValues.getPropertyValue(propertyName);
+        PropertyValue pv = propValues.getPropertyValue(extensionPointPropertyName);
 
         // pull out the value definition (in our case we only supporting
         // updating of List style properties)
         Object prop = pv.getValue();
         if (!(prop instanceof List)) {
-            throw new IllegalArgumentException("Property " + propertyName + " in extension bean " +
-                    extensionBeanName + " is not an instanceof List.");
+            throw new IllegalArgumentException("Property " + extensionPointPropertyName + " in extension bean " +
+                    extensionPointBeanName + " is not an instance of List.");
         }
         // add our bean reference to the list, when Spring creates the
         // objects and wires them together our bean is now in place.
         List l = (List) pv.getValue();
-        l.add(new RuntimeBeanReference(pluginBeanName));
+        l.add(new RuntimeBeanReference(extensionBeanName));
     }
 
 
