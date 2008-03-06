@@ -23,17 +23,20 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.config.RuntimeBeanReference;
+import org.springframework.beans.factory.InitializingBean;
 
 import java.util.List;
+import java.util.Collections;
 
 /**
  * Based on: http://www.devx.com/Java/Article/31835
  */
-public class PluginBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
+public class PluginBeanFactoryPostProcessor implements BeanFactoryPostProcessor, InitializingBean {
 
     private String extensionPointBeanName;
     private String extensionPointPropertyName;
     private String extensionBeanName;
+    private List<String> extensionBeanNames;
     
     public void setExtensionPointBeanName(String extensionPointBeanName) {
         this.extensionPointBeanName = extensionPointBeanName;
@@ -45,6 +48,27 @@ public class PluginBeanFactoryPostProcessor implements BeanFactoryPostProcessor 
 
     public void setExtensionBeanName(String extensionBeanName) {
         this.extensionBeanName = extensionBeanName;
+    }
+
+    public void setExtensionBeanNames(List<String> extensionBeanNames) {
+        this.extensionBeanNames = extensionBeanNames;
+    }
+
+    public void afterPropertiesSet() throws Exception {
+        if (extensionBeanName == null && extensionBeanNames == null) {
+            throw new IllegalStateException("Either extensionBeanName or extensionBeanNames must be set.");
+        }
+        if (extensionBeanName != null && extensionBeanNames != null) {
+            throw new IllegalStateException("Either extensionBeanName or extensionBeanNames must be set.");
+        }
+    }
+
+    private List<String> getExtensionBeanNames() {
+        if (extensionBeanNames != null) {
+            return extensionBeanNames;
+        } else {
+            return Collections.singletonList(extensionBeanName);
+        }
     }
 
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
@@ -70,7 +94,9 @@ public class PluginBeanFactoryPostProcessor implements BeanFactoryPostProcessor 
         // add our bean reference to the list, when Spring creates the
         // objects and wires them together our bean is now in place.
         List l = (List) pv.getValue();
-        l.add(new RuntimeBeanReference(extensionBeanName));
+        for (String name : getExtensionBeanNames()) {
+            l.add(new RuntimeBeanReference(name));
+        }
     }
 
 
