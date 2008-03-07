@@ -32,11 +32,11 @@
         </property>
     </bean>
 
-    <!--
-    <plugin:extension extensionPoint="eater" property="fruits">
-        <value>apple</value>
-        <value>banana</value>
-    </plugin:extension>
+    <!-- TODO schema that allows to write this:
+    <plugin:register extension-point="eater" property="fruits">
+        <plugin:extension ref="apple"/>
+        <plugin:extension ref="banana"/>
+    </plugin:register>
     -->
     
 </beans>
