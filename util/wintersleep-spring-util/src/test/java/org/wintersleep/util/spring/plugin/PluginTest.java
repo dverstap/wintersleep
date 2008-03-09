@@ -27,8 +27,8 @@ public class PluginTest extends AbstractDependencyInjectionSpringContextTests {
     }
     
     @Override
-    protected String[] getConfigLocations() {
-        return new String[] { "classpath:/org/wintersleep/util/spring/plugin/test-plugin-context.xml" };
+    protected String getConfigPath() {
+        return "test-plugin-context.xml";
     }
 
     public void test() {
