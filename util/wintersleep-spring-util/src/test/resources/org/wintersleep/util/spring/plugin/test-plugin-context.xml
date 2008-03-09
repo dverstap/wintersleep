@@ -1,6 +1,8 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+       xmlns:plugin="http://wintersleep.org/schema/plugin"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd 
+                           http://wintersleep.org/schema/plugin http://wintersleep.org/schema/plugin/plugin.xsd">
 
     <bean id="eater"
           class="org.wintersleep.util.spring.plugin.Eater">
@@ -21,22 +23,9 @@
         <constructor-arg value="banana"/>
     </bean>
 
-    <bean class="org.wintersleep.util.spring.plugin.PluginBeanFactoryPostProcessor">
-        <property name="extensionPointBeanName" value="eater"/>
-        <property name="extensionPointPropertyName" value="fruits"/>
-        <property name="extensionBeanNames">
-            <list>
-                <value>apple</value>
-                <value>banana</value>
-            </list>
-        </property>
-    </bean>
-
-    <!-- TODO schema that allows to write this:
     <plugin:register extension-point="eater" property="fruits">
         <plugin:extension ref="apple"/>
         <plugin:extension ref="banana"/>
     </plugin:register>
-    -->
-    
+
 </beans>

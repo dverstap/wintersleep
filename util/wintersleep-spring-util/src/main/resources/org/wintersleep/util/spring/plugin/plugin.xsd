@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns="http://wintersleep.org/schema/plugin"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:beans="http://www.springframework.org/schema/beans"
+            targetNamespace="http://wintersleep.org/schema/plugin"
+            elementFormDefault="qualified"
+            attributeFormDefault="unqualified">
+
+    <!--<xsd:import namespace="http://www.springframework.org/schema/beans"/>-->
+
+    <xsd:element name="register">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="extension" type="Extension" minOccurs="1" maxOccurs="unbounded"/>
+            </xsd:sequence>
+            <xsd:attribute name="extension-point" type="xsd:IDREF" use="required"/>
+            <xsd:attribute name="property" type="xsd:string" use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:complexType name="Extension">
+        <xsd:attribute name="ref" type="xsd:IDREF" use="required"/>
+    </xsd:complexType>
+    
+</xsd:schema>

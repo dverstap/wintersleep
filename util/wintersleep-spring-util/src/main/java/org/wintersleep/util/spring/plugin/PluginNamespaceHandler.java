@@ -16,22 +16,12 @@
 
 package org.wintersleep.util.spring.plugin;
 
-import org.springframework.test.AbstractDependencyInjectionSpringContextTests;
+import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 
-public class PluginTest extends AbstractDependencyInjectionSpringContextTests {
+public class PluginNamespaceHandler extends NamespaceHandlerSupport {
 
-    private Eater eater;
-
-    public void setEater(Eater eater) {
-        this.eater = eater;
-    }
-    
-    @Override
-    protected String[] getConfigLocations() {
-        return new String[] { "classpath:/org/wintersleep/util/spring/plugin/test-plugin-context.xml" };
+    public void init() {
+        registerBeanDefinitionParser("register", new RegisterExtensionBeanDefinitionParser());
     }
 
-    public void test() {
-        assertEquals(2, eater.getFruits().size());
-    }
 }
