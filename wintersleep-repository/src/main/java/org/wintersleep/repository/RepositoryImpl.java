@@ -127,6 +127,16 @@ public class RepositoryImpl<T extends Serializable, ID extends Serializable> imp
         return getPersistentClass().cast(crit.uniqueResult());
     }
 
+    @SuppressWarnings("unchecked")
+    protected List<T> list(Criteria criteria) {
+        return criteria.list();
+    }
+
+    @SuppressWarnings("unchecked")
+    protected List<T> list(String query) {
+        return getSession().createQuery(query).list();
+    }
+
     // explicit logging in here, because this executed during class loading,
     // and there's often no good error logging at that point.
     protected static <T> Property findProperty(Class<T> persistentClass, String propertyName) {
@@ -149,4 +159,7 @@ public class RepositoryImpl<T extends Serializable, ID extends Serializable> imp
         throw exception;
     }
 
+    protected Criteria createCriteria() {
+        return getSession().createCriteria(getPersistentClass());
+    }
 }

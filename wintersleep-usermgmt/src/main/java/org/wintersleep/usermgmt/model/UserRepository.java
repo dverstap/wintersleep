@@ -16,10 +16,12 @@
 
 package org.wintersleep.usermgmt.model;
 
-public interface UserManagementService {
+import org.wintersleep.repository.Repository;
 
+import java.util.List;
 
-    Role findRole(Long id);
+public interface UserRepository extends Repository<User, Long> {
 
-    String getState();
+    List<User> findAllSortedByProfile();
+
 }

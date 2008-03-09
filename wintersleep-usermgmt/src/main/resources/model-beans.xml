@@ -41,4 +41,6 @@
 
     <bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
 
+    <bean class="org.wintersleep.util.spring.support.SelfProxyInjector"/>
+    
 </beans>

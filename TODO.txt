@@ -4,7 +4,8 @@
 - security
 - web services
 - report page
-- progress bar
+- progress bar: Indicating* components from wicket-extensions
 - menu component
+- wicket unit tests
 - rather than write reusable UserManagement pages, we should write reusable panels
 (issue is then: how do you do navigation...)

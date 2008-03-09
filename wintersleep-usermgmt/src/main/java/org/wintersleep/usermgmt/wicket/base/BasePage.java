@@ -22,6 +22,7 @@ import org.apache.wicket.markup.html.link.PageLink;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.wintersleep.usermgmt.wicket.UserListPage;
 import org.wintersleep.usermgmt.wicket.UserProfileListPage;
+import org.wintersleep.usermgmt.wicket.UserReportPage;
 
 public class BasePage extends WebPage {
     public BasePage() {
@@ -29,6 +30,7 @@ public class BasePage extends WebPage {
         add(new FeedbackPanel("status"));
         add(new PageLink("userListPageLink", UserListPage.class));
         add(new PageLink("userProfileListPageLink", UserProfileListPage.class));
+        add(new PageLink("userReportPageLink", UserReportPage.class));
     }
 
 }

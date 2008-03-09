@@ -12,7 +12,7 @@
     <groupId>org.wintersleep</groupId>
     <artifactId>wintersleep-usermgmt</artifactId>
     <version>0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <name>Wintersleep User Management Web Application</name>
 
     <dependencies>
@@ -175,6 +175,26 @@
                         <version>1.1</version>
                     </dependency>
                 </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>1.1.1</version>
+                <configuration>
+                    <xmlOutput>true</xmlOutput>
+                    <xmlOutputDirectory>target/findbugs/xml</xmlOutputDirectory>
+                    <!--<threshold>High|Normal|Low|Exp|Ignore</threshold>-->
+                    <!--<effort>Min|Default|Max</effort>-->
+                    <!--<excludeFilterFile>findbugs-exclude.xml</excludeFilterFile>-->
+                    <!--<includeFilterFile>findbugs-include.xml</includeFilterFile>-->
+                    <!--<visitors>FindDeadLocalStores,UnreadFields</visitors>-->
+                    <!--<omitVisitors>FindDeadLocalStores,UnreadFields</omitVisitors>-->
+                    <!--<onlyAnalyze>org.codehaus.mojo.findbugs.*</onlyAnalyze>-->
+                    <!--<pluginList>/libs/fb-contrib/fb-contrib-2.8.0.jar</pluginList>-->
+                    <debug>true</debug>
+                    <!--<relaxed>true|false</relaxed>-->
+                    <outputDirectory>/tmp</outputDirectory>
+                </configuration>
             </plugin>
         </plugins>
     </build>

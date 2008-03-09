@@ -42,10 +42,11 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(String login, String password, String fullName) {
+    public User(String login, String password, String fullName, UserProfile userProfile) {
         this.login = login;
         this.password = password;
         this.fullName = fullName;
+        this.userProfile = userProfile;
     }
 
     public Long getId() {

@@ -14,8 +14,18 @@ public class UserManagementServiceImpl implements UserManagementService {
     @Autowired
     private RoleRepository roleRepository;
 
+    private UserManagementService selfProxy;
+
+    public void setSelfProxy(UserManagementService selfProxy) {
+        this.selfProxy = selfProxy;
+    }
+
     public Role findRole(Long id) {
         return roleRepository.findById(id);
+    }
+
+    public String getState() {
+        return System.identityHashCode(this) + ":" + System.identityHashCode(selfProxy);
     }
 
 }
