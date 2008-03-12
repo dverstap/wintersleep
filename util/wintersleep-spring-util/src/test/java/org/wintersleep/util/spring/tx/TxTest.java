@@ -14,13 +14,15 @@
  * limitations under the License.
  */
 
-package org.wintersleep.repository;
+package org.wintersleep.util.spring.tx;
 
-import org.hibernate.FlushMode;
+import org.springframework.test.AbstractDependencyInjectionSpringContextTests;
 
-public interface PersonService {
-    Person find(Long id);
+public class TxTest extends AbstractDependencyInjectionSpringContextTests {
+        
 
-    FlushMode testContextualSession();
-    
+    public void test() {
+
+    }
+
 }

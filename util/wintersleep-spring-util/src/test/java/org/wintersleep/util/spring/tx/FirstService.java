@@ -14,13 +14,22 @@
  * limitations under the License.
  */
 
-package org.wintersleep.repository;
+package org.wintersleep.util.spring.tx;
 
-import org.hibernate.FlushMode;
+public interface FirstService {
 
-public interface PersonService {
-    Person find(Long id);
+    void required();
 
-    FlushMode testContextualSession();
-    
+    void supports();
+
+    void mandatory();
+
+    void requiresNew();
+
+    void notSupported();
+
+    void never();
+
+    void nested();
+
 }

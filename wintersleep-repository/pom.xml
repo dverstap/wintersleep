@@ -132,9 +132,11 @@
             </plugin>
         </plugins>
     </build>
+<!--
     <properties>
         <jetty.version>6.1.7</jetty.version>
         <spring.version>2.5.1</spring.version>
     </properties>
+-->
 
 </project>
