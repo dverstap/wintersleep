@@ -46,22 +46,24 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate</artifactId>
-            <version>3.2.5.ga</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
-            <version>3.3.1.ga</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-annotations</artifactId>
-            <version>3.3.0.ga</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-commons-annotations</artifactId>
-            <version>3.3.0.ga</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.transaction</groupId>
+            <artifactId>jboss-jta</artifactId>
+            <version>4.2.3.SP5</version>
         </dependency>
 
         <dependency>
@@ -132,11 +134,11 @@
             </plugin>
         </plugins>
     </build>
-<!--
-    <properties>
-        <jetty.version>6.1.7</jetty.version>
-        <spring.version>2.5.1</spring.version>
-    </properties>
--->
+    <!--
+        <properties>
+            <jetty.version>6.1.7</jetty.version>
+            <spring.version>2.5.1</spring.version>
+        </properties>
+    -->
 
 </project>

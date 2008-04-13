@@ -22,6 +22,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Example;
 import org.hibernate.criterion.Property;
+import org.hibernate.criterion.Projections;
 import org.apache.log4j.Logger;
 
 import java.io.Serializable;
@@ -71,6 +72,10 @@ public class RepositoryImpl<T extends Serializable, ID extends Serializable> imp
 
     public List<T> findAll() {
         return findByCriteria();
+    }
+
+    public long countAll() {
+        return (Long) getSession().createCriteria(getPersistentClass()).setProjection(Projections.rowCount()).uniqueResult();
     }
 
     @SuppressWarnings("unchecked")

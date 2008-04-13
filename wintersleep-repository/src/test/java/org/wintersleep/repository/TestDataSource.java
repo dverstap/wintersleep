@@ -63,4 +63,18 @@ public class TestDataSource extends DelegatingDataSource {
         }
     }
 
+    public long countAllRows(String tableName) throws SQLException {
+        Connection connection = getConnection();
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("select count(*) from " + tableName);
+            resultSet.next();
+            long result = resultSet.getLong(1);
+            resultSet.close();
+            return result;
+        } finally {
+            connection.close();
+        }        
+    }
+
 }
