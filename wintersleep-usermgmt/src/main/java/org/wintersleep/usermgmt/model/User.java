@@ -16,10 +16,15 @@
 
 package org.wintersleep.usermgmt.model;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.beans.factory.annotation.Autowire;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
+@Configurable(autowire = Autowire.BY_TYPE, preConstruction = true)
 public class User implements Serializable {
 
     @Id
@@ -38,6 +43,10 @@ public class User implements Serializable {
 
     @ManyToOne(optional = false)
     private UserProfile userProfile;
+
+    @Transient
+    @Autowired
+    private transient UserManagementService userManagementService;
 
     public User() {
     }
@@ -87,5 +96,23 @@ public class User implements Serializable {
 
     public void setUserProfile(UserProfile userProfile) {
         this.userProfile = userProfile;
+    }
+
+    public UserManagementService getUserManagementService() {
+        return userManagementService;
+    }
+
+    public String getMsg() {
+        if (userManagementService == null) {
+            return "it's null";
+        } else {
+            return "it's not null";
+        }
+    }
+
+    public String toString() {
+        return "User{" +
+                "userManagementService=" + userManagementService +
+                '}';
     }
 }

@@ -79,4 +79,9 @@ public class UserRepositoryTest extends AbstractTransactionalSpringContextTests 
         assertSame(user4, users.get(3));
     }
 
+    public void testLoadTimeWeaving() {
+        User user = new User("user", "pw", "fullname", new UserProfile("name", new TreeSet<Role>()));
+        assertNotNull(user.getUserManagementService());
+    }
+
 }

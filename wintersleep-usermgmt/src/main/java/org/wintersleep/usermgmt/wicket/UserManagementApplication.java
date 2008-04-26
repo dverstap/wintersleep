@@ -23,7 +23,11 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.orm.hibernate3.LocalSessionFactoryBean;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
+import org.apache.wicket.request.target.coding.HybridUrlCodingStrategy;
+import org.apache.wicket.request.target.coding.BookmarkablePageRequestTargetUrlCodingStrategy;
+import org.apache.wicket.request.target.coding.IndexedParamUrlCodingStrategy;
 import org.apache.log4j.Logger;
+import org.wintersleep.usermgmt.model.User;
 
 import java.util.Iterator;
 
@@ -41,14 +45,21 @@ public class UserManagementApplication extends DataApplication {
         super.init();
         addComponentInstantiationListener(new SpringComponentInjector(this));
 
-        try {
-            mountBookmarkablePages();
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+//        try {
+//            mountBookmarkablePages();
+//        } catch (ClassNotFoundException e) {
+//            throw new RuntimeException(e);
+//        }
 
         // disable cookieless interaction to improve search engine crawlability
 		setCookielessSupported(false);
+
+        //mount(new HybridUrlCodingStrategy("/user", UserEditPage.class));
+        //mount(new BookmarkablePageRequestTargetUrlCodingStrategy("/user", UserEditPage.class, null));
+
+        //mount(new IndexedParamUrlCodingStrategy("/user", UserEditPage.class, null));
+
+        mountBookmarkablePage(User.class.getSimpleName(), UserEditPage.class);        
     }
 
     // I can't really get this REST-thingy to work: it seems databinder supports it for panels and such,
@@ -64,6 +75,7 @@ public class UserManagementApplication extends DataApplication {
             Class entityClass = Class.forName(persistentClass.getClassName());
             m_log.info("Adding bookmark support for: " + persistentClass.getEntityName() + ": " + entityClass);
             mountBookmarkablePage(entityClass.getSimpleName(), entityClass);
+
         }
 
     }

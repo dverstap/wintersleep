@@ -2,43 +2,51 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org">
 <head>
 
-<link href="../../../../../dep_preview/DataStyleSheet.css" type="text/css" rel="stylesheet" />
+    <link href="../../../../../dep_preview/DataStyleSheet.css" type="text/css" rel="stylesheet"/>
 
-<title>Edit User</title>
+    <title>Edit User</title>
 
 </head>
 <body>
 
 <wicket:extend>
-<form wicket:id="editform">
-<table cellspacing="0" cellpadding="2">
-	<tr>
-		<td>Login</td>
-		<td><input type="text" wicket:id="login" size="40" maxlength="32"/></td>
-	</tr>
-    <tr>
-        <td>Password</td>
-        <td><input type="password" wicket:id="password" size="40" maxlength="32"/></td>
-    </tr>
-	<tr>
-		<td>Full name</td>
-		<td><input type="text" wicket:id="fullName" size="40" maxlength="32"/></td>
-	</tr>
+    <form wicket:id="editform">
+        <table cellspacing="0" cellpadding="2">
+            <tr>
+                <td>Login</td>
+                <td><input type="text" wicket:id="login" size="40" maxlength="32"/></td>
+            </tr>
+            <tr>
+                <td>Password</td>
+                <td><input type="password" wicket:id="password" size="40" maxlength="32"/></td>
+            </tr>
+            <tr>
+                <td>Full name</td>
+                <td><input type="text" wicket:id="fullName" size="40" maxlength="32"/></td>
+            </tr>
 
-	<tr>
-		<td>Profile</td>
-		<td><select wicket:id="userProfile"></select></td>
-	</tr>
-    <tr>
-		<td>&nbsp;</td>
-		<td>
-			<!--<input type="submit" wicket:id="new" value="New"/>-->
-			<input type="submit" value="Save">
-			<input type="submit" wicket:id="cancel" value="Cancel"/>
-		</td>
-	</tr>
-</table>
-</form>
+            <tr>
+                <td>Profile</td>
+                <td><select wicket:id="userProfile"></select></td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td>
+                    <!--<input type="submit" wicket:id="new" value="New"/>-->
+                    <input type="submit" value="Save">
+                    <input type="submit" wicket:id="cancel" value="Cancel"/>
+                </td>
+            </tr>
+            <tr>
+                <td>test aspectj LTW:</td>
+                <td>
+                    <span wicket:id="userManagementService">
+                    </span>
+                </td>
+            </tr>
+        </table>
+
+    </form>
 </wicket:extend>
 
 </body>

@@ -10,8 +10,8 @@
            http://www.springframework.org/schema/context
            http://www.springframework.org/schema/context/spring-context-2.5.xsd">
 
-    <import resource="classpath:/model-beans.xml"/>
-    <import resource="classpath:/datasource-beans.xml"/>
-    <import resource="classpath:/wicket-beans.xml"/>
+    <import resource="classpath:/org/wintersleep/usermgmt/model-beans.xml"/>
+    <import resource="classpath:/org/wintersleep/usermgmt/datasource-beans.xml"/>
+    <import resource="classpath:/org/wintersleep/usermgmt/wicket-beans.xml"/>
 
 </beans>
