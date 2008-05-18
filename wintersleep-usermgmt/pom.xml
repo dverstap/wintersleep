@@ -75,6 +75,29 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-aspects</artifactId>
             <version>${spring.version}</version>
+            <exclusions>
+                <!-- Spring 2.5.4 depends on org.aspectj 1.6.0, but the pom incorrectly depends on aspect 1.5.4.
+                Also notice the unfortunate change in the maven groupId from aspectj to org.aspectj!
+                This seems to be already fixed for the spring 2.5.5 release. -->
+                <exclusion>
+                    <groupId>aspectj</groupId>
+                    <artifactId>aspectjrt</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>aspectj</groupId>
+                    <artifactId>aspectjweaver</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>1.6.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <version>1.6.0</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -167,7 +190,9 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
-                    <argLine>-javaagent:/udir/stappend/maven/repositories/local/org/springframework/spring-agent/2.5.3/spring-agent-2.5.3.jar</argLine>
+                    <argLine>
+                        -javaagent:/udir/stappend/maven/repositories/local/org/springframework/spring-agent/2.5.3/spring-agent-2.5.3.jar
+                    </argLine>
                 </configuration>
             </plugin>
             <plugin>
