@@ -5,4 +5,5 @@ target
 .project
 .classpath
 cobertura.ser
-
+ObjectStore
+projectFilesBackup*
