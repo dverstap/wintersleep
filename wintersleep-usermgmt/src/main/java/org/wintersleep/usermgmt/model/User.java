@@ -103,10 +103,12 @@ public class User implements Serializable {
     }
 
     public String getMsg() {
+        String msg = "loaded by " + this.getClass().getClassLoader() + ": ";
+
         if (userManagementService == null) {
-            return "it's null";
+            return msg + "it's null";
         } else {
-            return "it's not null";
+            return msg + "it's not null";
         }
     }
 

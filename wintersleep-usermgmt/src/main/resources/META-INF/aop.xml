@@ -1,0 +1,25 @@
+<!DOCTYPE aspectj PUBLIC
+        "-//AspectJ//DTD//EN" "http://www.eclipse.org/aspectj/dtd/aspectj.dtd">
+<aspectj>
+
+
+    <!-- Question: it's not really clear whether this file is supposed to go under
+         src/main/resources/META-INF or
+         src/main/webapp/META-INF
+    -->
+
+    <weaver options="-showWeaveInfo -XmessageHandlerClass:org.springframework.aop.aspectj.AspectJWeaverMessageHandler">
+        <!-- only weave classes in our application-specific packages -->
+        <include within="org.wintersleep..*"/>
+
+        <!-- http://forum.springframework.org/showthread.php?t=51455 -->
+        <exclude within="*..*CGLIB*"/>
+    </weaver>
+
+    <!--
+        <aspects>
+            <aspect name="org.springframework.beans.factory.aspectj.AnnotationBeanConfigurerAspect"/>
+        </aspects>
+    -->
+
+</aspectj>

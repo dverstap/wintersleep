@@ -75,19 +75,6 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-aspects</artifactId>
             <version>${spring.version}</version>
-            <exclusions>
-                <!-- Spring 2.5.4 depends on org.aspectj 1.6.0, but the pom incorrectly depends on aspect 1.5.4.
-                Also notice the unfortunate change in the maven groupId from aspectj to org.aspectj!
-                This seems to be already fixed for the spring 2.5.5 release. -->
-                <exclusion>
-                    <groupId>aspectj</groupId>
-                    <artifactId>aspectjrt</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>aspectj</groupId>
-                    <artifactId>aspectjweaver</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.aspectj</groupId>
@@ -103,6 +90,12 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-agent</artifactId>
             <version>${spring.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mortbay.jetty</groupId>
+            <artifactId>jetty</artifactId>
+            <version>${jetty.version}</version>
         </dependency>
 
         <dependency>
@@ -150,8 +143,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.5</version>
-            <scope>provided</scope>
+            <version>${mysql.version}</version>
         </dependency>
 
         <dependency>
@@ -170,6 +162,12 @@
             <artifactId>commons-logging</artifactId>
             <version>1.1</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.4</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -191,7 +189,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <argLine>
-                        -javaagent:/udir/stappend/maven/repositories/local/org/springframework/spring-agent/2.5.3/spring-agent-2.5.3.jar
+                        -javaagent:/udir/stappend/maven/repositories/local/org/springframework/spring-agent/${spring.version}/spring-agent-${spring.version}.jar
                     </argLine>
                 </configuration>
             </plugin>
@@ -240,7 +238,7 @@
     </build>
 
     <properties>
-        <wicket.version>1.3.1</wicket.version>
+        <wicket.version>1.3.4</wicket.version>
         <databinder.version>1.1.1</databinder.version>
     </properties>
 

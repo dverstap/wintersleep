@@ -15,44 +15,44 @@
  */
 package org.wintersleep.usermgmt.model;
 
-import org.springframework.test.AbstractTransactionalSpringContextTests;
+import static org.junit.Assert.*;
+import org.junit.runner.RunWith;
+import org.junit.Test;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.TreeSet;
 
-// TODO figure out decent testing strategy
-public class UserRepositoryTest extends AbstractTransactionalSpringContextTests {
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = {"../../../../testApplicationContext.xml"})
+@TransactionConfiguration
+@Transactional
+public class UserRepositoryTest {
 
+    @Autowired
     private RoleRepository roleRepository;
+    @Autowired
     private UserProfileRepository userProfileRepository;
+    @Autowired
     private UserRepository userRepository;
 
-    public void setRoleRepository(RoleRepository roleRepository) {
-        this.roleRepository = roleRepository;
-    }
-
-    public void setUserProfileRepository(UserProfileRepository userProfileRepository) {
-        this.userProfileRepository = userProfileRepository;
-    }
-
-    public void setUserRepository(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
-    protected String getConfigPath() {
-        return "/testApplicationContext.xml";
-    }
-
+    @Test
     public void testFindById() {
         Role role = roleRepository.findById(1L);
         assertNull(role);
     }
 
+    @Test
     public void testFindAll() {
         List<Role> roles = roleRepository.findAll();
         assertEquals(0, roles.size());
     }
 
+    @Test
     public void testFindAllSortedByProfile() {
         UserProfile profile1 = new UserProfile("profile1", new TreeSet<Role>());
         userProfileRepository.makePersistent(profile1);
@@ -77,11 +77,6 @@ public class UserRepositoryTest extends AbstractTransactionalSpringContextTests 
         assertSame(user3, users.get(1));
         assertSame(user2, users.get(2));
         assertSame(user4, users.get(3));
-    }
-
-    public void testLoadTimeWeaving() {
-        User user = new User("user", "pw", "fullname", new UserProfile("name", new TreeSet<Role>()));
-        assertNotNull(user.getUserManagementService());
     }
 
 }
