@@ -10,10 +10,10 @@
     </parent>
 
     <groupId>org.wintersleep</groupId>
-    <artifactId>wintersleep-usermgmt</artifactId>
+    <artifactId>usermgmt-domain</artifactId>
     <version>0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
-    <name>Wintersleep User Management Web Application</name>
+    <packaging>jar</packaging>
+    <name>Wintersleep User Management Domain Library</name>
 
     <dependencies>
         <dependency>
@@ -32,23 +32,6 @@
             <version>0.1-SNAPSHOT</version>
             <type>test-jar</type>
             <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.wicket</groupId>
-            <artifactId>wicket-spring-annot</artifactId>
-            <version>${wicket.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework</groupId>
-                    <artifactId>spring</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>net.databinder</groupId>
-            <artifactId>databinder</artifactId>
-            <version>${databinder.version}</version>
         </dependency>
 
         <dependency>
@@ -93,12 +76,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.mortbay.jetty</groupId>
-            <artifactId>jetty</artifactId>
-            <version>${jetty.version}</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
             <version>${spring.version}</version>
@@ -120,13 +97,6 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-commons-annotations</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
-            <version>2.4</version>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -193,53 +163,7 @@
                     </argLine>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.mortbay.jetty</groupId>
-                <artifactId>maven-jetty-plugin</artifactId>
-                <version>${jetty.version}</version>
-                <configuration>
-                    <scanIntervalSeconds>10</scanIntervalSeconds>
-                    <connectors>
-                        <connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
-                            <port>9090</port>
-                            <maxIdleTime>60000</maxIdleTime>
-                        </connector>
-                    </connectors>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>commons-logging</groupId>
-                        <artifactId>commons-logging</artifactId>
-                        <version>1.1</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>findbugs-maven-plugin</artifactId>
-                <version>1.1.1</version>
-                <configuration>
-                    <xmlOutput>true</xmlOutput>
-                    <xmlOutputDirectory>target/findbugs/xml</xmlOutputDirectory>
-                    <!--<threshold>High|Normal|Low|Exp|Ignore</threshold>-->
-                    <!--<effort>Min|Default|Max</effort>-->
-                    <!--<excludeFilterFile>findbugs-exclude.xml</excludeFilterFile>-->
-                    <!--<includeFilterFile>findbugs-include.xml</includeFilterFile>-->
-                    <!--<visitors>FindDeadLocalStores,UnreadFields</visitors>-->
-                    <!--<omitVisitors>FindDeadLocalStores,UnreadFields</omitVisitors>-->
-                    <!--<onlyAnalyze>org.codehaus.mojo.findbugs.*</onlyAnalyze>-->
-                    <!--<pluginList>/libs/fb-contrib/fb-contrib-2.8.0.jar</pluginList>-->
-                    <debug>true</debug>
-                    <!--<relaxed>true|false</relaxed>-->
-                    <outputDirectory>/tmp</outputDirectory>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
-
-    <properties>
-        <wicket.version>1.3.4</wicket.version>
-        <databinder.version>1.1.1</databinder.version>
-    </properties>
 
 </project>
