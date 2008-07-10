@@ -29,6 +29,7 @@
         <module>util</module>
         <module>wintersleep-repository</module>
         <module>usermgmt/usermgmt-domain</module>
+        <module>usermgmt/usermgmt-springfaces</module>
         <module>usermgmt/usermgmt-wicket</module>
     </modules>
 

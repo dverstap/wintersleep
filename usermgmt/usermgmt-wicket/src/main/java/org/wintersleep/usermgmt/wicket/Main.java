@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.wintersleep.usermgmt;
+package org.wintersleep.usermgmt.wicket;
 
 import org.apache.log4j.Logger;
 import org.mortbay.jetty.Handler;

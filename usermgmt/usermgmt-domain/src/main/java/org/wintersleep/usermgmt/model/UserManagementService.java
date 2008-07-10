@@ -16,8 +16,13 @@
 
 package org.wintersleep.usermgmt.model;
 
+import java.util.List;
+
 public interface UserManagementService {
 
+    List<User> findUsers();
+
+    void saveUser(User user);
 
     Role findRole(Long id);
 
