@@ -1,0 +1,22 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:plugin="http://wintersleep.org/schema/plugin"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd 
+                           http://wintersleep.org/schema/plugin http://wintersleep.org/schema/plugin/plugin.xsd">
+
+    <bean id="pear"
+          class="org.wintersleep.util.spring.plugin.Fruit">
+        <constructor-arg value="pear"/>
+    </bean>
+
+    <bean id="kiwi"
+          class="org.wintersleep.util.spring.plugin.Fruit">
+        <constructor-arg value="kiwi"/>
+    </bean>
+
+    <plugin:register extension-point="eater" property="fruits">
+        <plugin:extension ref="pear"/>
+        <plugin:extension ref="kiwi"/>
+    </plugin:register>
+
+</beans>

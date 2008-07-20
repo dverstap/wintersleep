@@ -20,14 +20,28 @@ import java.util.List;
 
 public class Eater {
 
-    private List<Fruit> fruits;
+    private Iterable<Fruit> fruits;
 
-    public List<Fruit> getFruits() {
+    public Eater() {
+    }
+
+    public Iterable<Fruit> getFruits() {
         return fruits;
     }
 
-    public void setFruits(List<Fruit> fruits) {
+    public void setFruits(Iterable<Fruit> fruits) {
+        // ensure that the list is complete at the moment it is injected
+        List fruitsList = (List) fruits;
+        if (fruitsList.size() != 4) {
+            throw new IllegalArgumentException("Expected 4 fruits");
+        }
         this.fruits = fruits;
+    }
+
+    public void doMyThing() {
+        for (Fruit fruit : fruits) {
+            System.out.println(fruit.getName());
+        }
     }
 
     

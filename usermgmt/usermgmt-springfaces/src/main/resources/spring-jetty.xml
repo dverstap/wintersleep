@@ -26,7 +26,7 @@
         <property name="ignoreResourceNotFound" value="true"/>
         <property name="propertiesArray">
             <props>
-                <prop key="jetty.port">8080</prop>
+                <prop key="jetty.port">8081</prop>
                 <prop key="jetty.contextPath">/</prop>
                 <prop key="jetty.war">src/main/webapp</prop>
             </props>

@@ -18,6 +18,8 @@ package org.wintersleep.util.spring.plugin;
 
 import org.springframework.test.AbstractDependencyInjectionSpringContextTests;
 
+import java.util.List;
+
 public class PluginTest extends AbstractDependencyInjectionSpringContextTests {
 
     private Eater eater;
@@ -27,11 +29,16 @@ public class PluginTest extends AbstractDependencyInjectionSpringContextTests {
     }
     
     @Override
-    protected String getConfigPath() {
-        return "test-plugin-context.xml";
+    protected String[] getConfigPaths() {
+        return new String[] { "testPluginContext1.xml", "testPluginContext2.xml", "testApplicationContextWithExtensionPoint.xml" };
     }
 
     public void test() {
-        assertEquals(2, eater.getFruits().size());
+        List<Fruit> fruits = (List<Fruit>) eater.getFruits();
+        assertEquals(4, fruits.size());
+        assertEquals("apple", fruits.get(0).getName());
+        assertEquals("banana", fruits.get(1).getName());
+        assertEquals("pear", fruits.get(2).getName());
+        assertEquals("kiwi", fruits.get(3).getName());
     }
 }

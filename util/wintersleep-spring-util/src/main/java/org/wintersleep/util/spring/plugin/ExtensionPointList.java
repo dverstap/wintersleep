@@ -16,13 +16,20 @@
 
 package org.wintersleep.util.spring.plugin;
 
-import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
+import java.util.ArrayList;
+import java.util.Collection;
 
-public class PluginNamespaceHandler extends NamespaceHandlerSupport {
+public class ExtensionPointList<E> extends ArrayList<E> {
 
-    public void init() {
-        registerBeanDefinitionParser("extension-point", new ExtensionPointBeanDefinitionParser());
-        registerBeanDefinitionParser("register", new RegisterExtensionBeanDefinitionParser());
+    public ExtensionPointList() {
+        System.out.println("hello");
     }
 
+    public ExtensionPointList(int initialCapacity) {
+        super(initialCapacity);
+    }
+
+    public ExtensionPointList(Collection<? extends E> c) {
+        super(c);
+    }
 }

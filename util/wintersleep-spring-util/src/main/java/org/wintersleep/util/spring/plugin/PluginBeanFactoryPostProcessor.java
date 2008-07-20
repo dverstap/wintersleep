@@ -19,14 +19,13 @@ package org.wintersleep.util.spring.plugin;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.MutablePropertyValues;
 import org.springframework.beans.PropertyValue;
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
-import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
-import org.springframework.beans.factory.config.RuntimeBeanReference;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.config.*;
+import org.springframework.beans.factory.support.GenericBeanDefinition;
+import org.springframework.beans.factory.support.ManagedList;
 
-import java.util.List;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Based on: http://www.devx.com/Java/Article/31835
@@ -37,7 +36,7 @@ public class PluginBeanFactoryPostProcessor implements BeanFactoryPostProcessor,
     private String extensionPointPropertyName;
     private String extensionBeanName;
     private List<String> extensionBeanNames;
-    
+
     public void setExtensionPointBeanName(String extensionPointBeanName) {
         this.extensionPointBeanName = extensionPointBeanName;
     }
@@ -87,16 +86,22 @@ public class PluginBeanFactoryPostProcessor implements BeanFactoryPostProcessor,
         // pull out the value definition (in our case we only supporting
         // updating of List style properties)
         Object prop = pv.getValue();
-        if (!(prop instanceof List)) {
-            throw new IllegalArgumentException("Property " + extensionPointPropertyName + " in extension bean " +
-                    extensionPointBeanName + " is not an instance of List.");
+        List l;
+        if (prop instanceof ManagedList) {
+            l = (List) prop;
+        } else if (prop instanceof BeanDefinitionHolder) {
+            BeanDefinitionHolder holder = (BeanDefinitionHolder) prop;
+            GenericBeanDefinition extensionPointBeanDefinition = (GenericBeanDefinition) holder.getBeanDefinition();
+            PropertyValue sourceListValue = extensionPointBeanDefinition.getPropertyValues().getPropertyValue("sourceList");
+            l = (List) sourceListValue.getValue();
+        } else {
+            throw new IllegalArgumentException("Cannot modify property " + extensionPointPropertyName + " in extension bean " +
+                    extensionPointBeanName + " of type: " + prop.getClass());
         }
-        // add our bean reference to the list, when Spring creates the
-        // objects and wires them together our bean is now in place.
-        List l = (List) pv.getValue();
         for (String name : getExtensionBeanNames()) {
             l.add(new RuntimeBeanReference(name));
         }
+
     }
 
 

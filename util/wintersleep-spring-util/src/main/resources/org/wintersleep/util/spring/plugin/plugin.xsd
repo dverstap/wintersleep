@@ -6,20 +6,25 @@
             elementFormDefault="qualified"
             attributeFormDefault="unqualified">
 
-    <!--<xsd:import namespace="http://www.springframework.org/schema/beans"/>-->
+    <xsd:element name="extension-point">
+        <xsd:complexType/>
+    </xsd:element>
 
     <xsd:element name="register">
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element name="extension" type="Extension" minOccurs="1" maxOccurs="unbounded"/>
             </xsd:sequence>
-            <xsd:attribute name="extension-point" type="xsd:IDREF" use="required"/>
+            <!--  IDREF requires the id to be available in the same file.
+            <xsd:attribute name="extension-point" type="xsd:IDREF" use="required"/>-->
+            <xsd:attribute name="extension-point" type="xsd:NCName" use="required"/>
             <xsd:attribute name="property" type="xsd:string" use="required"/>
         </xsd:complexType>
     </xsd:element>
 
     <xsd:complexType name="Extension">
-        <xsd:attribute name="ref" type="xsd:IDREF" use="required"/>
+        <!-- <xsd:attribute name="ref" type="xsd:IDREF" use="required"/>-->
+        <xsd:attribute name="ref" type="xsd:NCName" use="required"/>
     </xsd:complexType>
     
 </xsd:schema>
