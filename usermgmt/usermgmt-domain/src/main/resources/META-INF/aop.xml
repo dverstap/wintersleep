@@ -12,8 +12,12 @@
         <!-- only weave classes in our application-specific packages -->
         <include within="org.wintersleep..*"/>
 
-        <!-- http://forum.springframework.org/showthread.php?t=51455 -->
-        <exclude within="*..*CGLIB*"/>
+        <!-- http://forum.springframework.org/showthread.php?t=51455 suggest this: -->
+        <!--<exclude within="*..*CGLIB*"/>-->
+        <!-- and that worked with spring 2.5 and associated aspectj version,
+        but not with spring 3.0.3 and aspectj 1.6.9, or something else in my setup,
+         but this does work: -->
+        <exclude within="org.wintersleep.*..*CGLIB*"/>
     </weaver>
 
     <!--

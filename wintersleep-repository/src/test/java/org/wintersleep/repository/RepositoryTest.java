@@ -15,8 +15,8 @@
  */
 package org.wintersleep.repository;
 
-import org.springframework.test.AbstractTransactionalSpringContextTests;
 import org.hibernate.ObjectNotFoundException;
+import org.springframework.test.AbstractTransactionalSpringContextTests;
 
 import java.util.List;
 
