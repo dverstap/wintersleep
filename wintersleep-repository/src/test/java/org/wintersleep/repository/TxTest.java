@@ -16,19 +16,19 @@
 
 package org.wintersleep.repository;
 
-import com.arjuna.ats.internal.jta.transaction.arjunacore.TransactionManagerImple;
-import com.arjuna.ats.internal.jta.transaction.arjunacore.UserTransactionImple;
 import junit.framework.AssertionFailedError;
 import org.hibernate.FlushMode;
 import org.hibernate.HibernateException;
 import org.springframework.core.Constants;
 import org.springframework.test.AbstractDependencyInjectionSpringContextTests;
-import org.springframework.transaction.*;
+import org.springframework.transaction.IllegalTransactionStateException;
+import org.springframework.transaction.NestedTransactionNotSupportedException;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import javax.transaction.TransactionManager;
-import javax.transaction.UserTransaction;
 import java.sql.SQLException;
 
 public class TxTest extends AbstractDependencyInjectionSpringContextTests {
@@ -63,10 +63,10 @@ public class TxTest extends AbstractDependencyInjectionSpringContextTests {
         this.personService = personService;
     }
 
-    public void justChecking() {
-        UserTransaction userTransaction = new UserTransactionImple();
-        TransactionManager transactionManager = new TransactionManagerImple();
-    }
+//    public void justChecking() {
+//        UserTransaction userTransaction = new UserTransactionImple();
+//        TransactionManager transactionManager = new TransactionManagerImple();
+//    }
 
     public void testNoNesting() throws SQLException {
 

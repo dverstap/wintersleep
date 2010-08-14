@@ -25,6 +25,8 @@ public class RepositoryTest extends AbstractTransactionalSpringContextTests {
     private TestDataSource dataSource;
     private PersonRepository personRepository;
 
+    private static final int COUNT = 10 * 1000;
+
     public void setDataSource(TestDataSource dataSource) {
         this.dataSource = dataSource;
     }
@@ -60,6 +62,26 @@ public class RepositoryTest extends AbstractTransactionalSpringContextTests {
     public void testFindAll() {
         List<Person> persons = personRepository.findAll();
         assertEquals(0, persons.size());
+    }
+
+    public void testInsert() {
+        Person person = new Person("ikke");
+        personRepository.makePersistent(person);
+        assertEquals(1, personRepository.countAll());
+
+        person = new Person("gij");
+        personRepository.makePersistent(person);
+        assertEquals(2, personRepository.countAll());
+
+        long start = System.currentTimeMillis();
+        for (int i = 0; i < COUNT; i++) {
+            person = new Person("jij" + i);
+            personRepository.makePersistent(person);
+        }
+        assertEquals(COUNT + 2, personRepository.countAll());
+        System.out.println(System.currentTimeMillis()-start);
+
+
     }
 
 }

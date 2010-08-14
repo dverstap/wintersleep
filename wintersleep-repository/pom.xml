@@ -64,6 +64,7 @@
             <groupId>org.jboss.transaction</groupId>
             <artifactId>jboss-jta</artifactId>
             <version>4.2.3.SP5</version>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
@@ -82,17 +83,20 @@
                     <artifactId>commons-collections</artifactId>
                 </exclusion>
             </exclusions>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>${mysql.version}</version>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
             <version>1.4.2</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>log4j</groupId>
@@ -104,7 +108,7 @@
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
             <version>1.1</version>
-            <scope>provided</scope>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -133,5 +137,5 @@
             </plugin>
         </plugins>
     </build>
-    
+
 </project>

@@ -24,4 +24,5 @@ public interface UserRepository extends Repository<User, Long> {
 
     List<User> findAllSortedByProfile();
 
+    List<User> find(int firstResult, int maxResults);
 }

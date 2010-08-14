@@ -16,16 +16,12 @@
 
 package org.wintersleep.usermgmt.model.impl;
 
-import org.wintersleep.usermgmt.model.UserRepository;
-import org.wintersleep.usermgmt.model.User;
-import org.wintersleep.repository.RepositoryImpl;
 import org.hibernate.SessionFactory;
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Projection;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Order;
-import org.springframework.stereotype.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.wintersleep.repository.RepositoryImpl;
+import org.wintersleep.usermgmt.model.User;
+import org.wintersleep.usermgmt.model.UserRepository;
 
 import java.util.List;
 
@@ -39,6 +35,12 @@ public class UserRepositoryImpl extends RepositoryImpl<User, Long> implements Us
 
     public List<User> findAllSortedByProfile() {
         return list("from User user order by user.userProfile.id, user.id");
+    }
+
+    public List<User> find(int firstResult, int maxResults) {
+        return createCriteria()
+                .setFirstResult(firstResult)
+                .setMaxResults(maxResults).list();
     }
 
 

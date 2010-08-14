@@ -75,7 +75,7 @@ public class RepositoryImpl<T extends Serializable, ID extends Serializable> imp
     }
 
     public long countAll() {
-        return (Long) getSession().createCriteria(getPersistentClass()).setProjection(Projections.rowCount()).uniqueResult();
+        return (Integer) getSession().createCriteria(getPersistentClass()).setProjection(Projections.rowCount()).uniqueResult();
     }
 
     @SuppressWarnings("unchecked")

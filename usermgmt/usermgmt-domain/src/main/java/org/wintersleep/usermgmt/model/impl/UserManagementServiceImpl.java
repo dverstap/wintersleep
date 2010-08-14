@@ -20,6 +20,9 @@ public class UserManagementServiceImpl implements UserManagementService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private UserProfileRepository userProfileRepository;
+
     private UserManagementService selfProxy;
 
     public void setSelfProxy(UserManagementService selfProxy) {
@@ -35,6 +38,10 @@ public class UserManagementServiceImpl implements UserManagementService {
         return users;
     }
 
+    public List<User> findUsers(int firstResult, int maxResults) {
+        return userRepository.find(firstResult, maxResults);
+    }
+
     public void saveUser(User user) {
         userRepository.makePersistent(user);
     }
@@ -45,6 +52,18 @@ public class UserManagementServiceImpl implements UserManagementService {
 
     public String getState() {
         return System.identityHashCode(this) + ":" + System.identityHashCode(selfProxy);
+    }
+
+    public User findUser(long id) {
+        return userRepository.findById(id);
+    }
+
+    public List<UserProfile> findProfiles() {
+        return userProfileRepository.findAll();
+    }
+
+    public long countUsers() {
+        return userRepository.countAll();
     }
 
 }

@@ -22,9 +22,17 @@ public interface UserManagementService {
 
     List<User> findUsers();
 
+    List<User> findUsers(int firstResult, int maxResults);
+
     void saveUser(User user);
 
     Role findRole(Long id);
 
     String getState();
+
+    User findUser(long id);
+
+    List<UserProfile> findProfiles();
+
+    long countUsers();
 }

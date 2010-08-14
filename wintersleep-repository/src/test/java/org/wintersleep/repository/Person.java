@@ -22,7 +22,9 @@ import java.io.Serializable;
 public class Person implements Serializable {
 
     @Id
-    @GeneratedValue
+    //@GeneratedValue()
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "PersonPK")
+    @TableGenerator(name="PersonPK", /*table="PersonGeneratorTable", */allocationSize = 50)
     private Long id;
 
     @Basic(optional = false)
