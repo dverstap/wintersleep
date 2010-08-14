@@ -19,7 +19,7 @@ package org.wintersleep.repository;
 import com.arjuna.ats.jta.UserTransaction;
 import org.hibernate.transaction.JTATransactionFactory;
 
-public class JTATestTransactionFactory extends JTATransactionFactory {
+public class ArjunaJTATransactionFactory extends JTATransactionFactory {
 
     @Override
     protected javax.transaction.UserTransaction getUserTransaction() {
