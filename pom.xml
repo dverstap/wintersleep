@@ -6,21 +6,8 @@
     <packaging>pom</packaging>
     <version>0.1-SNAPSHOT</version>
     <name>Wintersleep</name>
-    <url>http://code.google.com/p/wintersleep/</url>
+    <url>http://github.com/dverstap/wintersleep</url>
     <inceptionYear>2007</inceptionYear>
-
-    <prerequisites>
-        <maven>2.0.9</maven>
-    </prerequisites>
-
-    <developers>
-        <developer>
-            <id>stappend</id>
-            <name>Davy Verstappen</name>
-            <email>davy@jsmiparser.org</email>
-            <timezone>+1</timezone>
-        </developer>
-    </developers>
 
     <licenses>
         <license>
@@ -30,7 +17,7 @@
     </licenses>
 
     <modules>
-        <module>util</module>
+        <module>wintersleep-spring-util</module>
         <module>wintersleep-repository</module>
         <module>usermgmt/usermgmt-domain</module>
         <module>usermgmt/usermgmt-springfaces</module>
