@@ -22,6 +22,7 @@
         <module>wintersleep-spring-util</module>
         <module>wintersleep-repository</module>
         <module>wintersleep-graphviz</module>
+        <module>wintersleep-statechart</module>
         <module>wintersleep-codeviz</module>
         <module>usermgmt/usermgmt-domain</module>
         <module>usermgmt/usermgmt-springfaces</module>
