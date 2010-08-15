@@ -1,6 +1,8 @@
 package org.wintersleep.statechart;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 public class Statechart {
@@ -12,11 +14,12 @@ public class Statechart {
     private final Queue<Event> waitingEvents = new LinkedList<Event>();
 
     private State currentState;
+    private final List<Transition> transitions = new ArrayList<Transition>();
 
     public Statechart(String name) {
         this.name = name;
         top = new CompositeState(this, "TOP");
-        new PseudoState(top, PseudoState.Type.INITIAL);
+        //new PseudoState(top, PseudoState.Type.INITIAL);
     }
 
     public String getName() {
@@ -32,7 +35,9 @@ public class Statechart {
     }
 
     public Transition addTransition(State from, State to, Signal signal, Guard guard, TransitionAction... actions) {
-        return new Transition(this, from, to, signal, guard, false, actions);
+        Transition transition = new Transition(this, from, to, signal, guard, false, actions);
+        transitions.add(transition);
+        return transition;
     }
 
 
@@ -53,4 +58,7 @@ public class Statechart {
 
     }
 
+    public Transition[] getTransitions() {
+        return transitions.toArray(new Transition[transitions.size()]);
+    }
 }

@@ -18,8 +18,16 @@ public class EdgeAttributeList extends ENGCAttributeList<EdgeAttributeList> {
         return addEnum("arrowtail", arrow);
     }
 
+    public EdgeAttributeList setLTail(DiGraph subGraph) {
+        return addUnquoted("ltail", "cluster_" + subGraph.getId());
+    }
+
     public EdgeAttributeList setArrowHead(Arrow arrow) {
         return addEnum("arrowhead", arrow);
+    }
+
+    public EdgeAttributeList setLHead(DiGraph subGraph) {
+        return addUnquoted("lhead", "cluster_" + subGraph.getId());
     }
 
     public EdgeAttributeList setStyle(String... styles) {

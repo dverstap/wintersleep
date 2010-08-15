@@ -8,7 +8,7 @@ class ReferenceStatechart extends Statechart {
     private final SimpleState s11 = new SimpleState(s1, "S11", entryActions("enterS11"), exitActions("exitS11"));
     private final CompositeState s2 = new CompositeState(s0, "S2", entryActions("enterS2"), exitActions("exitS2"));
     private final CompositeState s21 = new CompositeState(s2, "S21", entryActions("enterS21"), exitActions("exitS21"));
-    private final CompositeState s211 = new CompositeState(s21, "S211", entryActions("enterS211"), exitActions("exitS211"));
+    private final SimpleState s211 = new SimpleState(s21, "S211", entryActions("enterS211"), exitActions("exitS211"));
 
     private static final Signal A = new Signal("A");
     private static final Signal B = new Signal("B");
@@ -21,6 +21,17 @@ class ReferenceStatechart extends Statechart {
 
     public ReferenceStatechart() {
         super(ReferenceStatechart.class.getSimpleName());
+        top.onInit().transitionTo(s0).build();
+
+        s0.onInit().transitionTo(s1).build();
+        s0.on(E).transitionTo(s211).build();
+
+        s1.onInit().transitionTo(s11).build();
+
+        s2.onInit().transitionTo(s21).build();
+
+        s21.onInit().transitionTo(s211).build();
+        
     }
 
 

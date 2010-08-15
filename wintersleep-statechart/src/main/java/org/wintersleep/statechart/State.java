@@ -1,5 +1,6 @@
 package org.wintersleep.statechart;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -151,6 +152,10 @@ public abstract class State {
 
     public TransitionBuilder on(Signal signal) {
         return new TransitionBuilder(this, signal);
+    }
+
+    public void print(PrintWriter w, String indent) {
+        w.println(indent + getName());
     }
 
 }

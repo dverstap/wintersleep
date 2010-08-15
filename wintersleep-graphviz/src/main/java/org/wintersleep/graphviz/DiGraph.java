@@ -4,18 +4,29 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class DiGraph {
 
+    private final DiGraph parent;
     private final String id;
     private String[] message;
     private final GraphAttributeList attributeList = new GraphAttributeList();
     private final LinkedHashMap<String, AttributeListList> attributeListListList = new LinkedHashMap<String, AttributeListList>();
-    private final Map<String, Node> nodeMap = new HashMap<String, Node>();
-    private final Set<Edge> edgeSet = new HashSet<Edge>();
+    private final Map<String, Node> nodeMap = new LinkedHashMap<String, Node>();
+    private final Map<String, DiGraph> childGraphMap = new LinkedHashMap<String, DiGraph>();
+    private final Set<Edge> edgeSet = new LinkedHashSet<Edge>();
 
     public DiGraph(String id) {
+        this.parent = null;
+        this.id = id;
+    }
+
+    public DiGraph(DiGraph parent, String id) {
+        this.parent = parent;
         this.id = id;
     }
 
@@ -26,6 +37,15 @@ public class DiGraph {
         Node node = new Node(this, id);
         nodeMap.put(id, node);
         return node;
+    }
+
+    public DiGraph addSubGraph(String id) {
+        if (childGraphMap.containsKey(id)) {
+            throw new IllegalStateException("There is already a subgraph with id=" + id);
+        }
+        DiGraph result = new DiGraph(this, id);
+        childGraphMap.put(id, result);
+        return result;
     }
 
     public Edge addEdge(Node from, Node to) {
@@ -56,12 +76,31 @@ public class DiGraph {
         return addEdge(from, fromPort, to, toPort);
     }
 
+    // TODO this wrong: should look from the root graph
     private Node findNode(String id) {
-        Node result = nodeMap.get(id);
-        if (result == null) {
-            throw new IllegalArgumentException("Couldn't find node " + id);
+        Node result = doFindNode(id);
+        if (result != null) {
+            return result;
         }
-        return result;
+        throw new IllegalArgumentException("Couldn't find node " + id);
+    }
+
+    private Node doFindNode(String id) {
+        Node result = nodeMap.get(id);
+        if (result != null) {
+            return result;
+        }
+        for (DiGraph childGraph : childGraphMap.values()) {
+            result = childGraph.doFindNode(id);
+            if (result != null) {
+                return result;
+            }
+        }
+        return null;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String[] getMessage() {
@@ -96,6 +135,10 @@ public class DiGraph {
 
     public void print(PrintWriter w) {
         w.println("#!/bin/env dot");
+        doPrint(w);
+    }
+
+    private void doPrint(PrintWriter w) {
         if (message != null) {
             w.println();
             for (String line : message) {
@@ -104,7 +147,11 @@ public class DiGraph {
             }
             w.println();
         }
-        w.println("digraph " + id + " {");
+        if (parent == null) {
+            w.println("digraph " + id + " {");
+        } else {
+            w.println("subgraph cluster_" + id + " {");
+        }
 
         w.println("# attributeListListList:");
         for (Map.Entry<String, AttributeListList> entry : attributeListListList.entrySet()) {
@@ -118,6 +165,11 @@ public class DiGraph {
         attributeList.print(w, null, "\n", null);
         w.println();
         w.println();
+
+        w.println("# child graphs:");
+        for (DiGraph graph : childGraphMap.values()) {
+            graph.doPrint(w);
+        }
 
         w.println("# nodes:");
         for (Node node : nodeMap.values()) {

@@ -2,7 +2,7 @@ package org.wintersleep.statechart;
 
 public class PseudoState extends State {
 
-    enum Type {
+    public enum Type {
         INITIAL,
         FINAL
         //DEEP_HISTORY

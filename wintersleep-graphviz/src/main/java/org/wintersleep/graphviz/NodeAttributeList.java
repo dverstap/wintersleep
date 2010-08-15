@@ -6,6 +6,10 @@ public class NodeAttributeList extends ENGCAttributeList<NodeAttributeList> {
         return addUnquoted("shape", shape);
     }
 
+    public NodeAttributeList setStyle(String style) {
+        return addUnquoted("style", style);
+    }
+
     public NodeAttributeList setWidth(double width) {
         return addUnquoted("width", width);
     }

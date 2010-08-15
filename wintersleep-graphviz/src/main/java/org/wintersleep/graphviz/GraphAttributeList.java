@@ -39,4 +39,8 @@ public class GraphAttributeList extends ENGCAttributeList<GraphAttributeList> {
     public GraphAttributeList setNodeSep(double nodeSep) {
         return addUnquoted("nodesep", nodeSep);
     }
+
+    public GraphAttributeList setCompound(boolean compound) {
+        return addUnquoted("compound", true);
+    }
 }
