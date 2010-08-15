@@ -37,7 +37,7 @@ import static org.wintersleep.test.util.FileTestUtil.assertCreated;
 import static org.junit.Assert.assertNotNull;
 
 @RunWith(value = SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"/org/wintersleep/graphviz/diagram/clazz/hibernate/testApplicationContext.xml"})
+@ContextConfiguration(locations = {"/org/wintersleep/codeviz/diagram/clazz/hibernate/testApplicationContext.xml"})
 public class UserModelTest {
 
     private final File outputDir = FileTestUtil.makeOutputDir(UserModelTest.class);
