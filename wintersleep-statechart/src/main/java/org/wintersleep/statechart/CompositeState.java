@@ -26,20 +26,20 @@ public class CompositeState extends State implements Iterable<State> {
         super(parent, name, EntryAction.NO_ENTRY_ACTIONS, ExitAction.NO_EXIT_ACTIONS);
     }
 
-    protected CompositeState(StateMachine stateMachine, String name, EntryAction[] entryActions, ExitAction[] exitActions) {
-        super(stateMachine, name, entryActions, exitActions);
+    protected CompositeState(Statechart statechart, String name, EntryAction[] entryActions, ExitAction[] exitActions) {
+        super(statechart, name, entryActions, exitActions);
     }
 
-    protected CompositeState(StateMachine stateMachine, String name, EntryAction... entryActions) {
-        super(stateMachine, name, entryActions, ExitAction.NO_EXIT_ACTIONS);
+    protected CompositeState(Statechart statechart, String name, EntryAction... entryActions) {
+        super(statechart, name, entryActions, ExitAction.NO_EXIT_ACTIONS);
     }
 
-    protected CompositeState(StateMachine stateMachine, String name, ExitAction... exitActions) {
-        super(stateMachine, name, EntryAction.NO_ENTRY_ACTIONS, exitActions);
+    protected CompositeState(Statechart statechart, String name, ExitAction... exitActions) {
+        super(statechart, name, EntryAction.NO_ENTRY_ACTIONS, exitActions);
     }
 
-    protected CompositeState(StateMachine stateMachine, String name) {
-        super(stateMachine, name, EntryAction.NO_ENTRY_ACTIONS, ExitAction.NO_EXIT_ACTIONS);
+    protected CompositeState(Statechart statechart, String name) {
+        super(statechart, name, EntryAction.NO_ENTRY_ACTIONS, ExitAction.NO_EXIT_ACTIONS);
     }
 
     protected void addChild(State child) {

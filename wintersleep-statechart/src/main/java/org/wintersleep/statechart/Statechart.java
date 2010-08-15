@@ -3,7 +3,7 @@ package org.wintersleep.statechart;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class StateMachine {
+public class Statechart {
 
     private final String name;
     protected final CompositeState top;
@@ -13,7 +13,7 @@ public class StateMachine {
 
     private State currentState;
 
-    public StateMachine(String name) {
+    public Statechart(String name) {
         this.name = name;
         top = new CompositeState(this, "TOP");
         new PseudoState(top, PseudoState.Type.INITIAL);

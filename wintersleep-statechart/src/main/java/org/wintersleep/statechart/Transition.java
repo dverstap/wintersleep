@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Transition {
-    private final StateMachine stateMachine;
+    private final Statechart statechart;
     private final State startState;
     private final State targetState;
     private final List<State> targetToLCAPath = new ArrayList<State>();
@@ -15,9 +15,9 @@ public class Transition {
     private final boolean isInternal;
 
 
-    public Transition(StateMachine stateMachine, State startState, State targetState, Signal triggerSignal, Guard guard,
+    public Transition(Statechart statechart, State startState, State targetState, Signal triggerSignal, Guard guard,
                       boolean internal, TransitionAction... transitionActions) {
-        this.stateMachine = stateMachine;
+        this.statechart = statechart;
         this.startState = startState;
         this.targetState = targetState;
         this.lcaState = State.findLCA(startState, targetState, targetToLCAPath);
@@ -32,8 +32,8 @@ public class Transition {
         }
     }
 
-    public StateMachine getStateMachine() {
-        return stateMachine;
+    public Statechart getStateMachine() {
+        return statechart;
     }
 
     public State getStartState() {

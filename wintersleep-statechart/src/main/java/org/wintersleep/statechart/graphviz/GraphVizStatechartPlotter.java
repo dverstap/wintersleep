@@ -4,34 +4,36 @@ import org.wintersleep.graphviz.DiGraph;
 import org.wintersleep.graphviz.Node;
 import org.wintersleep.statechart.CompositeState;
 import org.wintersleep.statechart.State;
-import org.wintersleep.statechart.StateMachine;
+import org.wintersleep.statechart.Statechart;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class GraphVizStateMachinePlotter {
+public class GraphVizStatechartPlotter {
 
     private final Map<State, Node> stateToNodeMap = new HashMap<State, Node>();
-    private final StateMachine stateMachine;
+    private final Statechart statechart;
 
 
-    public GraphVizStateMachinePlotter(StateMachine stateMachine) {
-        this.stateMachine = stateMachine;
+    public GraphVizStatechartPlotter(Statechart statechart) {
+        this.statechart = statechart;
     }
 
     public DiGraph create() {
-        DiGraph graph = new DiGraph(stateMachine.getName());
-        addStateNodes(graph, stateMachine.getTop());
+        DiGraph graph = new DiGraph(statechart.getName());
+        addStateNodes(graph, statechart.getTop());
         return graph;
     }
 
     private void addStateNodes(DiGraph graph, State parent) {
-        stateToNodeMap.put(parent, graph.addNode(parent.getName()));
         if (parent instanceof CompositeState) {
+            stateToNodeMap.put(parent, graph.addNode(parent.getName()));
             CompositeState compositeState = (CompositeState) parent;
             for (State state : compositeState) {
                 addStateNodes(graph, state);
             }
+        } else {
+            stateToNodeMap.put(parent, graph.addNode(parent.getName()));
         }
     }
 }

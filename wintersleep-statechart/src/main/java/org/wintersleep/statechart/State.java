@@ -5,7 +5,7 @@ import java.util.List;
 
 public abstract class State {
 
-    private final StateMachine stateMachine;
+    private final Statechart statechart;
     private final State parent;
     private final String name;
     private final List<EntryExitAction> entryActions = new ArrayList<EntryExitAction>();
@@ -13,21 +13,21 @@ public abstract class State {
     private final List<Transition> outgoingTransitions = new ArrayList<Transition>();
 
     protected State(State parent, String name, EntryAction[] entryActions, ExitAction[] exitActions) {
-        this.stateMachine = parent.stateMachine;
+        this.statechart = parent.statechart;
         this.parent = parent;
         this.name = name;
         CompositeState compositeState = (CompositeState) parent;
         compositeState.addChild(this);
     }
 
-    protected State(StateMachine stateMachine, String name, EntryAction[] entryActions, ExitAction[] exitActions) {
-        this.stateMachine = stateMachine;
+    protected State(Statechart statechart, String name, EntryAction[] entryActions, ExitAction[] exitActions) {
+        this.statechart = statechart;
         this.parent = null;
         this.name = name;
     }
 
-    public StateMachine getStateMachine() {
-        return stateMachine;
+    public Statechart getStateMachine() {
+        return statechart;
     }
 
     public State getParent() {
