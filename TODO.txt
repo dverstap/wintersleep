@@ -1,4 +1,5 @@
 
+
 - integrate hibernate validator
 - integrate hibernate search
 - security
@@ -9,3 +10,6 @@
 - wicket unit tests
 - rather than write reusable UserManagement pages, we should write reusable panels
 (issue is then: how do you do navigation...)
+- migrate all logging to SLF4J
+- database tests should use hsqldb instead of mysql
+- port all spring tests to use annotations

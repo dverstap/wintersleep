@@ -27,7 +27,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 /**
  * You need to run this with JVM option:
  *
- * -javaagent:/udir/stappend/maven/repositories/local/org/springframework/spring-agent/2.5.5/spring-agent-2.5.5.jar
+ * -javaagent:${settings.localRepository}/org/springframework/spring-agent/2.5.5/spring-agent-2.5.5.jar
  */
 public class Main {
 

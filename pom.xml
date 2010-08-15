@@ -20,6 +20,8 @@
         <module>wintersleep-parent</module>
         <module>wintersleep-spring-util</module>
         <module>wintersleep-repository</module>
+        <module>wintersleep-graphviz</module>
+        <module>wintersleep-codeviz</module>
         <module>usermgmt/usermgmt-domain</module>
         <module>usermgmt/usermgmt-springfaces</module>
         <module>usermgmt/usermgmt-wicket</module>
