@@ -286,6 +286,11 @@
 
             <dependency>
                 <groupId>org.wintersleep</groupId>
+                <artifactId>wintersleep-graphviz</artifactId>
+                <version>0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wintersleep</groupId>
                 <artifactId>wintersleep-repository</artifactId>
                 <version>0.1-SNAPSHOT</version>
             </dependency>
@@ -300,6 +305,12 @@
                 <groupId>org.wintersleep</groupId>
                 <artifactId>wintersleep-spring-util</artifactId>
                 <version>0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wintersleep</groupId>
+                <artifactId>wintersleep-test-util</artifactId>
+                <version>0.1-SNAPSHOT</version>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.wintersleep</groupId>

@@ -1,10 +1,14 @@
 package org.jcodeviz.uml.diagram;
 
-import org.jcodeviz.graphviz.*;
 import org.jcodeviz.uml.model.CodeModel;
 import org.jcodeviz.uml.model.ModelClass;
 import org.jcodeviz.uml.model.Relation;
 import org.jcodeviz.uml.model.RelationEndpoint;
+import org.wintersleep.graphviz.DiGraph;
+import org.wintersleep.graphviz.EdgeAttributeList;
+import org.wintersleep.graphviz.EdgeStyle;
+import org.wintersleep.graphviz.Node;
+import org.wintersleep.graphviz.RankDir;
 
 import java.awt.*;
 import java.util.HashMap;

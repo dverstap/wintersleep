@@ -13,3 +13,5 @@
 - migrate all logging to SLF4J
 - database tests should use hsqldb instead of mysql
 - port all spring tests to use annotations
+- make sure all jcodeviz package names are gone
+- make sure all junit.framework package names are gone

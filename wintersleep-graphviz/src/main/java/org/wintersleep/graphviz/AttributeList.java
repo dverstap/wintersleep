@@ -1,4 +1,4 @@
-package org.jcodeviz.graphviz;
+package org.wintersleep.graphviz;
 
 import java.awt.*;
 import java.io.PrintWriter;

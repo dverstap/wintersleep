@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package org.jcodeviz.test;
+package org.wintersleep.test.util;
 
-import static junit.framework.Assert.assertTrue;
+import org.junit.Assert;
 
 import java.io.File;
 import java.net.URISyntaxException;
@@ -58,8 +58,8 @@ public abstract class FileTestUtil {
     }
 
     public static void assertCreated(File file) {
-        assertTrue("image file not created:" + file, file.exists());
-        assertTrue(file + " size is " + file.length(), file.length() > 0);
+        Assert.assertTrue("image file not created:" + file, file.exists());
+        Assert.assertTrue(file + " size is " + file.length(), file.length() > 0);
     }
 
 }

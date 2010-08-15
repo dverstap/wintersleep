@@ -3,9 +3,9 @@ package org.jcodeviz.uml.diagram;
 import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlObject;
 import org.jcodeviz.uml.model.ModelClass;
-import org.jcodeviz.graphviz.DiGraph;
-import org.jcodeviz.graphviz.Node;
-import org.jcodeviz.graphviz.html.*;
+import org.wintersleep.graphviz.DiGraph;
+import org.wintersleep.graphviz.Node;
+import org.wintersleep.graphviz.html.*;
 
 import java.awt.Font;
 import java.lang.reflect.Field;
@@ -127,7 +127,7 @@ public class ClassShape {
         }
 
         if (font != null) {
-            org.jcodeviz.graphviz.html.Font fontElement = td.addNewFont();
+            org.wintersleep.graphviz.html.Font fontElement = td.addNewFont();
             fontElement.setFace(font.getName());
             fontElement.setPointSize(10);
             setText(fontElement, text + linePostfix);

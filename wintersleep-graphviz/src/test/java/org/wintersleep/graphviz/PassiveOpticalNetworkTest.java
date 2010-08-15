@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package org.jcodeviz.graphviz;
+package org.wintersleep.graphviz;
 
-import org.jcodeviz.test.FileTestUtil;
-import static org.jcodeviz.test.FileTestUtil.assertCreated;
 import org.junit.Test;
+import org.wintersleep.test.util.FileTestUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,10 +29,10 @@ public class PassiveOpticalNetworkTest {
     @Test
     public void test() throws IOException, InterruptedException {
         DiGraph g = makeSingleSplitter64();
-        assertCreated(g.makeImageFile(outputDir, "png", true));
+        FileTestUtil.assertCreated(g.makeImageFile(outputDir, "png", true));
 
         g = make(4, 16);
-        assertCreated(g.makeImageFile(outputDir, "png", true));
+        FileTestUtil.assertCreated(g.makeImageFile(outputDir, "png", true));
 
 //        ImageViewer viewer = new ImageViewer("/tmp/PON.png");
 //        viewer.view();

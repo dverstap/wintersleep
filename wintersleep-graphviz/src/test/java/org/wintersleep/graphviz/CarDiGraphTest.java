@@ -1,15 +1,17 @@
-package org.jcodeviz.graphviz;
+package org.wintersleep.graphviz;
 
 import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlObject;
-import org.jcodeviz.graphviz.html.*;
-import org.jcodeviz.test.FileTestUtil;
-import static org.jcodeviz.test.FileTestUtil.assertCreated;
 import org.junit.Test;
+import org.wintersleep.graphviz.html.Alignment;
+import org.wintersleep.graphviz.html.Cell;
+import org.wintersleep.graphviz.html.ExtendedAlignment;
+import org.wintersleep.graphviz.html.Table;
+import org.wintersleep.graphviz.html.TableDocument;
+import org.wintersleep.test.util.FileTestUtil;
 
 import java.awt.*;
-import java.awt.Font;
 import java.io.File;
 import java.io.IOException;
 
@@ -64,7 +66,7 @@ public class CarDiGraphTest {
 //        w.flush();
 //        w.close();
 
-        assertCreated(g.makeImageFile(outputDir, "png", true));
+        FileTestUtil.assertCreated(g.makeImageFile(outputDir, "png", true));
     }
 
     private Node addClassNode(DiGraph g, final String className) {
@@ -132,7 +134,7 @@ public class CarDiGraphTest {
         }
 
         if (font != null) {
-            org.jcodeviz.graphviz.html.Font fontElement = td.addNewFont();
+            org.wintersleep.graphviz.html.Font fontElement = td.addNewFont();
             fontElement.setFace(font.getName());
             fontElement.setPointSize(10);
             setText(fontElement, text + linePostfix);

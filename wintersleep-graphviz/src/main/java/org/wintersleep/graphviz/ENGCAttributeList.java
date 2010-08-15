@@ -1,7 +1,7 @@
-package org.jcodeviz.graphviz;
+package org.wintersleep.graphviz;
 
 import org.apache.xmlbeans.XmlOptions;
-import org.jcodeviz.graphviz.html.TableDocument;
+import org.wintersleep.graphviz.html.TableDocument;
 
 import java.awt.*;
 import java.util.Collections;

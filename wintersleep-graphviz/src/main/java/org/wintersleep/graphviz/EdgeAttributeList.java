@@ -1,4 +1,4 @@
-package org.jcodeviz.graphviz;
+package org.wintersleep.graphviz;
 
 public class EdgeAttributeList extends ENGCAttributeList<EdgeAttributeList> {
 

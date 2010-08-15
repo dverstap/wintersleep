@@ -18,6 +18,7 @@
 
     <modules>
         <module>wintersleep-parent</module>
+        <module>wintersleep-test-util</module>
         <module>wintersleep-spring-util</module>
         <module>wintersleep-repository</module>
         <module>wintersleep-graphviz</module>

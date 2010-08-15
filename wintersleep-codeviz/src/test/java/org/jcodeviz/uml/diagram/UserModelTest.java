@@ -18,7 +18,7 @@ package org.jcodeviz.uml.diagram;
 
 import org.hibernate.cfg.Configuration;
 import org.hibernate.mapping.PersistentClass;
-import org.jcodeviz.test.FileTestUtil;
+import org.wintersleep.test.util.FileTestUtil;
 import org.jcodeviz.uml.model.CodeModel;
 import org.jcodeviz.uml.model.HibernateModelFactory;
 import org.junit.Test;
@@ -33,7 +33,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 
-import static org.jcodeviz.test.FileTestUtil.assertCreated;
+import static org.wintersleep.test.util.FileTestUtil.assertCreated;
 import static org.junit.Assert.assertNotNull;
 
 @RunWith(value = SpringJUnit4ClassRunner.class)

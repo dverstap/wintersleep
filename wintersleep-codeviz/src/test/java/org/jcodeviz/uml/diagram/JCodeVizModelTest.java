@@ -1,7 +1,7 @@
 package org.jcodeviz.uml.diagram;
 
-import org.jcodeviz.test.FileTestUtil;
-import static org.jcodeviz.test.FileTestUtil.assertCreated;
+import org.wintersleep.test.util.FileTestUtil;
+import static org.wintersleep.test.util.FileTestUtil.assertCreated;
 import org.jcodeviz.uml.model.CodeModel;
 import org.jcodeviz.uml.model.ModelClass;
 import org.jcodeviz.uml.model.Relation;
