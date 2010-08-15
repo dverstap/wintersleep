@@ -1,4 +1,4 @@
-package org.jcodeviz.uml.model;
+package org.wintersleep.codeviz.uml.model;
 
 /**
  * Created by IntelliJ IDEA.

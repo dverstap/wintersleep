@@ -1,8 +1,8 @@
-package org.jcodeviz.uml.diagram;
+package org.wintersleep.codeviz.uml.diagram;
 
 import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlObject;
-import org.jcodeviz.uml.model.ModelClass;
+import org.wintersleep.codeviz.uml.model.ModelClass;
 import org.wintersleep.graphviz.DiGraph;
 import org.wintersleep.graphviz.Node;
 import org.wintersleep.graphviz.html.*;

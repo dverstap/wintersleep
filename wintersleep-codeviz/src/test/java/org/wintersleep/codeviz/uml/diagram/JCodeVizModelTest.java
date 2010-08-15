@@ -1,11 +1,12 @@
-package org.jcodeviz.uml.diagram;
+package org.wintersleep.codeviz.uml.diagram;
 
+import org.wintersleep.codeviz.uml.model.CodeModel;
+import org.wintersleep.codeviz.uml.model.Relation;
 import org.wintersleep.test.util.FileTestUtil;
 import static org.wintersleep.test.util.FileTestUtil.assertCreated;
-import org.jcodeviz.uml.model.CodeModel;
-import org.jcodeviz.uml.model.ModelClass;
-import org.jcodeviz.uml.model.Relation;
-import org.jcodeviz.uml.model.RelationEndpoint;
+
+import org.wintersleep.codeviz.uml.model.ModelClass;
+import org.wintersleep.codeviz.uml.model.RelationEndpoint;
 import org.junit.Test;
 
 import java.io.File;

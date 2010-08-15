@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jcodeviz.uml.diagram;
+package org.wintersleep.codeviz.uml.diagram;
 
 import org.hibernate.annotations.NaturalId;
 

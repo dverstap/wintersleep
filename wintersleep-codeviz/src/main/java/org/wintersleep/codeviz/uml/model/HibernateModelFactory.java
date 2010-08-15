@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jcodeviz.uml.model;
+package org.wintersleep.codeviz.uml.model;
 
 import org.hibernate.cfg.Configuration;
 import org.hibernate.mapping.*;

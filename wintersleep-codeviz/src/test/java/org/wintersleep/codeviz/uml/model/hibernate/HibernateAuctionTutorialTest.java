@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jcodeviz.uml.model.hibernate;
+package org.wintersleep.codeviz.uml.model.hibernate;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.dialect.MySQL5InnoDBDialect;
@@ -22,11 +22,12 @@ import org.hibernate.auction.Bid;
 import org.hibernate.auction.User;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
+import org.wintersleep.codeviz.uml.diagram.ClassDiagram;
+import org.wintersleep.codeviz.uml.model.HibernateModelFactory;
 import org.wintersleep.test.util.FileTestUtil;
 import static org.wintersleep.test.util.FileTestUtil.assertCreated;
-import org.jcodeviz.uml.diagram.ClassDiagram;
-import org.jcodeviz.uml.model.CodeModel;
-import org.jcodeviz.uml.model.HibernateModelFactory;
+
+import org.wintersleep.codeviz.uml.model.CodeModel;
 import org.junit.Test;
 
 import java.io.File;

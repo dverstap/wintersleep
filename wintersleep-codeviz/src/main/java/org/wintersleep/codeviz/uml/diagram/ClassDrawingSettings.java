@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.jcodeviz.uml.diagram;
+package org.wintersleep.codeviz.uml.diagram;
 
 public class ClassDrawingSettings implements Cloneable {
 

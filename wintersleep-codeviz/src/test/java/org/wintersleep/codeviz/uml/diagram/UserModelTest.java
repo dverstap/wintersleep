@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package org.jcodeviz.uml.diagram;
+package org.wintersleep.codeviz.uml.diagram;
 
 import org.hibernate.cfg.Configuration;
 import org.hibernate.mapping.PersistentClass;
+import org.wintersleep.codeviz.uml.model.CodeModel;
+import org.wintersleep.codeviz.uml.model.HibernateModelFactory;
 import org.wintersleep.test.util.FileTestUtil;
-import org.jcodeviz.uml.model.CodeModel;
-import org.jcodeviz.uml.model.HibernateModelFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +37,7 @@ import static org.wintersleep.test.util.FileTestUtil.assertCreated;
 import static org.junit.Assert.assertNotNull;
 
 @RunWith(value = SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"/org/jcodeviz/diagram/clazz/hibernate/testApplicationContext.xml"})
+@ContextConfiguration(locations = {"/org/wintersleep/codeviz/diagram/clazz/hibernate/testApplicationContext.xml"})
 public class UserModelTest {
 
     private final File outputDir = FileTestUtil.makeOutputDir(UserModelTest.class);

@@ -1,4 +1,4 @@
-package org.jcodeviz.uml.diagram;
+package org.wintersleep.codeviz.uml.diagram;
 
 import org.hibernate.annotations.NaturalId;
 
