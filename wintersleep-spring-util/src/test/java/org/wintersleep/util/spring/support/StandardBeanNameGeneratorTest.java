@@ -16,10 +16,13 @@
 
 package org.wintersleep.util.spring.support;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
-public class StandardBeanNameGeneratorTest extends TestCase {
+import static org.junit.Assert.assertEquals;
 
+public class StandardBeanNameGeneratorTest {
+
+    @Test
     public void test() {
         StandardBeanNameGenerator gen = new StandardBeanNameGenerator();
         assertEquals("userService", gen.process("MockUserService"));
