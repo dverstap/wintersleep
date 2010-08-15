@@ -158,4 +158,16 @@ public abstract class State {
         w.println(indent + getName());
     }
 
+    // is this state a (recursive) child of the presumed parent?
+    public boolean isChildOf(State presumedParent) {
+        State p = parent;
+        while (p != null) {
+            if (p == presumedParent) {
+                return true;
+            }
+            p = p.parent;
+        }
+        return false;
+    }
+
 }

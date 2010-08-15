@@ -43,4 +43,8 @@ public class GraphAttributeList extends ENGCAttributeList<GraphAttributeList> {
     public GraphAttributeList setCompound(boolean compound) {
         return addUnquoted("compound", true);
     }
+
+    public GraphAttributeList setStyle(String style) {
+        return addUnquoted("style", style);
+    }
 }

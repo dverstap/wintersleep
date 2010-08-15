@@ -5,6 +5,7 @@ import org.wintersleep.graphviz.Edge;
 import org.wintersleep.graphviz.Node;
 import org.wintersleep.statechart.CompositeState;
 import org.wintersleep.statechart.PseudoState;
+import org.wintersleep.statechart.Signal;
 import org.wintersleep.statechart.SimpleState;
 import org.wintersleep.statechart.State;
 import org.wintersleep.statechart.Statechart;
@@ -39,7 +40,16 @@ public class GraphVizStatechartPlotter {
             CompositeState compositeState = (CompositeState) state;
             DiGraph subGraph = graph.addSubGraph(state.getName());
             subGraph.getAttributeList().setLabel(state.getName());
+            if (compositeState.isTopState()) {
+                subGraph.getAttributeList().setStyle("invis");
+            } else {
+                subGraph.getAttributeList().setStyle("rounded");                
+            }
             compositeStateToGraphMap.put(compositeState, subGraph);
+            graph.addNode(compositeState.getGraphVizExternalNodeId()).
+                    addAttributeList().setStyle("invis").setLabel("");
+            subGraph.addNode(compositeState.getGraphVizInternalNodeId()).
+                    addAttributeList().setStyle("invis").setLabel("");
             for (State childState : compositeState) {
                 addStateNodes(subGraph, childState);
             }
@@ -64,8 +74,11 @@ public class GraphVizStatechartPlotter {
 
     private void addTransitions(DiGraph graph) {
         for (Transition transition : statechart.getTransitions()) {
-            Edge edge = graph.addEdge(findTransitionStateName(transition.getStartState()),
-                    findTransitionStateName(transition.getTargetState()));
+            Edge edge = graph.addEdge(transition.getGraphVizStartStateId(),
+                    transition.getGraphVizTargetStateId());
+            if (!transition.getTriggerSignal().equals(Signal.INIT)) {
+                edge.addAttributeList().setLabel(transition.getTriggerSignal().getName());
+            }
             if (transition.getStartState() instanceof CompositeState) {
                 CompositeState compositeStartState = (CompositeState) transition.getStartState();
                 edge.addAttributeList().setLTail(compositeStateToGraphMap.get(compositeStartState));

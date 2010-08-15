@@ -69,5 +69,34 @@ public class Transition {
         }
     }
 
+    public String getGraphVizStartStateId() {
+        if (startState instanceof CompositeState) {
+            CompositeState compositeStartState = (CompositeState) startState;
+            if (targetState.isChildOf(startState)) {
+                return compositeStartState.getGraphVizExternalNodeId();
+//            } else if (startState.isChildOf(targetState)) {
+//                return compositeStartState.getGraphVizInternalNodeId();
+//            }
+            } else {
+                return compositeStartState.getInitialState().getName();
+            }
+        }
+        return startState.getName();
+    }
+
+    public String getGraphVizTargetStateId() {
+        if (targetState instanceof CompositeState) {
+            CompositeState compositeTargetState = (CompositeState) targetState;
+            if (startState.isChildOf(targetState)) {
+                return compositeTargetState.getGraphVizExternalNodeId();
+//            } else if (targetState.isChildOf(startState)) {
+//                return compositeTargetState.getGraphVizInternalNodeId();
+//            }
+            } else {
+                return compositeTargetState.getInitialState().getName();
+            }
+        }
+        return targetState.getName();
+    }
 
 }
