@@ -3,24 +3,32 @@ package org.wintersleep.statechart;
 public class Guard {
 
     private final GuardCallback callback;
-    private final boolean isPositive;
-    private final String desc;
+    private final boolean positive;
+    private final String name;
 
-    public Guard(GuardCallback callback, boolean positive, String desc) {
+    public Guard(GuardCallback callback, boolean positive, String name) {
         this.callback = callback;
-        isPositive = positive;
-        this.desc = desc;
+        this.positive = positive;
+        this.name = name;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getName() {
+        return name;
     }
 
     public boolean passes(Event event) {
         boolean result = callback.test(event);
-        if (!isPositive) {
+        if (!positive) {
             result = !result;
         }
         return result;
+    }
+
+    public String getLabel() {
+        if (positive) {
+            return "[" + name + "]/";
+        } else {
+            return "[!" + name + "]/";
+        }
     }
 }

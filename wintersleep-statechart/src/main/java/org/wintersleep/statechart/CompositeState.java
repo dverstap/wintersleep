@@ -7,9 +7,6 @@ import java.util.List;
 
 public class CompositeState extends State implements Iterable<State> {
 
-    private static final String EXTERNAL_INVISIBLE = "_EXTERNAL_INVISIBLE";
-    private static final String INTERNAL_INVISIBLE = "_INTERNAL_INVISIBLE";
-
     private final List<State> children = new ArrayList<State>();
     private final PseudoState initialState;
     private PseudoState deepHistoryState;
@@ -116,11 +113,4 @@ public class CompositeState extends State implements Iterable<State> {
         }
     }
 
-    public String getGraphVizInternalNodeId() {
-        return getName() + INTERNAL_INVISIBLE;
-    }
-
-    public String getGraphVizExternalNodeId() {
-        return getName() + EXTERNAL_INVISIBLE;
-    }
 }

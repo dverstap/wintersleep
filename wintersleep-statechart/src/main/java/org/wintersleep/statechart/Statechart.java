@@ -40,6 +40,12 @@ public class Statechart {
         return transition;
     }
 
+    public Transition addInternalTransition(State from, Signal signal, Guard guard, TransitionAction... actions) {
+        Transition transition = new Transition(this, from, from, signal, guard, true, actions);
+        transitions.add(transition);
+        return transition;
+    }
+
 
     public EntryAction[] entryActions(String... names) {
         EntryAction[] result = new EntryAction[names.length];

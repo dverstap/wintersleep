@@ -45,6 +45,6 @@ public class GraphAttributeList extends ENGCAttributeList<GraphAttributeList> {
     }
 
     public GraphAttributeList setStyle(String style) {
-        return addUnquoted("style", style);
+        return addQuoted("style", style);
     }
 }

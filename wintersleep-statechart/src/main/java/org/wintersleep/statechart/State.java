@@ -9,14 +9,17 @@ public abstract class State {
     private final Statechart statechart;
     private final State parent;
     private final String name;
-    private final List<EntryExitAction> entryActions = new ArrayList<EntryExitAction>();
-    private final List<EntryExitAction> exitActions = new ArrayList<EntryExitAction>();
+    private final EntryAction[] entryActions;
+    private final ExitAction[] exitActions;
     private final List<Transition> outgoingTransitions = new ArrayList<Transition>();
 
     protected State(State parent, String name, EntryAction[] entryActions, ExitAction[] exitActions) {
         this.statechart = parent.statechart;
         this.parent = parent;
         this.name = name;
+        this.entryActions = entryActions;
+        this.exitActions = exitActions;
+
         CompositeState compositeState = (CompositeState) parent;
         compositeState.addChild(this);
     }
@@ -25,6 +28,8 @@ public abstract class State {
         this.statechart = statechart;
         this.parent = null;
         this.name = name;
+        this.entryActions = entryActions;
+        this.exitActions = exitActions;
     }
 
     public Statechart getStateMachine() {
@@ -66,14 +71,6 @@ public abstract class State {
             return this;
         }
         return null;
-    }
-
-    public void addEntryAction(EntryExitAction action) {
-        entryActions.add(action);
-    }
-
-    public void addExitAction(EntryExitAction action) {
-        exitActions.add(action);
     }
 
     public void executeEntryActions() {
@@ -170,4 +167,18 @@ public abstract class State {
         return false;
     }
 
+    public String getGraphVizNodeId() {
+        return getName();
+    }
+
+    public String getGraphVizLabel() {
+        StringBuilder result = new StringBuilder(getName());
+        for (EntryExitAction entryAction : entryActions) {
+            result.append("\\nentry/").append(entryAction.getName());
+        }
+        for (ExitAction exitAction : exitActions) {
+            result.append("\\nexit/").append(exitAction.getName());
+        }
+        return result.toString();
+    }
 }

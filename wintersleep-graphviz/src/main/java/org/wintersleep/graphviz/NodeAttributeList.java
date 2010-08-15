@@ -7,7 +7,7 @@ public class NodeAttributeList extends ENGCAttributeList<NodeAttributeList> {
     }
 
     public NodeAttributeList setStyle(String style) {
-        return addUnquoted("style", style);
+        return addQuoted("style", style);
     }
 
     public NodeAttributeList setWidth(double width) {

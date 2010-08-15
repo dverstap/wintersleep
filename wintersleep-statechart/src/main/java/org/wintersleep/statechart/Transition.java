@@ -57,10 +57,7 @@ public class Transition {
     }
 
     public boolean passesGuard(Event event) {
-        if (guard == null) {
-            return true;
-        }
-        return guard.passes(event);
+        return guard == null || guard.passes(event);
     }
 
     public void executeActions(Event event) {
@@ -69,34 +66,14 @@ public class Transition {
         }
     }
 
-    public String getGraphVizStartStateId() {
-        if (startState instanceof CompositeState) {
-            CompositeState compositeStartState = (CompositeState) startState;
-            if (targetState.isChildOf(startState)) {
-                return compositeStartState.getGraphVizExternalNodeId();
-//            } else if (startState.isChildOf(targetState)) {
-//                return compositeStartState.getGraphVizInternalNodeId();
-//            }
-            } else {
-                return compositeStartState.getInitialState().getName();
-            }
+    public String getLabel() {
+        StringBuilder result = new StringBuilder(triggerSignal.getName());
+        if (guard != null) {
+            result.append(guard.getLabel());
         }
-        return startState.getName();
-    }
-
-    public String getGraphVizTargetStateId() {
-        if (targetState instanceof CompositeState) {
-            CompositeState compositeTargetState = (CompositeState) targetState;
-            if (startState.isChildOf(targetState)) {
-                return compositeTargetState.getGraphVizExternalNodeId();
-//            } else if (targetState.isChildOf(startState)) {
-//                return compositeTargetState.getGraphVizInternalNodeId();
-//            }
-            } else {
-                return compositeTargetState.getInitialState().getName();
-            }
+        for (TransitionAction transitionAction : transitionActions) {
+            result.append("\\n").append(transitionAction.getName());
         }
-        return targetState.getName();
+        return result.toString();
     }
-
 }

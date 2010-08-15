@@ -35,32 +35,35 @@ public class GraphVizStatechartPlotter {
 
 
     private void addStateNodes(DiGraph graph, State state) {
-        // TODO should use the visitor pattern here
+        // TODO should use the visitor pattern here or something
+        Node node = null;
         if (state instanceof CompositeState) {
             CompositeState compositeState = (CompositeState) state;
             DiGraph subGraph = graph.addSubGraph(state.getName());
-            subGraph.getAttributeList().setLabel(state.getName());
+            //subGraph.getAttributeList().setLabel(state.getName());
             if (compositeState.isTopState()) {
                 subGraph.getAttributeList().setStyle("invis");
             } else {
                 subGraph.getAttributeList().setStyle("rounded");                
+                node = subGraph.addNode(compositeState.getName());
+                        node.addAttributeList()
+                        .setShape("box")
+                        .setStyle("rounded,dotted")
+                                .setLabel(compositeState.getGraphVizLabel());
             }
             compositeStateToGraphMap.put(compositeState, subGraph);
-            graph.addNode(compositeState.getGraphVizExternalNodeId()).
-                    addAttributeList().setStyle("invis").setLabel("");
-            subGraph.addNode(compositeState.getGraphVizInternalNodeId()).
-                    addAttributeList().setStyle("invis").setLabel("");
             for (State childState : compositeState) {
                 addStateNodes(subGraph, childState);
             }
         } else if (state instanceof SimpleState) {
-            Node node = graph.addNode(state.getName());
+            node = graph.addNode(state.getName());
             node.addAttributeList().setShape("box")
-                    .setStyle("rounded");
+                    .setStyle("rounded")
+                    .setLabel(state.getGraphVizLabel());
             stateToNodeMap.put(state, node);
         } else if (state instanceof PseudoState) {
             PseudoState pseudoState = (PseudoState) state;
-            Node node = graph.addNode(pseudoState.getName());
+            node = graph.addNode(pseudoState.getName());
             if (pseudoState.getType() == PseudoState.Type.INITIAL) {
                 node.addAttributeList().setShape("point")
                         .setWidth(0.15)
@@ -74,10 +77,10 @@ public class GraphVizStatechartPlotter {
 
     private void addTransitions(DiGraph graph) {
         for (Transition transition : statechart.getTransitions()) {
-            Edge edge = graph.addEdge(transition.getGraphVizStartStateId(),
-                    transition.getGraphVizTargetStateId());
+            Edge edge = graph.addEdge(transition.getStartState().getGraphVizNodeId(),
+                    transition.getTargetState().getGraphVizNodeId());
             if (!transition.getTriggerSignal().equals(Signal.INIT)) {
-                edge.addAttributeList().setLabel(transition.getTriggerSignal().getName());
+                edge.addAttributeList().setLabel(transition.getLabel());
             }
             if (transition.getStartState() instanceof CompositeState) {
                 CompositeState compositeStartState = (CompositeState) transition.getStartState();

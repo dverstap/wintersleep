@@ -4,7 +4,9 @@ public class TransitionBuilder {
 
     private final State sourceState;
     private final Signal signal;
+    private boolean positiveCondition = true;
     private String condition;
+    private boolean internal = false;
     private State targetState;
     private String[] actions = {};
 
@@ -16,12 +18,25 @@ public class TransitionBuilder {
 
 
     public TransitionBuilder when(String condition) {
+        this.positiveCondition = true;
+        this.condition = condition;
+        return this;
+    }
+
+    public TransitionBuilder whenNot(String condition) {
+        this.positiveCondition = false;
         this.condition = condition;
         return this;
     }
 
     public TransitionBuilder transitionTo(State targetState) {
         this.targetState = targetState;
+        return this;
+    }
+
+    public TransitionBuilder transitionInternally() {
+        this.targetState = this.sourceState;
+        this.internal = true;
         return this;
     }
 
@@ -36,7 +51,7 @@ public class TransitionBuilder {
         }
         Guard guard = null;
         if (condition != null) {
-            guard = new Guard(null, true, condition);
+            guard = new Guard(null, positiveCondition, condition);
         }
         TransitionAction[] transitionActions = new TransitionAction[actions.length];
         for (int i = 0; i < actions.length; i++) {
@@ -54,6 +69,10 @@ public class TransitionBuilder {
             };
 
         }
-        sourceState.getStateMachine().addTransition(sourceState, targetState, signal, guard, transitionActions);
+        if (internal) {
+            sourceState.getStateMachine().addInternalTransition(sourceState, signal, guard, transitionActions);
+        } else {
+            sourceState.getStateMachine().addTransition(sourceState, targetState, signal, guard, transitionActions);
+        }
     }
 }
