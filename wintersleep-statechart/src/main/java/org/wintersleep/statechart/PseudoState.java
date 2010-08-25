@@ -1,6 +1,11 @@
 package org.wintersleep.statechart;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class PseudoState extends State {
+
+    private static final Logger log = LoggerFactory.getLogger(PseudoState.class);
 
     public enum Type {
         INITIAL,
@@ -24,6 +29,7 @@ public class PseudoState extends State {
 
         Transition transition = findOutgoingTransition(event);
         assert (transition != null);
+        log.debug("Executing initial transaction from '{}' to '{}'.", transition.getStartState(), transition.getTargetState().getName());
 
         transition.executeActions(event);
 

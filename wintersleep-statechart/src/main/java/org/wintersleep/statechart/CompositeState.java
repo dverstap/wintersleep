@@ -51,13 +51,6 @@ public class CompositeState extends State implements Iterable<State> {
 
     protected void addChild(State child) {
         children.add(child);
-//        if (child instanceof PseudoState) {
-//            PseudoState pseudoState = (PseudoState) child;
-//            if (pseudoState.getType() == PseudoState.Type.INITIAL) {
-//                assert(this.initialState == null);
-//                initialState = pseudoState;
-//            }
-//        }
     }
 
     @Override

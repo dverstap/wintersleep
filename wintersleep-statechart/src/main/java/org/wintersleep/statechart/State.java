@@ -1,10 +1,15 @@
 package org.wintersleep.statechart;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class State {
+
+    private static final Logger log = LoggerFactory.getLogger(State.class);
 
     private final Statechart statechart;
     private final State parent;
@@ -74,14 +79,22 @@ public abstract class State {
     }
 
     public void executeEntryActions() {
-        for (EntryExitAction entryAction : entryActions) {
-            entryAction.execute();
+        if (entryActions.length > 0) {
+            String id = toString();
+            for (EntryExitAction entryAction : entryActions) {
+                log.debug("{}: executing entry action: {}", id, entryAction.getName());
+                entryAction.execute();
+            }
         }
     }
 
     public void executeExitActions() {
-        for (EntryExitAction exitAction : exitActions) {
-            exitAction.execute();
+        if (exitActions.length > 0) {
+            String id = toString();
+            for (EntryExitAction exitAction : exitActions) {
+                log.debug("{}: executing exit action: {}", id, exitAction.getName());
+                exitAction.execute();
+            }
         }
     }
 
@@ -106,30 +119,28 @@ public abstract class State {
                     targetToLCAPath.add(s);
                 }
             }
-            // TODO:
-//            if (lca == null) {
-//                for (int i = targetToLCAPath.size();
-//                     lca == null && i != 0; i--) {
-//                    State s = targetToLCAPath.get(i - 1);
-//                    if (s == source.parent) {
-//                        lca = s;
-//                        targetToLCAPath.resize(i - 1, null);
-//                    }
-//                }
-//            }
-//            if (lca == null) {
-//                for (State s1 = source.parent;
-//                     lca == null && s1 != null; s1 = s1.parent) {
-//                    for (int i = targetToLCAPath.size();
-//                         lca == null && i != 0; i--) {
-//                        State s2 = targetToLCAPath.get(i - 1);
-//                        if (s1 == s2) {
-//                            lca = s1;
-//                            targetToLCAPath.resize(i - 1, null);
-//                        }
-//                    }
-//                }
-//            }
+            if (lca == null) {
+                for (int i = targetToLCAPath.size(); lca == null && i != 0; i--) {
+                    State s = targetToLCAPath.get(i - 1);
+                    if (s == source.parent) {
+                        lca = s;
+                        resize(targetToLCAPath, i - 1, null);
+                    }
+                }
+            }
+            if (lca == null) {
+                for (State s1 = source.parent;
+                     lca == null && s1 != null; s1 = s1.parent) {
+                    for (int i = targetToLCAPath.size();
+                         lca == null && i != 0; i--) {
+                        State s2 = targetToLCAPath.get(i - 1);
+                        if (s1 == s2) {
+                            lca = s1;
+                            resize(targetToLCAPath, i - 1, null);
+                        }
+                    }
+                }
+            }
 
         }
         assert (lca != null);
@@ -140,7 +151,7 @@ public abstract class State {
         List<State> result = new ArrayList<State>();
         State state = this;
         while (state.parent != parent) {
-            assert(state.parent != null);
+            assert (state.parent != null);
             result.add(state);
             state = state.parent;
         }
@@ -180,5 +191,21 @@ public abstract class State {
             result.append("\\nexit/").append(exitAction.getName());
         }
         return result.toString();
+    }
+
+    private static <T> void resize(final List<T> list, final int newSize, final T fillValue) {
+        if (list.size() < newSize) {
+            throw new IllegalStateException("Does not make sense to make the LCA path longer. ");
+//            do {
+//                list.add(fillValue);
+//            } while (list.size() < newSize);
+        } else if (newSize < list.size()) {
+            list.subList(newSize, list.size()).clear();
+        }
+    }
+
+    @Override
+    public String toString() {
+        return statechart.getName() + ":" + name;
     }
 }
