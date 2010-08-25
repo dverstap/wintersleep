@@ -21,7 +21,7 @@ class ReferenceStatechart extends Statechart {
 
 
     public ReferenceStatechart() {
-        super(ReferenceStatechart.class.getSimpleName());
+        super(ReferenceStatechartPojo.class, ReferenceStatechart.class.getSimpleName());
 
         // TODO the .build() at the end of every TransitionBuilder is very annoying and error prone.
         // if we just store the TransitionBuilder in the Statechart, we could build() them all at once

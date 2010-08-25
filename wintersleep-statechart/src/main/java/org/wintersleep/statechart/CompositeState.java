@@ -71,15 +71,15 @@ public class CompositeState extends State implements Iterable<State> {
 
 
     @Override
-    public void executeExitActions() {
+    public void executeExitActions(Object pojo) {
         // TODO
 //        if (deepHistoryState != null) {
 //        }
-        super.executeExitActions();
+        super.executeExitActions(pojo);
     }
 
-    public State executeInitialTransition() {
-        return initialState.executeInitialTransition();
+    public State executeInitialTransition(Object pojo) {
+        return initialState.executeInitialTransition(pojo);
     }
 
     public static CompositeState dynamicCast(State state) {

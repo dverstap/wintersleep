@@ -37,7 +37,7 @@ public abstract class State {
         this.exitActions = exitActions;
     }
 
-    public Statechart getStateMachine() {
+    public Statechart getStatechart() {
         return statechart;
     }
 
@@ -57,16 +57,16 @@ public abstract class State {
         outgoingTransitions.add(transition);
     }
 
-    public Transition findOutgoingTransition(Event event) {
+    public Transition findOutgoingTransition(Object pojo, Event event) {
         for (Transition transition : outgoingTransitions) {
             if (transition.getTriggerSignal().equals(event.getSignal())) {
-                if (transition.passesGuard(event)) {
+                if (transition.passesGuard(pojo, event)) {
                     return transition;
                 }
             }
         }
         if (parent != null) {
-            return parent.findOutgoingTransition(event);
+            return parent.findOutgoingTransition(pojo, event);
         }
         return null;
     }
@@ -78,22 +78,22 @@ public abstract class State {
         return null;
     }
 
-    public void executeEntryActions() {
+    public void executeEntryActions(Object pojo) {
         if (entryActions.length > 0) {
             String id = toString();
             for (EntryExitAction entryAction : entryActions) {
                 log.debug("{}: executing entry action: {}", id, entryAction.getName());
-                entryAction.execute();
+                entryAction.execute(pojo);
             }
         }
     }
 
-    public void executeExitActions() {
+    public void executeExitActions(Object pojo) {
         if (exitActions.length > 0) {
             String id = toString();
             for (EntryExitAction exitAction : exitActions) {
                 log.debug("{}: executing exit action: {}", id, exitAction.getName());
-                exitAction.execute();
+                exitAction.execute(pojo);
             }
         }
     }

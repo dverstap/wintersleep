@@ -4,8 +4,8 @@ public class EntryAction extends EntryExitAction {
 
     public static final EntryAction[] NO_ENTRY_ACTIONS = new EntryAction[0];
 
-    public EntryAction(String name) {
-        super(name);
+    public EntryAction(Class clazz, String name) {
+        super(clazz, name);
     }
 
 }

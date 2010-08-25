@@ -12,6 +12,7 @@ public class Statechart {
 
     private final static Logger log = LoggerFactory.getLogger(Statechart.class);
 
+    private final Class callbackClass;
     private final String name;
     protected final CompositeState top;
 
@@ -20,9 +21,14 @@ public class Statechart {
     private State currentState;
     private final List<Transition> transitions = new ArrayList<Transition>();
 
-    public Statechart(String name) {
+    public Statechart(Class callbackClass, String name) {
+        this.callbackClass = callbackClass;
         this.name = name;
-        top = new CompositeState(this, "TOP");
+        this.top = new CompositeState(this, "TOP");
+    }
+
+    public Class getCallbackClass() {
+        return callbackClass;
     }
 
     public String getName() {
@@ -53,7 +59,7 @@ public class Statechart {
     public EntryAction[] entryActions(String... names) {
         EntryAction[] result = new EntryAction[names.length];
         for (int i = 0; i < names.length; i++) {
-            result[i] = new EntryAction(names[i]);
+            result[i] = new EntryAction(callbackClass, names[i]);
         }
         return result;
     }
@@ -61,7 +67,7 @@ public class Statechart {
     public ExitAction[] exitActions(String... names) {
         ExitAction[] result = new ExitAction[names.length];
         for (int i = 0; i < names.length; i++) {
-            result[i] = new ExitAction(names[i]);
+            result[i] = new ExitAction(callbackClass, names[i]);
         }
         return result;
 
@@ -71,24 +77,25 @@ public class Statechart {
         return transitions.toArray(new Transition[transitions.size()]);
     }
 
-    public void start() {
+    public void start(Object pojo) {
         if (currentState != null) {
             throw new IllegalStateException("statechart already started.");
         }
-        currentState = top.getInitialState().executeInitialTransition();
+        currentState = top.getInitialState().executeInitialTransition(pojo);
     }
 
 
-    public void processEvent(Event newEvent) {
+    public void processEvent(Object pojo, Event newEvent) {
+        // TODO events need to be queued per pojo
         waitingEvents.add(newEvent);
         if (waitingEvents.size() == 1) {
             while (waitingEvents.size() > 0) {
-                processNextEvent();
+                processNextEvent(pojo);
             }
         }
     }
 
-    protected void processNextEvent() {
+    protected void processNextEvent(Object pojo) {
         assert (waitingEvents.size() > 0);
 
         Event event = waitingEvents.remove();
@@ -96,28 +103,27 @@ public class Statechart {
         log.debug("Received event '{}'", event.getSignal().getName());
 
         Transition transition
-                = currentState.findOutgoingTransition(event);
+                = currentState.findOutgoingTransition(pojo, event);
         if (transition != null) {
             if (transition.isInternal()) {
-                transition.executeActions(event);
+                transition.executeActions(pojo, event);
             } else {
                 log.debug("Found transition via '{}' to '{}'.",
                         transition.getStartState().getName(),
                         transition.getTargetState().getName());
 
                 State origState = currentState;
-                exitToState(transition.getStartState(), origState);
-                exitToState(transition.getLCAState(), origState);
+                exitToState(pojo, transition.getStartState(), origState);
+                exitToState(pojo, transition.getLCAState(), origState);
 
-                transition.executeActions(event);
+                transition.executeActions(pojo, event);
 
-                enterToState(transition.getTargetState(),
-                        transition.getTargetToLCAPath());
+                enterToState(pojo, transition.getTargetState(), transition.getTargetToLCAPath());
                 assert (currentState == transition.getTargetState());
 
                 if (currentState instanceof CompositeState) {
                     CompositeState compositeState = (CompositeState) currentState;
-                    currentState = compositeState.getInitialState().executeInitialTransition();
+                    currentState = compositeState.getInitialState().executeInitialTransition(pojo);
                 }
 
                 // TODO deep history
@@ -136,23 +142,23 @@ public class Statechart {
         }
     }
 
-    void exitToState(State target, State origState) {
+    void exitToState(Object pojo, State target, State origState) {
         while (currentState != target) {
             // TODO deep history currentState.executeExitActions(origState);
-            currentState.executeExitActions();
+            currentState.executeExitActions(pojo);
             currentState = currentState.getParent();
         }
     }
 
-    void enterToState(State target, List<State> targetToAncestorPath) {
+    void enterToState(Object pojo, State target, List<State> targetToAncestorPath) {
         if (currentState != target) {
             for (int i = targetToAncestorPath.size(); i != 0; i--) {
                 currentState = targetToAncestorPath.get(i - 1);
-                currentState.executeEntryActions();
+                currentState.executeEntryActions(pojo);
             }
             assert (currentState == target.getParent());
             currentState = target;
-            currentState.executeEntryActions();
+            currentState.executeEntryActions(pojo);
         }
     }
 

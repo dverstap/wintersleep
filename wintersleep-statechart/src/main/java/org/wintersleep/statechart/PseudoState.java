@@ -24,20 +24,20 @@ public class PseudoState extends State {
         return type;
     }
 
-    public State executeInitialTransition() {
+    public State executeInitialTransition(Object pojo) {
         Event event = new Event(Signal.INIT);
 
-        Transition transition = findOutgoingTransition(event);
+        Transition transition = findOutgoingTransition(pojo, event);
         assert (transition != null);
         log.debug("Executing initial transaction from '{}' to '{}'.", transition.getStartState(), transition.getTargetState().getName());
 
-        transition.executeActions(event);
+        transition.executeActions(pojo, event);
 
         State targetState = transition.getTargetState();
-        targetState.executeEntryActions();
+        targetState.executeEntryActions(pojo);
         CompositeState compositeState = CompositeState.dynamicCast(targetState);
         while (compositeState != null) {
-            targetState = compositeState.executeInitialTransition();
+            targetState = compositeState.executeInitialTransition(pojo);
             compositeState = CompositeState.dynamicCast(targetState);
         }
 

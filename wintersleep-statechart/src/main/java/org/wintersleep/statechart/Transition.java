@@ -66,16 +66,16 @@ public class Transition {
         return isInternal;
     }
 
-    public boolean passesGuard(Event event) {
-        return guard == null || guard.passes(event);
+    public boolean passesGuard(Object pojo, Event event) {
+        return guard == null || guard.passes(pojo, event);
     }
 
-    public void executeActions(Event event) {
+    public void executeActions(Object pojo, Event event) {
         if (transitionActions.length > 0) {
             String id = toString();
             for (TransitionAction action : transitionActions) {
                 log.debug("{}: executing action: {}", id, action.getName());
-                action.run(event);
+                action.run(pojo, event);
             }
         }
     }
@@ -97,7 +97,7 @@ public class Transition {
         builder.append(":").append(startState.getName()).append("->").append(targetState.getName());
         builder.append(":").append(triggerSignal.getName());
         if (guard != null) {
-            builder.append("[").append(guard.getName()).append("]");
+            builder.append("[").append(guard).append("]");
         }
         return builder.toString();
     }

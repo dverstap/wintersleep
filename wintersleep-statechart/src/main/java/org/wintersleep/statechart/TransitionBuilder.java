@@ -51,28 +51,18 @@ public class TransitionBuilder {
         }
         Guard guard = null;
         if (condition != null) {
-            guard = new Guard(null, positiveCondition, condition);
+            guard = new Guard(sourceState.getStatechart().getCallbackClass(), positiveCondition, condition);
         }
         TransitionAction[] transitionActions = new TransitionAction[actions.length];
         for (int i = 0; i < actions.length; i++) {
             final String action = actions[i];
-            transitionActions[i] = new TransitionAction() {
-                @Override
-                public void run(Event event) {
-
-                }
-
-                @Override
-                public String getName() {
-                    return action;
-                }
-            };
+            transitionActions[i] = new TransitionAction(sourceState.getStatechart().getCallbackClass(), action);
 
         }
         if (internal) {
-            sourceState.getStateMachine().addInternalTransition(sourceState, signal, guard, transitionActions);
+            sourceState.getStatechart().addInternalTransition(sourceState, signal, guard, transitionActions);
         } else {
-            sourceState.getStateMachine().addTransition(sourceState, targetState, signal, guard, transitionActions);
+            sourceState.getStatechart().addTransition(sourceState, targetState, signal, guard, transitionActions);
         }
     }
 }

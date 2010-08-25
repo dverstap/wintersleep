@@ -1,2 +1,4 @@
 Replace the logging with a more generic listener approach: beforeTransition, beforeEntryAction, ...
 and implement logging as such a listener.
+
+This also allows easier testing: a listener could simply track the actions called, and those could be asserted.
