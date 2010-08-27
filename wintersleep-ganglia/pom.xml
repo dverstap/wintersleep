@@ -53,21 +53,7 @@
                         <phase>generate-sources</phase>
                         <configuration>
                             <tasks>
-                                <taskdef name="jrpcgen" classname="org.acplt.oncrpc.ant.JrpcgenTask"/>
-                                <mkdir dir="${generated.sources.xdr.dir}"/>
-                                <exec executable="cpp">
-                                    <arg value="-P"/>
-                                    <arg value="-o"/>
-                                    <arg value="${project.build.directory}/gm_protocol.x.pre"/>
-                                    <arg value="${basedir}/src/main/xdr/gm_protocol.x"/>
-                                </exec>
-                                <jrpcgen srcfile="${project.build.directory}/gm_protocol.x.pre"
-                                         destdir="${generated.sources.xdr.dir}"
-                                         package="org.wintersleep.ganglia.xdr"
-                                         createdir="true"
-                                         debug="true">
-                                </jrpcgen>
-                                <delete file="${generated.sources.xdr.dir}/org/wintersleep/ganglia/xdr/gm_protocol.x.java"/>
+                                <ant antfile="build.xml"/>
                             </tasks>
                         </configuration>
                         <goals>

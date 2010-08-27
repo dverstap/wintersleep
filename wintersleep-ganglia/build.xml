@@ -1,0 +1,31 @@
+<project name="Generate Java Code from Ganglia XDR Specification" default="default">
+
+    <property name="xdr.file" location="${basedir}/src/main/xdr/gm_protocol.x"/>
+    <property name="xdr.preprocessed.file" location="${project.build.directory}/gm_protocol.x.pre"/>
+    <property name="xdr.uptodate.file" location="${generated.sources.xdr.dir}/.uptodate"/>
+
+
+    <target name="init">
+        <uptodate srcfile="${xdr.file}" targetfile="${xdr.uptodate.file}" property="xdr.java.uptodate"/>
+    </target>
+
+    <target name="default" depends="init" unless="xdr.java.uptodate">
+        <taskdef name="jrpcgen" classname="org.acplt.oncrpc.ant.JrpcgenTask"/>
+        <mkdir dir="${generated.sources.xdr.dir}"/>
+        <exec executable="cpp">
+            <arg value="-P"/>
+            <arg value="-o"/>
+            <arg value="${xdr.preprocessed.file}"/>
+            <arg value="${xdr.file}"/>
+        </exec>
+        <jrpcgen srcfile="${xdr.preprocessed.file}"
+                 destdir="${generated.sources.xdr.dir}"
+                 package="org.wintersleep.ganglia.xdr"
+                 createdir="true"
+                 debug="true">
+        </jrpcgen>
+        <delete file="${generated.sources.xdr.dir}/org/wintersleep/ganglia/xdr/gm_protocol.x.java"/>
+        <touch file="${xdr.uptodate.file}"/>
+    </target>
+
+</project>
