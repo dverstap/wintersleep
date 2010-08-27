@@ -12,19 +12,12 @@
     <target name="default" depends="init" unless="xdr.java.uptodate">
         <taskdef name="jrpcgen" classname="org.acplt.oncrpc.ant.JrpcgenTask"/>
         <mkdir dir="${generated.sources.xdr.dir}"/>
-        <exec executable="cpp">
-            <arg value="-P"/>
-            <arg value="-o"/>
-            <arg value="${xdr.preprocessed.file}"/>
-            <arg value="${xdr.file}"/>
-        </exec>
-        <jrpcgen srcfile="${xdr.preprocessed.file}"
+        <jrpcgen srcfile="${xdr.file}"
                  destdir="${generated.sources.xdr.dir}"
                  package="org.wintersleep.ganglia.xdr"
                  createdir="true"
-                 debug="true">
-        </jrpcgen>
-        <delete file="${generated.sources.xdr.dir}/org/wintersleep/ganglia/xdr/gm_protocol.x.java"/>
+                 debug="true"
+                 verbose="true"/>
         <touch file="${xdr.uptodate.file}"/>
     </target>
 
