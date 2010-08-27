@@ -1,0 +1,108 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.wintersleep</groupId>
+    <artifactId>wintersleep-ganglia</artifactId>
+    <packaging>jar</packaging>
+    <version>0.1-SNAPSHOT</version>
+    <name>Wintersleep Ganglia</name>
+
+    <parent>
+        <groupId>org.wintersleep</groupId>
+        <artifactId>wintersleep-parent</artifactId>
+        <version>0.1-SNAPSHOT</version>
+    </parent>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>net.sourceforge.remotetea</groupId>
+            <artifactId>oncrpc</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <properties>
+        <generated.sources.xdr.dir>${project.build.directory}/generated-sources/xdr</generated.sources.xdr.dir>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.4</version>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <tasks>
+                                <taskdef name="jrpcgen" classname="org.acplt.oncrpc.ant.JrpcgenTask"/>
+                                <mkdir dir="${generated.sources.xdr.dir}"/>
+                                <exec executable="cpp">
+                                    <arg value="-P"/>
+                                    <arg value="-o"/>
+                                    <arg value="${project.build.directory}/gm_protocol.x.pre"/>
+                                    <arg value="${basedir}/src/main/xdr/gm_protocol.x"/>
+                                </exec>
+                                <jrpcgen srcfile="${project.build.directory}/gm_protocol.x.pre"
+                                         destdir="${generated.sources.xdr.dir}"
+                                         package="org.wintersleep.ganglia.xdr"
+                                         createdir="true"
+                                         debug="true">
+                                </jrpcgen>
+                                <delete file="${generated.sources.xdr.dir}/org/wintersleep/ganglia/xdr/gm_protocol.x.java"/>
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>net.sourceforge.remotetea</groupId>
+                        <artifactId>jrpcgen</artifactId>
+                        <version>1.0.7</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>1.4</version>
+                <executions>
+                    <execution>
+                        <id>add-xdr-source</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${generated.sources.xdr.dir}</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
