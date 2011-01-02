@@ -1,4 +1,4 @@
-<project name="Generate Java Code from Ganglia XDR Specification" default="default">
+<project name="wintersleep-ganglia">
 
     <property name="xdr.file" location="${basedir}/src/main/xdr/gm_protocol.x"/>
     <property name="xdr.preprocessed.file" location="${project.build.directory}/gm_protocol.x.pre"/>
@@ -9,7 +9,7 @@
         <uptodate srcfile="${xdr.file}" targetfile="${xdr.uptodate.file}" property="xdr.java.uptodate"/>
     </target>
 
-    <target name="default" depends="init" unless="xdr.java.uptodate">
+    <target name="generate-xdr-sources" depends="init" unless="xdr.java.uptodate">
         <taskdef name="jrpcgen" classname="org.acplt.oncrpc.ant.JrpcgenTask"/>
         <mkdir dir="${generated.sources.xdr.dir}"/>
         <jrpcgen srcfile="${xdr.file}"
@@ -19,6 +19,26 @@
                  debug="true"
                  verbose="true"/>
         <touch file="${xdr.uptodate.file}"/>
+    </target>
+
+    <target name="generate-doc">
+        <!-- Hack: ${project.build.directory}/latex/tmp is at the same directory depth as src/main/latex,
+        that's why these commands work. -->
+        <mkdir dir="${project.build.directory}/latex/tmp"/>
+        <exec executable="latex"
+              dir="${project.build.directory}/latex/tmp"
+              failonerror="true">
+            <arg value="${basedir}/src/main/latex/doc.tex"/>
+            <arg value="-output-directory"/>
+            <arg value="${project.build.directory}/latex/tmp"/>
+        </exec>
+        <exec executable="dvipdfmx"
+              dir="${project.build.directory}/latex/tmp"
+              failonerror="true">
+            <arg value="-o"/>
+            <arg value="${project.build.directory}/wintersleep-ganglia.pdf"/>
+            <arg value="${project.build.directory}/latex/tmp/doc.dvi"/>
+        </exec>
     </target>
 
 </project>

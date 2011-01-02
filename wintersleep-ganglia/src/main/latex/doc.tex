@@ -1,0 +1,29 @@
+\documentclass[11pt,a4paper]{report}
+
+\usepackage{listings}
+\usepackage{graphicx}
+
+\author{Davy Verstappen}
+
+\title{Wintersleep Ganglia}
+
+\begin{document}.
+\maketitle
+\tableofcontents
+\chapter{Ganglia Internals}
+
+\section{Ganglia XDR Protocol Specificiation}
+
+% \newpage
+
+% [scale=0.5] works with dvipdfmx
+\includegraphics[scale=0.7]{../../../target/test-diagrams/Ganglia31MetadataMessages}
+
+\newpage
+
+\includegraphics[scale=0.7]{../../../target/test-diagrams/Ganglia31ValueMessages}
+
+\lstinputlisting[language=C++,numbers=left,basicstyle=\tiny]{../../../src/main/xdr/gm_protocol.x}
+
+
+\end{document}

@@ -62,15 +62,28 @@
                 <version>1.4</version>
                 <executions>
                     <execution>
+                        <id>generate-xdr-sources</id>
                         <phase>generate-sources</phase>
                         <configuration>
                             <tasks>
-                                <ant antfile="build.xml"/>
+                                <ant antfile="build.xml" target="generate-xdr-sources"/>
                             </tasks>
                         </configuration>
                         <goals>
                             <goal>run</goal>
                         </goals>
+                    </execution>
+                    <execution>
+                        <id>generate-doc</id>
+                        <phase>prepare-package</phase>
+                        <configuration>
+                            <tasks>
+                                <ant antfile="build.xml" target="generate-doc"/>
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>                        
                     </execution>
                 </executions>
                 <dependencies>
