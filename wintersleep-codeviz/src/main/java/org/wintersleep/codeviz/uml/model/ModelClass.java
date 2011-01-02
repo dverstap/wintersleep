@@ -3,13 +3,14 @@ package org.wintersleep.codeviz.uml.model;
 import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
 public class ModelClass {
 
     private Class clazz;
-    private Set<String> stereoTypes;
+    private Set<String> stereoTypes = new LinkedHashSet<String>();
     private Map<String, RelationEndpoint> relationMap = new HashMap<String, RelationEndpoint>();
 
     public ModelClass(Class clazz) {
@@ -41,5 +42,9 @@ public class ModelClass {
 
     public Collection<RelationEndpoint> getRelationEndpoints() {
         return relationMap.values();
+    }
+
+    public void addStereoType(String stereotype) {
+        stereoTypes.add(stereotype);
     }
 }

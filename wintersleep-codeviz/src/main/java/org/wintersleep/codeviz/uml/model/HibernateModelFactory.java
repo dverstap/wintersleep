@@ -49,7 +49,7 @@ public class HibernateModelFactory {
         while (pci.hasNext()) {
             PersistentClass persistentClass = pci.next();
             Class clazz = persistentClass.getMappedClass();
-            model.add(clazz);
+            model.addClass(clazz);
         }
     }
 

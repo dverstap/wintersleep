@@ -14,7 +14,7 @@
         <mkdir dir="${generated.sources.xdr.dir}"/>
         <jrpcgen srcfile="${xdr.file}"
                  destdir="${generated.sources.xdr.dir}"
-                 package="org.wintersleep.ganglia.xdr"
+                 package="org.wintersleep.ganglia.protocol"
                  createdir="true"
                  debug="true"
                  verbose="true"/>

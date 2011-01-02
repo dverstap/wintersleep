@@ -62,4 +62,13 @@ public abstract class FileTestUtil {
         Assert.assertTrue(file + " size is " + file.length(), file.length() > 0);
     }
 
+    public static File changeExtension(File file, String newExtension) {
+        int i = file.getName().lastIndexOf(".");
+        String firstPart = file.getName();
+        if (i >= 0) {
+           firstPart  = file.getName().substring(0, i);
+        }
+        return new File(file.getParentFile(), firstPart + "." + newExtension);
+    }
+
 }

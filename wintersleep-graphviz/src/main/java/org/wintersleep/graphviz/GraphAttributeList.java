@@ -47,4 +47,8 @@ public class GraphAttributeList extends ENGCAttributeList<GraphAttributeList> {
     public GraphAttributeList setStyle(String style) {
         return addQuoted("style", style);
     }
+
+    public GraphAttributeList setOrientation(Orientation orientation) {
+        return addUnquoted("orientation", orientation.name().toLowerCase());
+    }
 }

@@ -294,6 +294,11 @@
 
             <dependency>
                 <groupId>org.wintersleep</groupId>
+                <artifactId>wintersleep-codeviz</artifactId>
+                <version>0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wintersleep</groupId>
                 <artifactId>wintersleep-graphviz</artifactId>
                 <version>0.1-SNAPSHOT</version>
             </dependency>

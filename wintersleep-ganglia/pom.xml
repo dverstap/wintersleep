@@ -37,6 +37,18 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.wintersleep</groupId>
+            <artifactId>wintersleep-codeviz</artifactId>
+            <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.wintersleep</groupId>
+            <artifactId>wintersleep-test-util</artifactId>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <properties>
