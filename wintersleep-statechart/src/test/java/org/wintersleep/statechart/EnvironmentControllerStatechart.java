@@ -7,10 +7,10 @@ public class EnvironmentControllerStatechart extends Statechart {
     public static final Signal TOO_HOT = new Signal("TOO_HOT");
 
     private final State idle = new SimpleState(top, "IDLE");
-    private final State heating = new SimpleState(top, "HEATING", entryActions("startHeater", "startBlower"), exitActions("stopHeater"));
-    private final State postHeating = new SimpleState(top, "POST_HEATING", exitActions("stopBlower"));
-    private final State cooling = new SimpleState(top, "COOLING", entryActions("startCooler", "startBlower"), exitActions("stopCooler", "stopBlower"));
-    private final State postCooling = new SimpleState(top, "POST_COOLING");
+    private final CompositeState blowing = new CompositeState(top, "BLOWING", entryActions("startBlower"), exitActions("stopBlower"));
+    private final State heating = new SimpleState(blowing, "HEATING", entryActions("startHeater"), exitActions("stopHeater"));
+    private final State onlyBlowing = new SimpleState(blowing, "ONLY_BLOWING");
+    private final State cooling = new SimpleState(blowing, "COOLING", entryActions("startCooler"), exitActions("stopCooler"));
 
 
     public EnvironmentControllerStatechart(Class callbackClass) {
@@ -19,20 +19,21 @@ public class EnvironmentControllerStatechart extends Statechart {
         top.onInit().transitionTo(idle).build();
 
         idle.on(TOO_COLD).transitionTo(heating).build();
-        idle.on(TOO_HOT).transitionTo(cooling).build();
+        idle.on(TOO_HOT).when("coolerHasBeenStoppedAtLeast3MinsAgo").transitionTo(cooling).build();
+        idle.on(TOO_HOT).whenNot("coolerHasBeenStoppedAtLeast3MinsAgo").transitionTo(onlyBlowing).build();
 
-        heating.on(COMFORTABLE).transitionTo(postHeating).build();
-        heating.on(TOO_HOT).transitionTo(cooling).build();
+        heating.on(COMFORTABLE).transitionTo(onlyBlowing).build();
+        heating.on(TOO_HOT).when("coolerHasBeenStoppedAtLeast3MinsAgo").transitionTo(cooling).build();
+        heating.on(TOO_HOT).whenNot("coolerHasBeenStoppedAtLeast3MinsAgo").transitionTo(onlyBlowing).build();
+//        heating.on(TOO_COLD)
 
-        postHeating.on(COMFORTABLE).when("heaterHasBeenStoppedAtLeast5MinsAgo").transitionTo(idle).build();
-        postHeating.on(TOO_HOT).when("heaterHasBeenStoppedAtLeast5MinsAgo").transitionTo(cooling).build();
-        postHeating.on(TOO_COLD).when("heaterHasBeenStoppedAtLeast5MinsAgo").transitionTo(heating).build();
+        cooling.on(COMFORTABLE).when("heaterHasBeenStoppedAtLeast5MinsAgo").transitionTo(idle).build();
+        cooling.on(COMFORTABLE).when("heaterHasBeenStoppedAtLeast5MinsAgo").transitionTo(onlyBlowing).build();
+        cooling.on(TOO_COLD).transitionTo(heating).build();
 
+        onlyBlowing.on(COMFORTABLE).when("heaterHasBeenStoppedAtLeast5MinsAgo").transitionTo(idle).build();
+        onlyBlowing.on(TOO_HOT).when("heaterHasBeenStoppedAtLeast5MinsAgo").transitionTo(cooling).build();
+        onlyBlowing.on(TOO_COLD).when("heaterHasBeenStoppedAtLeast5MinsAgo").transitionTo(heating).build();
 
-        cooling.on(COMFORTABLE).transitionTo(postCooling).build();
-        cooling.on(TOO_COLD).transitionTo(postCooling).build();
-
-        postCooling.on(COMFORTABLE).when("coolerHasBeenStoppedAtLeast3MinsAgo").transitionTo(idle).build();
-        postCooling.on(TOO_COLD).when("coolerHasBeenStoppedAtLeast3MinsAgo").transitionTo(heating).build();
     }
 }

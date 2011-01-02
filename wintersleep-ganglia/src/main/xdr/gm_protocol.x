@@ -1,13 +1,13 @@
-#define __GANGLIA_MTU     1500
-#define __UDP_HEADER_SIZE 28
-#define __MAX_TITLE_LEN 32
-#define __MAX_GROUPS_LEN 128
-#define __MAX_DESC_LEN 128
-%#define UDP_HEADER_SIZE __UDP_HEADER_SIZE
-%#define MAX_DESC_LEN __MAX_DESC_LEN
-%#define GM_PROTOCOL_GUARD
+//#define __GANGLIA_MTU     1500
+//#define __UDP_HEADER_SIZE 28
+//#define __MAX_TITLE_LEN 32
+//#define __MAX_GROUPS_LEN 128
+//#define __MAX_DESC_LEN 128
+//%#define UDP_HEADER_SIZE __UDP_HEADER_SIZE
+//%#define MAX_DESC_LEN __MAX_DESC_LEN
+//%#define GM_PROTOCOL_GUARD
 
-#define GANGLIA_MAX_XDR_MESSAGE_LEN (__GANGLIA_MTU - __UDP_HEADER_SIZE - 8)
+//#define GANGLIA_MAX_XDR_MESSAGE_LEN (__GANGLIA_MTU - __UDP_HEADER_SIZE - 8)
 
 enum Ganglia_value_types {
   GANGLIA_VALUE_UNKNOWN,
@@ -155,13 +155,13 @@ struct Ganglia_25metric
    int *metadata;
 };
 
-#ifdef RPC_HDR
-% #define GANGLIA_MAX_MESSAGE_LEN GANGLIA_MAX_XDR_MESSAGE_LEN
+//#ifdef RPC_HDR
+//% #define GANGLIA_MAX_MESSAGE_LEN GANGLIA_MAX_XDR_MESSAGE_LEN
 
 /* This is a place holder for the key field
  *  in the Ganglia_25metric structure. For now the only
  *  type of metric is modular.
  */
-%#define modular_metric 4098
-#endif
+//%#define modular_metric 4098
+//#endif
 

@@ -7,7 +7,9 @@ public class EnvironmentScenario {
 
     private final String name;
 
+    private int ticks = -1;
     private int minute;
+    private int previousTemperature;
     private int temperature;
     private EnvironmentControllerStatechart sc;
     private EnvironmentController controller;
@@ -25,10 +27,16 @@ public class EnvironmentScenario {
     }
 
     public void setTemp(int temperature) {
+        previousTemperature = this.temperature;
         this.temperature = temperature;
     }
 
     public void execute() {
+        ticks++;
+        while (ticks < minute) {
+            controller.tick(sc, previousTemperature);
+            ticks++;
+        }
         controller.tick(sc, temperature);
     }
 

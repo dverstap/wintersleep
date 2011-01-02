@@ -29,12 +29,18 @@ public class CodeModel {
         return classModelMap.values();
     }
 
-    public void add(Class... classes) {
+    public ModelClass addClass(Class clazz) {
+        ModelClass result = classModelMap.get(clazz);
+        if (result == null) {
+            result = new ModelClass(clazz);
+            classModelMap.put(clazz, result);
+        }
+        return result;
+    }
+
+    public void addClasses(Class... classes) {
         for (Class clazz : classes) {
-            if (classModelMap.containsKey(clazz)) {
-                throw new IllegalArgumentException(clazz + " is already added");
-            }
-            classModelMap.put(clazz, new ModelClass(clazz));
+            addClass(clazz);
         }
     }
 
@@ -42,15 +48,20 @@ public class CodeModel {
         for (ModelClass modelClass : classModelMap.values()) {
             for (Field field : modelClass.getClazz().getDeclaredFields()) {
                 if ((field.getModifiers() & Modifier.STATIC) == 0) {
-                    Class<?> aClass = field.getType();
-                    ModelClass otherModelClass = classModelMap.get(aClass);
+                    Class<?> fieldClass = field.getType();
+                    ModelClass otherModelClass = classModelMap.get(fieldClass);
                     if (otherModelClass != null) {
                         modelClass.addRelationTo(field, otherModelClass, 1);
-                    } else if (Collection.class.isAssignableFrom(aClass)) {
+                    } else if (Collection.class.isAssignableFrom(fieldClass)) {
                         addCollectionFieldRelations(modelClass, field);
-                    } else if (Map.class.isAssignableFrom(aClass)) {
+                    } else if (fieldClass.isArray()) {
+                        addArrayFieldRelations(modelClass, field);
+                    } else if (Map.class.isAssignableFrom(fieldClass)) {
                         addMapFieldRelations(modelClass, field);
                     }
+//                    else if (field.getName().equals("metadata")) {
+//                        System.out.println(field.getType());
+//                    }
                 }
             }
         }
@@ -72,6 +83,13 @@ public class CodeModel {
                     }
                 }
             }
+        }
+    }
+
+    private void addArrayFieldRelations(ModelClass modelClass, Field field) {
+        ModelClass otherModelClass = classModelMap.get(field.getType().getComponentType());
+        if (otherModelClass != null) {
+            modelClass.addRelationTo(field, otherModelClass, RelationEndpoint.MANY_CARDINALITY);
         }
     }
 

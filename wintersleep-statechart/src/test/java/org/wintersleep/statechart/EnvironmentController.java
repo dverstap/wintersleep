@@ -10,8 +10,8 @@ public class EnvironmentController {
     private char cooler = 'c';
     private char blower = 'b';
 
-    private int ticksSinceHeaterStopped;
-    private int ticksSinceCoolerStopped;
+    private int ticksSinceHeaterStopped = 5;
+    private int ticksSinceCoolerStopped = 3;
 
 
     public void tick(EnvironmentControllerStatechart statechart, int currentTemperature) {

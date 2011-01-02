@@ -25,7 +25,7 @@ public class RepositoryTest extends AbstractTransactionalSpringContextTests {
     private TestDataSource dataSource;
     private PersonRepository personRepository;
 
-    private static final int COUNT = 10 * 1000;
+    private static final int COUNT = 10;
 
     public void setDataSource(TestDataSource dataSource) {
         this.dataSource = dataSource;

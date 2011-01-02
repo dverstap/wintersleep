@@ -19,10 +19,10 @@ public class JCodeVizModelTest {
     @Test
     public void test() throws IOException, InterruptedException {
         CodeModel model = new CodeModel("JCodeVizModel");
-        model.add(CodeModel.class);
-        model.add(ModelClass.class);
-        model.add(Relation.class);
-        model.add(RelationEndpoint.class);
+        model.addClass(CodeModel.class);
+        model.addClass(ModelClass.class);
+        model.addClass(Relation.class);
+        model.addClass(RelationEndpoint.class);
         model.addFieldRelations();
 
         ClassDiagram d = new ClassDiagram("JCodeVizDiagram", model);

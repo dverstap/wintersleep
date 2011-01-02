@@ -99,16 +99,6 @@ public class CarDiGraphTest {
         tableLine(t, Alignment.CENTER, " " + className + " ");
     }
 
-    private String guilWrap(String str) {
-        // if we use the xml variants, then xmlbeans will escape it, so we have to use the unicode chars (for now)
-        //String guilOpen = "&laquo;"; // "\u00ab";
-        //String guilClose = "&raquo;"; // "\u00bb";
-        String guilOpen = "\u00ab";
-        String guilClose = "\u00bb";
-        return guilOpen + str + guilClose;
-    }
-
-
     private void tableLine(Table t, Alignment.Enum align, String text) {
         tableLine(t, align, text, null);
     }

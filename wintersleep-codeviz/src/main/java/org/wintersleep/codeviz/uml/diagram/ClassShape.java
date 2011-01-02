@@ -71,8 +71,10 @@ public class ClassShape {
     private void fillClassSection(Table t) {
 /*
         tableLine(t, Alignment.CENTER, guilWrap("repository"));
-        tableLine(t, Alignment.CENTER, guilWrap("singleton"));
 */
+        for (String stereotype : modelClass.getStereoTypes()) {
+            tableLine(t, Alignment.CENTER, guilWrap(stereotype), null);            
+        }
         tableLine(t, Alignment.CENTER, " " + getName() + " ", null);
     }
 
@@ -141,6 +143,15 @@ public class ClassShape {
         cursor.toFirstContentToken();
         cursor.insertChars(txt);
         cursor.dispose();
+    }
+
+    private String guilWrap(String str) {
+        // if we use the xml variants, then xmlbeans will escape it, so we have to use the unicode chars (for now)
+        //String guilOpen = "&laquo;"; // "\u00ab";
+        //String guilClose = "&raquo;"; // "\u00bb";
+        String guilOpen = "\u00ab";
+        String guilClose = "\u00bb";
+        return guilOpen + str + guilClose;
     }
 
 }
