@@ -37,7 +37,6 @@ public class PersonServiceImpl implements PersonService {
     }
 
     public Person find(Long id) {
-        System.out.println(personRepository.getClass());
         return personRepository.findById(id);
     }
 

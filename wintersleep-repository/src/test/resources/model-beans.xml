@@ -36,6 +36,6 @@
 
     <context:component-scan base-package="org.wintersleep"/>
 
-    <bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
+    <!--<bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>-->
 
 </beans>

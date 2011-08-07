@@ -17,6 +17,7 @@ package org.wintersleep.repository;
 
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.test.AbstractTransactionalSpringContextTests;
+import org.wintersleep.util.spring.perflog.CallTreePerformanceLogger;
 
 import java.util.List;
 
@@ -24,6 +25,8 @@ public class RepositoryTest extends AbstractTransactionalSpringContextTests {
 
     private TestDataSource dataSource;
     private PersonRepository personRepository;
+
+    private CallTreePerformanceLogger performanceLogger;
 
     private static final int COUNT = 10;
 
@@ -35,12 +38,32 @@ public class RepositoryTest extends AbstractTransactionalSpringContextTests {
         this.personRepository = personRepository;
     }
 
+    public CallTreePerformanceLogger getPerformanceLogger() {
+        return performanceLogger;
+    }
+
+    public void setPerformanceLogger(CallTreePerformanceLogger performanceLogger) {
+        this.performanceLogger = performanceLogger;
+    }
+
     protected String getConfigPath() {
         return "/testApplicationContext.xml";
     }
 
+    @Override
+    protected void onSetUp() throws Exception {
+        super.onSetUp();
+        performanceLogger.start("RepositoryTest");
+    }
+
     protected void onSetUpInTransaction() throws Exception {
         dataSource.deleteAllData();
+    }
+
+    @Override
+    protected void onTearDown() throws Exception {
+        performanceLogger.stop();
+        super.onTearDown();
     }
 
     public void testFindById() {

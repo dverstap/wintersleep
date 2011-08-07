@@ -28,6 +28,7 @@ import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
+import org.wintersleep.util.spring.perflog.CallTreePerformanceLogger;
 
 import java.sql.SQLException;
 
@@ -35,6 +36,7 @@ public class TxTest extends AbstractDependencyInjectionSpringContextTests {
 
     public static final String PREFIX_PROPAGATION = "PROPAGATION_";
 
+    private CallTreePerformanceLogger performanceLogger;
     private TestDataSource dataSource;
     private PlatformTransactionManager transactionManager;
     private PersonRepository personRepository;
@@ -45,6 +47,23 @@ public class TxTest extends AbstractDependencyInjectionSpringContextTests {
 
     protected String getConfigPath() {
         return "/tx-testApplicationContext.xml";
+    }
+
+
+    @Override
+    protected void onSetUp() throws Exception {
+        super.onSetUp();
+        performanceLogger.start("TxTest");
+    }
+
+    @Override
+    protected void onTearDown() throws Exception {
+        performanceLogger.stop();
+        super.onTearDown();
+    }
+
+    public void setPerformanceLogger(CallTreePerformanceLogger performanceLogger) {
+        this.performanceLogger = performanceLogger;
     }
 
     public void setDataSource(TestDataSource dataSource) {
