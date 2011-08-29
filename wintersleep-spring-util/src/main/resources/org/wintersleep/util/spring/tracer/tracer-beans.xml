@@ -3,18 +3,18 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:aop="http://www.springframework.org/schema/aop"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-           http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
 
-    <bean id="performanceLogger"
-          class="org.wintersleep.util.spring.perflog.CallTreePerformanceLogger"/>
+    <bean id="executionListener"
+          class="org.wintersleep.util.spring.tracer.CallTreeExecutionListener"/>
 
-    <bean id="performanceLoggingAspect"
-          class="org.wintersleep.util.spring.perflog.PerformanceLoggingAspect"
+    <bean id="executionTracerAspect"
+          class="org.wintersleep.util.spring.tracer.ExecutionTracerAspect"
           autowire="constructor"/>
 
     <aop:config>
-        <aop:aspect id="myAspect" ref="performanceLoggingAspect">
+        <aop:aspect id="myAspect" ref="executionTracerAspect">
 
             <aop:pointcut id="repositoryMethodExecution"
                           expression="execution(public * ((@org.springframework.stereotype.Repository *)+).*(..)) @this(org.springframework.stereotype.Repository) )"/>

@@ -19,8 +19,14 @@ package org.wintersleep.repository;
 import junit.framework.AssertionFailedError;
 import org.hibernate.FlushMode;
 import org.hibernate.HibernateException;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Constants;
-import org.springframework.test.AbstractDependencyInjectionSpringContextTests;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.IllegalTransactionStateException;
 import org.springframework.transaction.NestedTransactionNotSupportedException;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -28,65 +34,47 @@ import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
-import org.wintersleep.util.spring.perflog.CallTreePerformanceLogger;
+import org.wintersleep.util.spring.tracer.CallTreeExecutionListener;
 
 import java.sql.SQLException;
 
-public class TxTest extends AbstractDependencyInjectionSpringContextTests {
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration({"/tx-testApplicationContext.xml"})
+public class TxTest {
 
     public static final String PREFIX_PROPAGATION = "PROPAGATION_";
 
-    private CallTreePerformanceLogger performanceLogger;
-    private TestDataSource dataSource;
-    private PlatformTransactionManager transactionManager;
-    private PersonRepository personRepository;
-    private PersonService personService;
+    @Autowired
+    private CallTreeExecutionListener performanceLogger;
 
+    @Autowired
+    private TestDataSource dataSource;
+
+    @Autowired
+    private PlatformTransactionManager transactionManager;
+
+    @Autowired
+    private PersonRepository personRepository;
+
+    @Autowired
+    private PersonService personService;
 
     final Constants constants = new Constants(TransactionDefinition.class);
 
-    protected String getConfigPath() {
-        return "/tx-testApplicationContext.xml";
-    }
-
-
-    @Override
-    protected void onSetUp() throws Exception {
-        super.onSetUp();
+    @Before
+    public void startPerformanceLogger() throws Exception {
         performanceLogger.start("TxTest");
     }
 
-    @Override
-    protected void onTearDown() throws Exception {
+    @After
+    public void stopPerformanceLogger() throws Exception {
         performanceLogger.stop();
-        super.onTearDown();
     }
 
-    public void setPerformanceLogger(CallTreePerformanceLogger performanceLogger) {
-        this.performanceLogger = performanceLogger;
-    }
-
-    public void setDataSource(TestDataSource dataSource) {
-        this.dataSource = dataSource;
-    }
-
-    public void setTransactionManager(PlatformTransactionManager transactionManager) {
-        this.transactionManager = transactionManager;
-    }
-
-    public void setPersonRepository(PersonRepository personRepository) {
-        this.personRepository = personRepository;
-    }
-
-    public void setPersonService(PersonService personService) {
-        this.personService = personService;
-    }
-
-//    public void justChecking() {
-//        UserTransaction userTransaction = new UserTransactionImple();
-//        TransactionManager transactionManager = new TransactionManagerImple();
-//    }
-
+    @Test
     public void testNoNesting() throws SQLException {
 
         for (int propagation = TransactionDefinition.PROPAGATION_REQUIRED; propagation <= TransactionDefinition.PROPAGATION_NESTED; propagation++) {
@@ -113,6 +101,7 @@ public class TxTest extends AbstractDependencyInjectionSpringContextTests {
 
     }
 
+    @Test
     public void testNestedTransactionalServicesWithException() {
 
         checkNestedWithException(TransactionDefinition.PROPAGATION_REQUIRED, TransactionDefinition.PROPAGATION_REQUIRED, IllegalArgumentException.class);
@@ -199,21 +188,18 @@ public class TxTest extends AbstractDependencyInjectionSpringContextTests {
                 }
             });
         } catch (Throwable e) {
-            if (e.getClass() == expectedExceptionClass) {
-                if (e.getClass().equals(IllegalArgumentException.class)) {
-                    assertEquals(propagationDesc, "hello", e.getMessage());
-                }
-            } else {
-                e.printStackTrace(System.out);
-                fail(propagationDesc);
+            if (e.getClass().equals(IllegalArgumentException.class)) {
+                assertEquals(propagationDesc, "hello", e.getMessage());
             }
+            assertEquals(propagationDesc + ": " + e.toString(), expectedExceptionClass, e.getClass());
         }
     }
 
+    @Test
     public void testContextualSession() {
         try {
             FlushMode flushMode = personService.testContextualSession();
-            //assertEquals(FlushMode.NEVER, flushMode);
+            assertEquals(FlushMode.MANUAL, flushMode);
             fail();
         } catch (HibernateException e) {
             assertEquals("Unable to locate current JTA transaction", e.getMessage());

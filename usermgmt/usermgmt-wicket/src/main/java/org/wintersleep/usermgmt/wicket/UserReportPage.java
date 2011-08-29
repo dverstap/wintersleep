@@ -16,10 +16,11 @@
 
 package org.wintersleep.usermgmt.wicket;
 
-import net.databinder.components.hibernate.PageSourceLink;
-import net.databinder.models.DatabinderProvider;
-import net.databinder.models.HibernateObjectModel;
-import net.databinder.models.ICriteriaBuilder;
+import net.databinder.components.hib.PageSourceLink;
+import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
+import org.wintersleep.databinder.HibernateProvider;
+import net.databinder.models.hib.HibernateObjectModel;
+import net.databinder.models.hib.CriteriaBuilder;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
@@ -61,30 +62,30 @@ public class UserReportPage extends BasePage {
         // list of columns allows table to render itself without any markup from us
         IColumn[] columns = new IColumn[]{
 
-                new FilteredAbstractColumn(new Model("Actions")) {
+                new FilteredAbstractColumn<User>(new Model<String>("Actions")) {
 
                     // add the ActionsPanel to the cell item
-                    public void populateItem(Item cellItem, String componentId, final IModel model) {
+                    public void populateItem(Item<ICellPopulator<User>> cellItem, String componentId, final IModel<User> model) {
                         if (counter % 2 == 0) {
-                            cellItem.add(new AttributeModifier("rowspan", true, new Model("2")));
+                            cellItem.add(new AttributeModifier("rowspan", true, new Model<String>("2")));
                             cellItem.add(new ActionsPanel(componentId,
-                                    new PageSourceLink("showLink", UserEditPage.class, model),
+                                    new PageSourceLink<User>("showLink", UserEditPage.class, model),
                                     new IPageLink() {
                                         public Page getPage() {
-                                            return new UserEditPage(UserReportPage.this, (HibernateObjectModel) model);
+                                            return new UserEditPage(UserReportPage.this, (HibernateObjectModel<User>) model);
                                         }
 
-                                        public Class getPageIdentity() {
+                                        public Class<UserEditPage> getPageIdentity() {
                                             return UserEditPage.class;
                                         }
                                     },
                                     new IPageLink() {
                                         public Page getPage() {
-                                            User user = (User) model.getObject();
-                                            return new DeletePage(UserReportPage.this, (HibernateObjectModel) model, "User: " + user.getFullName());
+                                            User user = model.getObject();
+                                            return new DeletePage<User>(UserReportPage.this, (HibernateObjectModel<User>) model, "User: " + user.getFullName());
                                         }
 
-                                        public Class getPageIdentity() {
+                                        public Class<DeletePage> getPageIdentity() {
                                             return DeletePage.class;
                                         }
                                     }
@@ -102,13 +103,13 @@ public class UserReportPage extends BasePage {
                     public Component getFilter(String componentId, FilterForm form) {
                         return new GoAndClearAndNewFilter(componentId, form) {
                             public Page createNewPage() {
-                                return new UserEditPage(UserReportPage.this, new HibernateObjectModel(new User()));
+                                return new UserEditPage(UserReportPage.this, new HibernateObjectModel<User>(new User()));
                             }
                         };
                     }
                 },
-                new TextFilteredPropertyColumn(new Model("Login"), "login", "login"),
-                new TextFilteredPropertyColumn(new Model("Name"), "fullName", "fullName"),
+                new TextFilteredPropertyColumn(new Model<String>("Login"), "login", "login"),
+                new TextFilteredPropertyColumn(new Model<String>("Name"), "fullName", "fullName"),
 /*
                 // custom column to enable countries be be in the list and labeled correctly
                 new MyChoiceFilteredPropertyColumn(new Model("Birth country"), "country.name", "country.name", "country", "name", countries),
@@ -117,11 +118,11 @@ public class UserReportPage extends BasePage {
 */
         };
         UserSorter sorter = new UserSorter();
-        DatabinderProvider provider = new DatabinderProvider(User.class, filter, sorter);
+        HibernateProvider<User> provider = new HibernateProvider<User>(User.class, filter, sorter);
         provider.setWrapWithPropertyModel(false);
-        DataTable table = new DataTable("table", columns, provider, 25) {
-            protected Item newRowItem(String id, int index, IModel model) {
-                return new OddEvenItem(id, index, model);
+        DataTable<User> table = new DataTable<User>("table", columns, provider, 25) {
+            protected Item<User> newRowItem(String id, int index, IModel<User> model) {
+                return new OddEvenItem<User>(id, index, model);
             }
         };
         table.addTopToolbar(new NavigationToolbar(table));
@@ -130,7 +131,7 @@ public class UserReportPage extends BasePage {
         add(filterForm.add(table));
     }
 
-    class UserFilter implements IFilterStateLocator, ICriteriaBuilder {
+    class UserFilter implements IFilterStateLocator, CriteriaBuilder {
         private User filterState = new User();
 
         /**
@@ -154,7 +155,7 @@ public class UserReportPage extends BasePage {
         }
     }
 
-    class UserSorter implements ISortStateLocator, ICriteriaBuilder {
+    class UserSorter implements ISortStateLocator, CriteriaBuilder {
         private SingleSortState sortState = new SingleSortState();
 
         public void build(Criteria criteria) {

@@ -15,18 +15,14 @@
  */
 package org.wintersleep.usermgmt.wicket;
 
-import net.databinder.DataApplication;
-
+import net.databinder.hib.DataApplication;
+import org.apache.log4j.Logger;
+import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.hibernate.SessionFactory;
 import org.hibernate.mapping.PersistentClass;
+import org.springframework.orm.hibernate3.LocalSessionFactoryBean;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
-import org.springframework.orm.hibernate3.LocalSessionFactoryBean;
-import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
-import org.apache.wicket.request.target.coding.HybridUrlCodingStrategy;
-import org.apache.wicket.request.target.coding.BookmarkablePageRequestTargetUrlCodingStrategy;
-import org.apache.wicket.request.target.coding.IndexedParamUrlCodingStrategy;
-import org.apache.log4j.Logger;
 import org.wintersleep.usermgmt.model.User;
 
 import java.util.Iterator;

@@ -12,6 +12,19 @@
         <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
     </listener>
 
+    
+    <!-- perf tracer must be configured before all other filters: -->
+    <filter>
+       <filter-name>traceFilter</filter-name>
+       <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
+
+    <filter-mapping>
+       <filter-name>traceFilter</filter-name>
+       <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+
     <!-- must be configured before the wicket filter -->
     <filter>
         <filter-name>spring.opensessioninviewfilter</filter-name>

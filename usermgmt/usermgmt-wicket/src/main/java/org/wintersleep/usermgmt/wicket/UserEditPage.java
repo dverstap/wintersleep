@@ -16,24 +16,24 @@
 
 package org.wintersleep.usermgmt.wicket;
 
-import org.apache.wicket.spring.injection.annot.SpringBean;
+import net.databinder.components.hib.DataForm;
+import net.databinder.models.hib.HibernateListModel;
+import net.databinder.models.hib.HibernateObjectModel;
 import org.apache.wicket.Page;
 import org.apache.wicket.PageParameters;
-import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.extensions.markup.html.form.palette.Palette;
-import org.apache.wicket.extensions.markup.html.form.select.Select;
-import org.apache.wicket.validation.validator.StringValidator;
-import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.basic.Label;
-import org.wintersleep.usermgmt.model.User;
-import org.wintersleep.usermgmt.wicket.base.Saver;
-import org.wintersleep.usermgmt.wicket.base.BasePage;
+import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
+import org.apache.wicket.markup.html.form.ListChoice;
+import org.apache.wicket.markup.html.form.PasswordTextField;
+import org.apache.wicket.markup.html.form.RequiredTextField;
+import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.validation.validator.StringValidator;
 import org.hibernate.SessionFactory;
-import net.databinder.models.HibernateObjectModel;
-import net.databinder.models.HibernateListModel;
-import net.databinder.components.hibernate.DataForm;
-
-import java.io.Serializable;
+import org.wintersleep.usermgmt.model.User;
+import org.wintersleep.usermgmt.wicket.base.BasePage;
+import org.wintersleep.usermgmt.wicket.base.Saver;
 
 
 public class UserEditPage extends BasePage {
@@ -46,16 +46,16 @@ public class UserEditPage extends BasePage {
     private Saver saver;
 
     public UserEditPage(PageParameters parameters) {
-        this(new UserListPage(), new HibernateObjectModel(User.class, Long.parseLong((String) parameters.get("id"))));
+        this(new UserListPage(), new HibernateObjectModel<User>(User.class, Long.parseLong((String) parameters.get("id"))));
     }
 
-    public UserEditPage(final Page backPage, HibernateObjectModel model) {
+    public UserEditPage(final Page backPage, HibernateObjectModel<User> model) {
         // TODO replace queries with calls to Repository
         HibernateListModel userProfiles = new HibernateListModel("from UserProfile order by name");
 
-        final DataForm form = new DataForm("editform", model) {
+        final DataForm form = new DataForm<User>("editform", model) {
             protected void onSubmit() {
-                User user = (User) getModelObject();
+                User user = getModelObject();
                 setPersistentObject(user);
                 saver.save(user);
                 //getSession().info(String.format("Saved user %s %s", user.getNameFirst(), user.getNameLast()));

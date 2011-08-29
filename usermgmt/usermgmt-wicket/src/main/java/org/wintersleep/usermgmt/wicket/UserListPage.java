@@ -16,10 +16,11 @@
 
 package org.wintersleep.usermgmt.wicket;
 
-import net.databinder.components.hibernate.PageSourceLink;
-import net.databinder.models.DatabinderProvider;
-import net.databinder.models.HibernateObjectModel;
-import net.databinder.models.ICriteriaBuilder;
+import net.databinder.components.hib.PageSourceLink;
+import net.databinder.models.hib.CriteriaBuilder;
+import net.databinder.models.hib.HibernateObjectModel;
+import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
+import org.wintersleep.databinder.HibernateProvider;
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortState;
@@ -28,17 +29,18 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.HeadersToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.NavigationToolbar;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.*;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.FilterForm;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.FilterToolbar;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.FilteredAbstractColumn;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.IFilterStateLocator;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.TextFilteredPropertyColumn;
 import org.apache.wicket.extensions.markup.html.repeater.util.SingleSortState;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
-import org.apache.wicket.markup.html.form.ChoiceRenderer;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.link.IPageLink;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.OddEvenItem;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
@@ -59,28 +61,28 @@ public class UserListPage extends BasePage {
         // list of columns allows table to render itself without any markup from us
         IColumn[] columns = new IColumn[]{
 
-                new FilteredAbstractColumn(new Model("Actions")) {
+                new FilteredAbstractColumn<User>(new Model<String>("Actions")) {
 
                     // add the ActionsPanel to the cell item
-                    public void populateItem(Item cellItem, String componentId, final IModel model) {
+                    public void populateItem(Item<ICellPopulator<User>> cellItem, String componentId, final IModel<User> model) {
                         cellItem.add(new ActionsPanel(componentId,
-                                new PageSourceLink("showLink", UserEditPage.class, model),
+                                new PageSourceLink<User>("showLink", UserEditPage.class, model),
                                 new IPageLink() {
                                     public Page getPage() {
-                                        return new UserEditPage(UserListPage.this, (HibernateObjectModel) model);
+                                        return new UserEditPage(UserListPage.this, (HibernateObjectModel<User>) model);
                                     }
 
-                                    public Class getPageIdentity() {
+                                    public Class<UserEditPage> getPageIdentity() {
                                         return UserEditPage.class;
                                     }
                                 },
                                 new IPageLink() {
                                     public Page getPage() {
-                                        User user = (User) model.getObject();
-                                        return new DeletePage(UserListPage.this, (HibernateObjectModel) model, "User: " + user.getFullName());
+                                        User user = model.getObject();
+                                        return new DeletePage<User>(UserListPage.this, (HibernateObjectModel<User>) model, "User: " + user.getFullName());
                                     }
 
-                                    public Class getPageIdentity() {
+                                    public Class<DeletePage> getPageIdentity() {
                                         return DeletePage.class;
                                     }
                                 }
@@ -92,13 +94,13 @@ public class UserListPage extends BasePage {
                     public Component getFilter(String componentId, FilterForm form) {
                         return new GoAndClearAndNewFilter(componentId, form) {
                             public Page createNewPage() {
-                                return new UserEditPage(UserListPage.this, new HibernateObjectModel(new User()));
+                                return new UserEditPage(UserListPage.this, new HibernateObjectModel<User>(new User()));
                             }
                         };
                     }
                 },
-                new TextFilteredPropertyColumn(new Model("Login"), "login", "login"),
-                new TextFilteredPropertyColumn(new Model("Name"), "fullName", "fullName"),
+                new TextFilteredPropertyColumn(new Model<String>("Login"), "login", "login"),
+                new TextFilteredPropertyColumn(new Model<String>("Name"), "fullName", "fullName"),
 /*
                 // custom column to enable countries be be in the list and labeled correctly
                 new MyChoiceFilteredPropertyColumn(new Model("Birth country"), "country.name", "country.name", "country", "name", countries),
@@ -107,11 +109,11 @@ public class UserListPage extends BasePage {
 */
         };
         UserSorter sorter = new UserSorter();
-        DatabinderProvider provider = new DatabinderProvider(User.class, filter, sorter);
+        HibernateProvider<User> provider = new HibernateProvider<User>(User.class, filter, sorter);
         provider.setWrapWithPropertyModel(false);
-        DataTable table = new DataTable("table", columns, provider, 25) {
-            protected Item newRowItem(String id, int index, IModel model) {
-                return new OddEvenItem(id, index, model);
+        DataTable<User> table = new DataTable<User>("table", columns, provider, 25) {
+            protected Item<User> newRowItem(String id, int index, IModel<User> model) {
+                return new OddEvenItem<User>(id, index, model);
             }
         };
         table.addTopToolbar(new NavigationToolbar(table));
@@ -120,7 +122,7 @@ public class UserListPage extends BasePage {
         add(filterForm.add(table));
     }
 
-    class UserFilter implements IFilterStateLocator, ICriteriaBuilder {
+    class UserFilter implements IFilterStateLocator, CriteriaBuilder {
         private User filterState = new User();
 
         /**
@@ -144,7 +146,7 @@ public class UserListPage extends BasePage {
         }
     }
 
-    class UserSorter implements ISortStateLocator, ICriteriaBuilder {
+    class UserSorter implements ISortStateLocator, CriteriaBuilder {
         private SingleSortState sortState = new SingleSortState();
 
         public void build(Criteria criteria) {

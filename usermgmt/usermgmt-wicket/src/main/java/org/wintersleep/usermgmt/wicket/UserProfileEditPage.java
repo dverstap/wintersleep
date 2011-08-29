@@ -28,9 +28,9 @@ import org.wintersleep.usermgmt.model.UserProfile;
 import org.wintersleep.usermgmt.wicket.base.Saver;
 import org.wintersleep.usermgmt.wicket.base.BasePage;
 import org.hibernate.SessionFactory;
-import net.databinder.models.HibernateObjectModel;
-import net.databinder.models.HibernateListModel;
-import net.databinder.components.hibernate.DataForm;
+import net.databinder.models.hib.HibernateObjectModel;
+import net.databinder.models.hib.HibernateListModel;
+import net.databinder.components.hib.DataForm;
 
 
 public class UserProfileEditPage extends BasePage {
@@ -42,12 +42,12 @@ public class UserProfileEditPage extends BasePage {
     @SpringBean
     private Saver saver;
 
-    public UserProfileEditPage(final Page backPage, HibernateObjectModel model) {
+    public UserProfileEditPage(final Page backPage, HibernateObjectModel<UserProfile> model) {
         HibernateListModel roles = new HibernateListModel("from Role order by name");
 
-        final DataForm form = new DataForm("form", model) {
+        final DataForm form = new DataForm<UserProfile>("form", model) {
             protected void onSubmit() {
-                UserProfile userProfile = (UserProfile) getModelObject();
+                UserProfile userProfile = getModelObject();
                 setPersistentObject(userProfile);
                 saver.save(userProfile);
                 //getSession().info(String.format("Saved userProfile %s %s", userProfile.getNameFirst(), userProfile.getNameLast()));

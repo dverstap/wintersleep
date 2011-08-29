@@ -16,33 +16,33 @@
 
 package org.wintersleep.usermgmt.wicket;
 
-import org.apache.wicket.spring.injection.annot.SpringBean;
+import net.databinder.components.hib.DataForm;
+import net.databinder.models.hib.HibernateObjectModel;
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
-import org.wintersleep.usermgmt.wicket.base.Saver;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wintersleep.usermgmt.wicket.base.BasePage;
-import net.databinder.models.HibernateObjectModel;
-import net.databinder.components.hibernate.DataForm;
+import org.wintersleep.usermgmt.wicket.base.Saver;
 
-public class DeletePage extends BasePage
+public class DeletePage<T> extends BasePage
 {
     private static final long serialVersionUID = 1;
 
     @SpringBean
     private Saver saver;
 
-    public DeletePage(final Page backPage, HibernateObjectModel model, String objectDescription)
+    public DeletePage(final Page backPage, HibernateObjectModel<T> model, String objectDescription)
 	{
 		super();
 
 		add(new Label("name", objectDescription ) );
 
-		DataForm form = new DataForm("confirmForm", model)
+		DataForm form = new DataForm<T>("confirmForm", model)
 		{
 			protected void onSubmit()
 			{
-				Object entity = getModelObject();
+				T entity = getModelObject();
                 saver.delete(entity);
                 // TODO audit log
                 // getSession().info(String.format("Deleted %s %s,",player.getNameFirst(),player.getNameLast()));

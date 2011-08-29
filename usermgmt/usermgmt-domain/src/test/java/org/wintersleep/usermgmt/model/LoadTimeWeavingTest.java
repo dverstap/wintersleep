@@ -16,18 +16,21 @@
 
 package org.wintersleep.usermgmt.model;
 
-import org.junit.runner.RunWith;
+import org.junit.Ignore;
 import org.junit.Test;
-import static org.junit.Assert.assertNotNull;
+import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.TreeSet;
 
+import static org.junit.Assert.assertNotNull;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"../../../../testApplicationContext.xml"})
 public class LoadTimeWeavingTest {
 
+    @Ignore
     @Test
     public void testLoadTimeWeaving() {
         User user = new User("user", "pw", "fullname", new UserProfile("name", new TreeSet<Role>()));

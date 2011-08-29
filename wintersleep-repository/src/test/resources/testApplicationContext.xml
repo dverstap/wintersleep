@@ -2,12 +2,12 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-           http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
     <import resource="classpath:/model-beans.xml"/>
 
-    <import resource="classpath:/profiler-beans.xml"/>
+    <import resource="classpath:/org/wintersleep/util/spring/tracer/tracer-beans.xml"/>
 
     <import resource="classpath:/test-datasource.xml"/>
 

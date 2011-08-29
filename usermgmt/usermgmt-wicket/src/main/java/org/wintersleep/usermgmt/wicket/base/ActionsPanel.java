@@ -19,7 +19,7 @@ package org.wintersleep.usermgmt.wicket.base;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.html.link.IPageLink;
 import org.apache.wicket.markup.html.link.PageLink;
-import net.databinder.components.hibernate.PageSourceLink;
+import net.databinder.components.hib.PageSourceLink;
 
 public class ActionsPanel extends Panel
 {

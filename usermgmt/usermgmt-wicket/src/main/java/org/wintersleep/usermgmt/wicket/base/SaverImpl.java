@@ -16,12 +16,13 @@
 
 package org.wintersleep.usermgmt.wicket.base;
 
-import org.hibernate.SessionFactory;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.wintersleep.usermgmt.wicket.base.Saver;
 
 @Transactional
+@Service
 public class SaverImpl implements Saver {
 
     private SessionFactory sessionFactory;

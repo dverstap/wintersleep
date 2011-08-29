@@ -26,7 +26,7 @@
                     <artifactId>commons-collections</artifactId>
                 </exclusion>
             </exclusions>
-            <scope>test</scope>
+            <!--<scope>test</scope>-->
         </dependency>
         
         <dependency>

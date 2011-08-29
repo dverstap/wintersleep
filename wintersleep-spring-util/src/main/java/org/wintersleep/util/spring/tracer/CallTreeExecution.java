@@ -1,4 +1,4 @@
-package org.wintersleep.util.spring.perflog;
+package org.wintersleep.util.spring.tracer;
 
 import org.slf4j.Logger;
 
@@ -37,12 +37,11 @@ public class CallTreeExecution implements Execution {
         return parent == null;
     }
 
-    @Override
-    public void finished() {
-        this.stopTime = System.currentTimeMillis();
+    public void finished(long currentTime) {
+        this.stopTime = currentTime;
     }
 
-    public long getDuration() {
+    public long getTotalDuration() {
         return stopTime - startTime;
     }
 
@@ -53,7 +52,7 @@ public class CallTreeExecution implements Execution {
     }
 
     protected void format(StringBuilder sb, String prefix) {
-        sb.append(prefix).append(name).append(": ").append(getDuration()).append("\n");
+        sb.append(prefix).append(name).append(": ").append(getTotalDuration()).append("\n");
         if (children != null) {
             for (CallTreeExecution child : children) {
                 child.format(sb, prefix + "  ");

@@ -1,21 +1,23 @@
-package org.wintersleep.util.spring.perflog;
+package org.wintersleep.util.spring.tracer;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public class CallTreePerformanceLogger implements PerformanceLogger {
+public class CallTreeExecutionListener implements ExecutionListener {
 
     private final ThreadLocal<CallTreeExecution> current = new ThreadLocal<CallTreeExecution>();
 
+    private final CurrentTimeProvider currentTimeProvider;
     private final Logger logger;
 
-    public CallTreePerformanceLogger() {
-        this(LoggerFactory.getLogger("PERF_LOG"));
+    public CallTreeExecutionListener() {
+        this(new SystemCurrentTimeMillisProvider(), LoggerFactory.getLogger("PERF_LOG"));
     }
 
-    public CallTreePerformanceLogger(Logger logger) {
+    public CallTreeExecutionListener(CurrentTimeProvider currentTimeProvider, Logger logger) {
+        this.currentTimeProvider = currentTimeProvider;
         this.logger = logger;
     }
 
@@ -25,7 +27,7 @@ public class CallTreePerformanceLogger implements PerformanceLogger {
             throw new IllegalStateException("Already started");
         }
         if (isEnabled()) {
-            current.set(new CallTreeExecution(execution, message, System.currentTimeMillis()));
+            current.set(new CallTreeExecution(execution, message, currentTimeProvider.get()));
         }
     }
 
@@ -37,7 +39,7 @@ public class CallTreePerformanceLogger implements PerformanceLogger {
         if (!execution.isRoot()) {
             throw new IllegalStateException("Trying to stop before reaching in the root of the call tree.");
         }
-        execution.finished();
+        execution.finished(currentTimeProvider.get());
         execution.log(logger);
         current.remove();
     }
@@ -51,6 +53,12 @@ public class CallTreePerformanceLogger implements PerformanceLogger {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public void finished(Execution execution) {
+        CallTreeExecution callTreeExecution = (CallTreeExecution) execution;
+        callTreeExecution.finished(currentTimeProvider.get());
     }
 
     protected String buildMessage(ProceedingJoinPoint call) {
