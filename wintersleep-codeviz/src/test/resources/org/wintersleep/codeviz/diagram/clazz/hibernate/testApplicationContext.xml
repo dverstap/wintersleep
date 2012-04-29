@@ -17,6 +17,7 @@
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop>
+                <prop key="hibernate.bytecode.provider">javassist</prop>
             </props>
         </property>
     </bean>

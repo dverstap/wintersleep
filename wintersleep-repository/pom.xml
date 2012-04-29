@@ -18,6 +18,12 @@
     <dependencies>
 
         <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib-nodep</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>org.wintersleep</groupId>
             <artifactId>wintersleep-spring-util</artifactId>
             <scope>test</scope>
@@ -61,9 +67,10 @@
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
         </dependency>
+
         <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-entitymanager</artifactId>
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
         </dependency>
 
         <dependency>
