@@ -1,0 +1,26 @@
+apply from: 'https://raw.github.com/rartavia/gradle-plugins/master/xmlbeansPlugin/xmlbeans.gradle'
+
+sourceSets {
+  schemas {
+    ext.srcDir = 'src/main/xsd'
+  }
+}
+
+configurations {
+  xmlbeans
+//  compile {
+//    extendsFrom xmlbeans
+//  }
+}
+
+dependencies {
+  xmlbeans 'org.apache.xmlbeans:xmlbeans'
+
+  compile 'org.apache.xmlbeans:xmlbeans'
+  compile files("$buildDir/classes/xmlbeans") {
+    builtBy 'compileXmlSchemas'
+  }
+
+  testCompile 'junit:junit'
+  testCompile project(':wintersleep-test-util')
+}

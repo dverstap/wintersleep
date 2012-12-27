@@ -1,20 +1,20 @@
 package org.wintersleep.codeviz.uml.diagram;
 
-import org.wintersleep.codeviz.uml.model.CodeModel;
-import org.wintersleep.codeviz.uml.model.Relation;
-import org.wintersleep.test.util.FileTestUtil;
-import static org.wintersleep.test.util.FileTestUtil.assertCreated;
-
-import org.wintersleep.codeviz.uml.model.ModelClass;
-import org.wintersleep.codeviz.uml.model.RelationEndpoint;
 import org.junit.Test;
+import org.wintersleep.codeviz.uml.model.CodeModel;
+import org.wintersleep.codeviz.uml.model.ModelClass;
+import org.wintersleep.codeviz.uml.model.Relation;
+import org.wintersleep.codeviz.uml.model.RelationEndpoint;
+import org.wintersleep.test.util.FileTestUtil;
 
 import java.io.File;
 import java.io.IOException;
 
+import static org.wintersleep.test.util.FileTestUtil.assertCreated;
+
 public class JCodeVizModelTest {
 
-    private final File outputDir = FileTestUtil.makeOutputDir(JCodeVizModelTest.class);
+    private final File outputDir = FileTestUtil.makeOutputDir(JCodeVizModelTest.class, "test-diagrams");
 
     @Test
     public void test() throws IOException, InterruptedException {

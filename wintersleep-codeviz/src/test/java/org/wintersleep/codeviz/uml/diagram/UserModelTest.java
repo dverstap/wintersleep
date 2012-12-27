@@ -40,7 +40,7 @@ import static org.junit.Assert.assertNotNull;
 @ContextConfiguration(locations = {"/org/wintersleep/codeviz/diagram/clazz/hibernate/testApplicationContext.xml"})
 public class UserModelTest {
 
-    private final File outputDir = FileTestUtil.makeOutputDir(UserModelTest.class);
+    private final File outputDir = FileTestUtil.makeOutputDir(UserModelTest.class, "test-diagrams");
 
     @Autowired
     private ApplicationContext applicationContext;

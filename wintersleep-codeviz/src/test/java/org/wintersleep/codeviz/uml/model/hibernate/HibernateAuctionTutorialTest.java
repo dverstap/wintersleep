@@ -16,26 +16,26 @@
 package org.wintersleep.codeviz.uml.model.hibernate;
 
 import org.hibernate.SessionFactory;
-import org.hibernate.dialect.MySQL5InnoDBDialect;
 import org.hibernate.auction.AuctionItem;
 import org.hibernate.auction.Bid;
 import org.hibernate.auction.User;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
+import org.hibernate.dialect.MySQL5InnoDBDialect;
+import org.junit.Test;
 import org.wintersleep.codeviz.uml.diagram.ClassDiagram;
+import org.wintersleep.codeviz.uml.model.CodeModel;
 import org.wintersleep.codeviz.uml.model.HibernateModelFactory;
 import org.wintersleep.test.util.FileTestUtil;
-import static org.wintersleep.test.util.FileTestUtil.assertCreated;
-
-import org.wintersleep.codeviz.uml.model.CodeModel;
-import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
 
+import static org.wintersleep.test.util.FileTestUtil.assertCreated;
+
 public class HibernateAuctionTutorialTest {
 
-    private final File outputDir = FileTestUtil.makeOutputDir(HibernateAuctionTutorialTest.class);
+    private final File outputDir = FileTestUtil.makeOutputDir(HibernateAuctionTutorialTest.class, "test-diagrams");
 
     @Test
     public void test() throws IOException {

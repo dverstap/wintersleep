@@ -1,0 +1,29 @@
+1. Allow simple method call tracing, based on whether the TRACE level
+is enabled on the target class.
+
+2. Detailed call tree creation, based on whether it's enabled or not
+at the level of the entry point.
+
+3. Enabling call tree creation for an endpoint should be possible at
+runtime, even based on runtime parameters.
+
+4. It should be possible to randomly create a call tree for every 100
+or 1000 invocations on an entry point.
+
+5. Call trees should be loggable, to separate log files for each entry
+point.
+
+6. It should be possible to store the N last call trees for an entry
+point. Configurable per entry point. These should be accessible and
+viewable via JMX.
+
+7. It's possible that a method invokes another methods thousands of
+times: tracing all those will (probably) consume too much memory. The
+last thing we want is that the debugging code makes the system run out
+of memory! A call stack with thousands of entries isn't actually
+debuggable either... We'll need something to deal with this.
+
+8. When converting parameters to a String:
+- Catch any exceptions, so they don't make the system fail.
+- Limit them to N characters.
+

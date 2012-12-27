@@ -24,7 +24,7 @@ import java.io.IOException;
 
 public class PassiveOpticalNetworkTest {
 
-    private final File outputDir = FileTestUtil.makeOutputDir(PassiveOpticalNetworkTest.class);
+    private final File outputDir = FileTestUtil.makeOutputDir(PassiveOpticalNetworkTest.class, "test-diagrams");
 
     @Test
     public void test() throws IOException, InterruptedException {

@@ -24,7 +24,28 @@ import java.net.URL;
 
 public abstract class FileTestUtil {
 
+    // TODO rename to getBuildDir(), because of the gradle migration
     public static File getTargetDir(Class testClass) {
+        File classFile = getClassFile(testClass);
+        File result = findBuildDir(classFile);
+        if (result == null) {
+            throw new IllegalStateException("Could not find 'build' dir as a parent of " + classFile);
+        }
+        return result;
+    }
+
+    private static File findBuildDir(File classFile) {
+        File dir = classFile.getParentFile();
+        while (dir != null) {
+            if (dir.getName().equals("build")) {
+                return dir;
+            }
+            dir = dir.getParentFile();
+        }
+        return null;
+    }
+
+    private static File getClassFile(Class testClass) {
         ClassLoader cl = Thread.currentThread().getContextClassLoader();
         URL url = cl.getResource(testClass.getName().replace('.', '/') + ".class");
         if (url == null) {
@@ -39,20 +60,20 @@ public abstract class FileTestUtil {
         if (!classFile.exists()) {
             throw new IllegalStateException(classFile + " does not exist.");
         }
-        File dir = classFile.getParentFile();
-        while (dir != null) {
-            if (dir.getName().equals("target")) {
-                return dir;
-            }
-            dir = dir.getParentFile();
-        }
-        throw new IllegalStateException("Could not find 'target' dir as a parent of " + classFile);
+        return classFile;
     }
 
     @SuppressWarnings({"ResultOfMethodCallIgnored"})
-    public static File makeOutputDir(Class testClass) {
-        File targetDir = getTargetDir(testClass);
-        File result = new File(targetDir, "test-diagrams");
+    public static File makeOutputDir(Class testClass, String subDir) {
+        File classFile = getClassFile(testClass);
+        File buildDir = findBuildDir(classFile);
+        if (buildDir == null) {
+            // probably running in a IntelliJ 11.1 project, directly imported from gradle,
+            // which does not seem to (easily) support having a directory per module,
+            // so we create a dedicated directory for this class itself
+            buildDir = new File("intellij-test/" + testClass.getName());
+        }
+        File result = new File(buildDir, subDir);
         result.mkdirs();
         return result;
     }
@@ -66,7 +87,7 @@ public abstract class FileTestUtil {
         int i = file.getName().lastIndexOf(".");
         String firstPart = file.getName();
         if (i >= 0) {
-           firstPart  = file.getName().substring(0, i);
+            firstPart = file.getName().substring(0, i);
         }
         return new File(file.getParentFile(), firstPart + "." + newExtension);
     }

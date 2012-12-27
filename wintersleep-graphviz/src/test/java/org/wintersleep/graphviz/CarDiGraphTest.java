@@ -17,7 +17,7 @@ import java.io.IOException;
 
 public class CarDiGraphTest {
 
-    private final File outputDir = FileTestUtil.makeOutputDir(CarDiGraphTest.class);
+    private final File outputDir = FileTestUtil.makeOutputDir(PassiveOpticalNetworkTest.class, "test-diagrams");
 
     @Test
     public void test() throws IOException, InterruptedException, XmlException {
@@ -183,16 +183,16 @@ public class CarDiGraphTest {
         cursor.dispose();
     }
 
-    public static void main(String[] args) {
-
-        try {
-            new CarDiGraphTest().test();
-            //System.out.println("hello");
-            ImageViewer viewer = new ImageViewer("/tmp/G1.png");
-            viewer.view();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    public static void main(String[] args) {
+//
+//        try {
+//            new CarDiGraphTest().test();
+//            //System.out.println("hello");
+//            ImageViewer viewer = new ImageViewer("/tmp/G1.png");
+//            viewer.view();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 }

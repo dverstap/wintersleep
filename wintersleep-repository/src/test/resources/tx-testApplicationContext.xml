@@ -19,13 +19,13 @@
     <bean id="jtaTransactionManager"
           class="com.arjuna.ats.jta.TransactionManager"
           factory-method="transactionManager">
-        <constructor-arg value="true"/>
+        <!--<constructor-arg value="true"/>-->
     </bean>
 
     <bean id="userTransaction"
           class="com.arjuna.ats.jta.UserTransaction"
           factory-method="userTransaction">
-        <constructor-arg value="true"/>
+        <!--<constructor-arg value="true"/>-->
     </bean>
 
 

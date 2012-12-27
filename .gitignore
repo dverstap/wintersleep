@@ -2,6 +2,9 @@
 *.ipr
 *.iws
 target
+build
+.gradle
+gradle-app.setting
 .project
 .classpath
 cobertura.ser

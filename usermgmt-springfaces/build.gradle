@@ -1,0 +1,16 @@
+dependencies {
+  compile 'org.springframework:spring-web'
+  compile 'org.springframework.security:spring-security-core'
+  compile 'org.springframework.webflow:org.springframework.binding'
+  compile 'org.springframework.webflow:org.springframework.js'
+  compile 'org.springframework.webflow:org.springframework.webflow'
+  compile 'org.springframework.webflow:org.springframework.faces'
+  compile project(':usermgmt-domain')
+  compile 'javax.el:el-api'
+  compile 'javax.faces:jsf-api'
+  compile 'javax.faces:jsf-impl'
+  compile 'com.sun.facelets:jsf-facelets'
+  compile 'org.mortbay.jetty:jetty'
+  compile 'javax.servlet:servlet-api'
+  testCompile 'junit:junit'
+}

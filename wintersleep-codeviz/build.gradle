@@ -1,0 +1,25 @@
+dependencies {
+  compile 'com.intellij:annotations'
+  testCompile('commons-dbcp:commons-dbcp') {
+    exclude group:'commons-collections', module:'commons-collections'
+    exclude group:'commons-logging', module:'commons-logging'
+  }
+  testCompile 'junit:junit'
+  compile 'log4j:log4j'
+  testCompile 'mysql:mysql-connector-java'
+  compile 'org.hibernate:hibernate-core'
+  compile 'org.javassist:javassist'
+  testCompile('org.hibernate:hibernate-tutorial-eg') {
+    transitive = false
+  }
+  testRuntime 'org.slf4j:jcl-over-slf4j'
+  testCompile 'org.springframework:spring-core'
+  testCompile 'org.springframework:spring-orm'
+  testCompile 'org.springframework:spring-jdbc'
+  testCompile 'org.springframework:spring-aop'
+  testCompile 'org.springframework:spring-test'
+  compile 'org.slf4j:slf4j-log4j12'
+  compile 'org.slf4j:slf4j-api'
+  compile project(':wintersleep-graphviz')
+  testCompile project(':wintersleep-test-util')
+}

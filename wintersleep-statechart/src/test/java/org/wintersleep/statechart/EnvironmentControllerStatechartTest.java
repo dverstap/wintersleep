@@ -15,7 +15,7 @@ import static org.wintersleep.test.util.FileTestUtil.assertCreated;
 
 public class EnvironmentControllerStatechartTest {
 
-    private final File outputDir = FileTestUtil.makeOutputDir(ReferenceStatechartTest.class);
+    private final File outputDir = FileTestUtil.makeOutputDir(ReferenceStatechartTest.class, "test-diagrams");
 
     private EnvironmentControllerStatechart sc;
     private EnvironmentController controller;

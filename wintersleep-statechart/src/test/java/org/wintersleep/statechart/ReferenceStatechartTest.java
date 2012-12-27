@@ -15,7 +15,7 @@ import static org.wintersleep.test.util.FileTestUtil.assertCreated;
 
 public class ReferenceStatechartTest {
 
-    private final File outputDir = FileTestUtil.makeOutputDir(ReferenceStatechartTest.class);
+    private final File outputDir = FileTestUtil.makeOutputDir(ReferenceStatechartTest.class, "test-diagrams");
 
     private ReferenceStatechart sc;
     private ReferenceStatechartPojo pojo;

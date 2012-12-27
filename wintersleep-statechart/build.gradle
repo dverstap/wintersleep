@@ -1,0 +1,10 @@
+dependencies {
+
+  compile project(':wintersleep-graphviz')
+  compile 'org.slf4j:slf4j-api'
+
+  testCompile 'junit:junit'
+  testCompile 'org.slf4j:slf4j-log4j12'
+  testCompile project(':wintersleep-test-util')
+
+}

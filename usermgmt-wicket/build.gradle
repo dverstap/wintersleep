@@ -1,0 +1,13 @@
+dependencies {
+  compile project(':usermgmt-domain')
+  compile('org.apache.wicket:wicket-spring') {
+    exclude group:'org.springframework', module:'spring'
+  }
+  compile 'net.databinder:databinder-app-hib'
+  compile 'org.springframework:spring-web'
+  testCompile 'org.mortbay.jetty:jetty'
+  testCompile 'org.slf4j:jcl-over-slf4j'
+  testCompile 'org.slf4j:slf4j-log4j12'
+  compile 'javax.servlet:servlet-api'
+  testCompile 'junit:junit'
+}
