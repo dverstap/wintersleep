@@ -14,6 +14,7 @@ dependencies {
   }
   testRuntime 'org.slf4j:jcl-over-slf4j'
   testCompile 'org.springframework:spring-core'
+  testCompile 'org.springframework:spring-context'
   testCompile 'org.springframework:spring-orm'
   testCompile 'org.springframework:spring-jdbc'
   testCompile 'org.springframework:spring-aop'

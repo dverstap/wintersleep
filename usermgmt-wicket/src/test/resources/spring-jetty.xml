@@ -22,38 +22,36 @@
             <props>
                 <prop key="jetty.port">8080</prop>
                 <prop key="jetty.contextPath">/</prop>
-                <prop key="jetty.war">src/main/webapp</prop>
+                <prop key="jetty.war">usermgmt-wicket/src/main/webapp</prop>
             </props>
         </property>
     </bean>
 
-    <bean id="jettyServer" class="org.mortbay.jetty.Server" init-method="start" destroy-method="stop">
+    <!-- Highly simplified version (only a single webapp) of:
+    http://www.eclipse.org/jetty/documentation/current/frameworks.html#framework-jetty-spring -->
+
+    <bean id="jettyServer" name="Main" class="org.eclipse.jetty.server.Server" init-method="start" destroy-method="stop">
+        <constructor-arg>
+            <bean id="threadPool" class="org.eclipse.jetty.util.thread.QueuedThreadPool">
+                <property name="minThreads" value="10"/>
+                <property name="maxThreads" value="50"/>
+            </bean>
+        </constructor-arg>
         <property name="connectors">
             <list>
-                <bean id="Connector" class="org.mortbay.jetty.nio.SelectChannelConnector">
-                    <property name="port" value="${jetty.port}"/>
+                <bean id="connector" class="org.eclipse.jetty.server.ServerConnector">
+                    <constructor-arg ref="jettyServer"/>
+                    <property name="port" value="8080"/>
                 </bean>
             </list>
         </property>
-
         <property name="handler">
-            <bean id="handlers" class="org.mortbay.jetty.handler.HandlerCollection">
-                <property name="handlers">
-                    <list>
-                        <bean id="contexts" class="org.mortbay.jetty.handler.ContextHandlerCollection">
-                            <property name="handlers">
-                                <list>
-                                    <bean class="org.mortbay.jetty.webapp.WebAppContext">
-                                        <property name="contextPath" value="${jetty.contextPath}"/>
-                                        <property name="war" value="${jetty.war}">
-                                        </property>
-                                    </bean>
-                                </list>
-                            </property>
-                        </bean>
-                    </list>
+            <bean class="org.eclipse.jetty.webapp.WebAppContext">
+                <property name="contextPath" value="${jetty.contextPath}"/>
+                <property name="war" value="${jetty.war}">
                 </property>
             </bean>
         </property>
     </bean>
+
 </beans>

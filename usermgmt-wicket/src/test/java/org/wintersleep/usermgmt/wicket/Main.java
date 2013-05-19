@@ -17,17 +17,16 @@
 package org.wintersleep.usermgmt.wicket;
 
 import org.apache.log4j.Logger;
-import org.mortbay.jetty.Handler;
-import org.mortbay.jetty.Server;
-import org.mortbay.jetty.handler.ContextHandlerCollection;
-import org.mortbay.jetty.webapp.WebAppContext;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
+import org.eclipse.jetty.webapp.WebAppContext;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  * You need to run this with JVM option:
- *
- * -javaagent:${settings.localRepository}/org/springframework/spring-instrument/3.0.5.RELEASE/spring-instrument-3.0.5.RELEASE.jar
+ * <p/>
+ * -javaagent:${settings.localRepository}/org/springframework/spring-instrument/3.1.3.RELEASE/spring-instrument-3.1.3.RELEASE.jar
  */
 public class Main {
 
@@ -40,17 +39,12 @@ public class Main {
         String[] configLocations = new String[]{"/spring-jetty.xml"};
 
         ApplicationContext context = new ClassPathXmlApplicationContext(configLocations);
-        Server server = (Server) context.getBean("jettyServer");
-        // get host
-        String host = server.getConnectors()[0].getHost();
-        if (host == null) {
-            host = "localhost";
-        }
-        // get port
-        int port = server.getConnectors()[0].getPort();
-        // get context path
-        Handler[] handlers = ((ContextHandlerCollection) server.getHandlers()[0]).getHandlers();
-        String contextPath = ((WebAppContext) handlers[0]).getContextPath();
+        Server server = context.getBean("jettyServer", Server.class);
+        ServerConnector connector = (ServerConnector) server.getConnectors()[0];
+        String host = connector.getHost();
+        int port = connector.getLocalPort();
+        WebAppContext webAppContext = (WebAppContext) server.getHandler();
+        String contextPath = webAppContext.getContextPath();
         if (log.isInfoEnabled()) {
             log.info("server started - 'http://" + host + ":" + port + contextPath + "'");
         }

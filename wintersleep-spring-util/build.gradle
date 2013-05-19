@@ -1,5 +1,5 @@
 dependencies {
-  compile 'javax.servlet:servlet-api:'
+  compile 'javax.servlet:javax.servlet-api:'
   compile 'org.aspectj:aspectjrt:'
   compile 'org.slf4j:slf4j-api:'
   compile 'org.slf4j:jcl-over-slf4j:'

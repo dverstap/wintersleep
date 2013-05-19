@@ -13,7 +13,7 @@ dependencies {
   testCompile 'org.jboss.logging:jboss-logging'
   testCompile 'org.jboss.jbossts.jta:narayana-jta'
   testCompile 'org.jboss.jbossts.arjunacore:arjuna'
-  compile 'javax.servlet:servlet-api'
+  compile 'javax.servlet:javax.servlet-api'
   testCompile 'commons-dbcp:commons-dbcp'
   testCompile 'mysql:mysql-connector-java'
   testCompile 'org.slf4j:jcl-over-slf4j'

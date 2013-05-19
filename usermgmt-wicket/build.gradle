@@ -5,9 +5,11 @@ dependencies {
   }
   compile 'net.databinder:databinder-app-hib'
   compile 'org.springframework:spring-web'
-  testCompile 'org.mortbay.jetty:jetty'
+  testCompile 'org.eclipse.jetty:jetty-deploy'
+  testCompile 'org.eclipse.jetty:jetty-server'
+  testCompile 'org.eclipse.jetty:jetty-webapp'
   testCompile 'org.slf4j:jcl-over-slf4j'
   testCompile 'org.slf4j:slf4j-log4j12'
-  compile 'javax.servlet:servlet-api'
+  compile 'javax.servlet:javax.servlet-api'
   testCompile 'junit:junit'
 }

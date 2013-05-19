@@ -25,9 +25,9 @@
         <module>wintersleep-statechart</module>
         <module>wintersleep-codeviz</module>
         <module>wintersleep-ganglia</module>
-        <module>usermgmt/usermgmt-domain</module>
-        <module>usermgmt/usermgmt-springfaces</module>
-        <module>usermgmt/usermgmt-wicket</module>
+        <module>usermgmt-domain</module>
+        <module>usermgmt-springfaces</module>
+        <module>usermgmt-wicket</module>
     </modules>
 
 </project>
