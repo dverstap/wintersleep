@@ -13,23 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.wintersleep.wicket.hibernate;
 
-package org.wintersleep.usermgmt.wicket.base;
+public interface Saver {
 
-import org.apache.wicket.markup.html.link.IPageLink;
-import org.apache.wicket.markup.html.link.PageLink;
-import org.apache.wicket.markup.html.panel.Panel;
-import org.wintersleep.wicket.hibernate.PageSourceLink;
+    void save(Object... entities);
 
-public class ActionsPanel extends Panel
-{
-
-	public ActionsPanel(String wicketid, PageSourceLink showLink, IPageLink editLink, IPageLink deleteLink)
-	{
-		super(wicketid);
-
-        add(showLink);
-        add(new PageLink("editLink", editLink));
-		add(new PageLink("deleteLink", deleteLink));
-	}
+    void delete(Object... entities);
+    
 }

@@ -16,24 +16,20 @@
 
 package org.wintersleep.usermgmt.wicket;
 
-import net.databinder.components.hib.DataForm;
-import net.databinder.models.hib.HibernateListModel;
-import net.databinder.models.hib.HibernateObjectModel;
 import org.apache.wicket.Page;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.markup.html.form.ChoiceRenderer;
-import org.apache.wicket.markup.html.form.ListChoice;
-import org.apache.wicket.markup.html.form.PasswordTextField;
-import org.apache.wicket.markup.html.form.RequiredTextField;
+import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.StringValidator;
 import org.hibernate.SessionFactory;
 import org.wintersleep.usermgmt.model.User;
+import org.wintersleep.usermgmt.model.UserProfile;
 import org.wintersleep.usermgmt.wicket.base.BasePage;
-import org.wintersleep.usermgmt.wicket.base.Saver;
+import org.wintersleep.wicket.hibernate.Saver;
+import org.wintersleep.wicket.hibernate.HibernateListModel;
+import org.wintersleep.wicket.hibernate.HibernateObjectModel;
 
 
 public class UserEditPage extends BasePage {
@@ -46,17 +42,16 @@ public class UserEditPage extends BasePage {
     private Saver saver;
 
     public UserEditPage(PageParameters parameters) {
-        this(new UserListPage(), new HibernateObjectModel<User>(User.class, Long.parseLong((String) parameters.get("id"))));
+        this(new UserListPage(), new HibernateObjectModel<>(User.class, parameters.getAsLong("id")));
     }
 
-    public UserEditPage(final Page backPage, HibernateObjectModel<User> model) {
+    public UserEditPage(final Page backPage, HibernateObjectModel<Long, User> model) {
         // TODO replace queries with calls to Repository
-        HibernateListModel userProfiles = new HibernateListModel("from UserProfile order by name");
+        HibernateListModel<Long, UserProfile> userProfiles = new HibernateListModel<>("from UserProfile order by name");
 
-        final DataForm form = new DataForm<User>("editform", model) {
+        final Form form = new Form<User>("editform", model) {
             protected void onSubmit() {
                 User user = getModelObject();
-                setPersistentObject(user);
                 saver.save(user);
                 //getSession().info(String.format("Saved user %s %s", user.getNameFirst(), user.getNameLast()));
                 setResponsePage(backPage);
@@ -65,10 +60,11 @@ public class UserEditPage extends BasePage {
         add(form);
 
         // TODO allow model-based validation
-        form.add(new RequiredTextField("login").add(StringValidator.maximumLength(8)));
-        form.add(new PasswordTextField("password").add(StringValidator.maximumLength(16)));
-        form.add(new RequiredTextField("fullName").add(StringValidator.maximumLength(32)));
-        form.add(new ListChoice("userProfile", new PropertyModel(model.getObject(), "userProfile"), userProfiles, new ChoiceRenderer("name", "id")));
+        form.add(new RequiredTextField<>("login", new PropertyModel<String>(model, "login")).add(StringValidator.maximumLength(8)));
+        form.add(new PasswordTextField("password", new PropertyModel<String>(model, "password")).add(StringValidator.maximumLength(16)));
+        form.add(new RequiredTextField<>("fullName", new PropertyModel<String>(model, "fullName")).add(StringValidator.maximumLength(32)));
+        form.add(new ListChoice<>("userProfile", new PropertyModel<UserProfile>(model.getObject(), "userProfile"),
+                userProfiles, new ChoiceRenderer<UserProfile>("name", "id")));
 
 /*
         form.add(new Button("new") {

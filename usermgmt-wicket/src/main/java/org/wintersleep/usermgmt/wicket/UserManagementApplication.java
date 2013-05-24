@@ -15,72 +15,38 @@
  */
 package org.wintersleep.usermgmt.wicket;
 
-import net.databinder.hib.DataApplication;
 import org.apache.log4j.Logger;
+import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.request.target.coding.BookmarkablePageRequestTargetUrlCodingStrategy;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
-import org.hibernate.SessionFactory;
-import org.hibernate.mapping.PersistentClass;
-import org.springframework.orm.hibernate3.LocalSessionFactoryBean;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.wintersleep.usermgmt.model.User;
+import org.wintersleep.usermgmt.model.UserProfile;
 
-import java.util.Iterator;
-
-public class UserManagementApplication extends DataApplication {
+public class UserManagementApplication extends WebApplication {
 
     private static final Logger m_log = Logger.getLogger(UserManagementApplication.class);
 
     @Override
-	public Class getHomePage() {
-		return UserListPage.class;
-	}
+    public Class<UserListPage> getHomePage() {
+        return UserListPage.class;
+    }
 
     @Override
     protected void init() {
         super.init();
         addComponentInstantiationListener(new SpringComponentInjector(this));
 
-//        try {
-//            mountBookmarkablePages();
-//        } catch (ClassNotFoundException e) {
-//            throw new RuntimeException(e);
-//        }
-
-        // disable cookieless interaction to improve search engine crawlability
-		setCookielessSupported(false);
-
         //mount(new HybridUrlCodingStrategy("/user", UserEditPage.class));
-        //mount(new BookmarkablePageRequestTargetUrlCodingStrategy("/user", UserEditPage.class, null));
+        mount(new BookmarkablePageRequestTargetUrlCodingStrategy(User.class.getSimpleName().toLowerCase(),
+                UserEditPage.class, null));
+        mount(new BookmarkablePageRequestTargetUrlCodingStrategy(UserProfile.class.getSimpleName().toLowerCase(),
+                UserProfileEditPage.class, null));
 
-        //mount(new IndexedParamUrlCodingStrategy("/user", UserEditPage.class, null));
+        // mount(new IndexedParamUrlCodingStrategy("/user", UserEditPage.class));
+        //mount(new IndexedParamUrlCodingStrategy("/userprofile", UserProfileEditPage.class));
 
-        mountBookmarkablePage(User.class.getSimpleName(), UserEditPage.class);        
+        //mountBookmarkablePage(User.class.getSimpleName(), UserEditPage.class);
+        //mountBookmarkablePage(UserProfile.class.getSimpleName(), UserProfileEditPage.class);
     }
 
-    // I can't really get this REST-thingy to work: it seems databinder supports it for panels and such,
-    // but not for plain pages. Futhermore, the example app (cookbook) seems to do this only for showing
-    // recipes, not for editing them.
-    private void mountBookmarkablePages() throws ClassNotFoundException {
-        WebApplicationContext context = WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext());
-
-        LocalSessionFactoryBean sessionFactoryBean = (LocalSessionFactoryBean) context.getBean("&sessionFactory");
-        Iterator<PersistentClass> classMappings = sessionFactoryBean.getConfiguration().getClassMappings();
-        while (classMappings.hasNext()) {
-            PersistentClass persistentClass = classMappings.next();
-            Class entityClass = Class.forName(persistentClass.getClassName());
-            m_log.info("Adding bookmark support for: " + persistentClass.getEntityName() + ": " + entityClass);
-            mountBookmarkablePage(entityClass.getSimpleName(), entityClass);
-
-        }
-
-    }
-
-    @Override
-    public void buildHibernateSessionFactory(Object key) {
-        WebApplicationContext context = WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext());
-        SessionFactory sessionFactory = (SessionFactory) context.getBean("sessionFactory");
-        setHibernateSessionFactory(null, sessionFactory);
-
-    }
 }

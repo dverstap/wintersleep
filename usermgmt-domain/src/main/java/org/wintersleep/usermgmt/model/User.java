@@ -31,7 +31,7 @@ public class User implements Serializable {
     @GeneratedValue
     private Long id;
 
-    @Column(nullable = false, updatable = false, unique = true, length = 8)
+    @Column(nullable = false, unique = true, length = 8)
     private String login;
 
     @Column(nullable = false, length = 16)
@@ -112,9 +112,15 @@ public class User implements Serializable {
         }
     }
 
+    @Override
     public String toString() {
         return "User{" +
-                "userManagementService=" + userManagementService +
+                "id=" + id +
+                ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", userProfile=" + userProfile +
+                ", userManagementService=" + userManagementService +
                 '}';
     }
 }

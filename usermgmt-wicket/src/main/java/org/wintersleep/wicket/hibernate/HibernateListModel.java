@@ -1,5 +1,5 @@
 /*
- * Copyright 2008 Davy Verstappen.
+ * Copyright 2013 Davy Verstappen.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,12 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wintersleep.usermgmt.wicket.base;
+package org.wintersleep.wicket.hibernate;
 
-public interface Saver {
+import org.apache.wicket.model.LoadableDetachableModel;
 
-    void save(Object... entities);
+import java.io.Serializable;
+import java.util.List;
 
-    void delete(Object... entities);
-    
+public class HibernateListModel<ID extends Serializable, T> extends LoadableDetachableModel<List<T>> {
+
+    private final String query;
+
+    public HibernateListModel(String query) {
+        this.query = query;
+    }
+
+    @Override
+    protected List<T> load() {
+        return WebAppHibernateUtil.getCurrentSession().createQuery(query).list();
+    }
+
 }

@@ -20,9 +20,14 @@
     <!--<context:load-time-weaver/>-->
 
     <!-- a PlatformTransactionManager is still required -->
+<!--
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <!-- (this dependency is defined somewhere else) -->
+        &lt;!&ndash; (this dependency is defined somewhere else) &ndash;&gt;
         <property name="dataSource" ref="dataSource"/>
+    </bean>
+-->
+    <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
     <bean id="sessionFactory"

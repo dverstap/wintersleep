@@ -16,48 +16,42 @@
 
 package org.wintersleep.usermgmt.wicket;
 
-import net.databinder.components.hib.DataForm;
-import net.databinder.models.hib.HibernateObjectModel;
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wintersleep.usermgmt.wicket.base.BasePage;
-import org.wintersleep.usermgmt.wicket.base.Saver;
+import org.wintersleep.wicket.hibernate.Saver;
 
-public class DeletePage<T> extends BasePage
-{
+public class DeletePage<T> extends BasePage {
     private static final long serialVersionUID = 1;
 
     @SpringBean
     private Saver saver;
 
-    public DeletePage(final Page backPage, HibernateObjectModel<T> model, String objectDescription)
-	{
-		super();
+    public DeletePage(final Page backPage, IModel<T> model, String objectDescription) {
+        super();
 
-		add(new Label("name", objectDescription ) );
+        add(new Label("name", objectDescription));
 
-		DataForm form = new DataForm<T>("confirmForm", model)
-		{
-			protected void onSubmit()
-			{
-				T entity = getModelObject();
+        Form form = new Form<T>("confirmForm", model) {
+            protected void onSubmit() {
+                T entity = getModelObject();
                 saver.delete(entity);
                 // TODO audit log
                 // getSession().info(String.format("Deleted %s %s,",player.getNameFirst(),player.getNameLast()));
-				setResponsePage(backPage);
-			}
-		};
+                setResponsePage(backPage);
+            }
+        };
 
-		form.add(new Button("cancel")
-		{
-			public void onSubmit()
-			{
-				setResponsePage(backPage);
-			}
-		}.setDefaultFormProcessing(false));
+        form.add(new Button("cancel") {
+            public void onSubmit() {
+                setResponsePage(backPage);
+            }
+        }.setDefaultFormProcessing(false));
 
-		add(form);
-	}
+        add(form);
+    }
 }

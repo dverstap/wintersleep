@@ -8,8 +8,22 @@
         </layout>
     </appender>
 
+<!--
+    <logger name="org.hibernate.SQL">
+        <level value="DEBUG"/>
+    </logger>
+    
+    <logger name="org.hibernate.type">
+        <level value="TRACE"/>
+    </logger>
+-->
+
+    <logger name="org.wintersleep">
+        <level value="DEBUG"/>
+    </logger>
+
     <root>
-        <priority value="debug"/>
+        <priority value="INFO"/>
         <appender-ref ref="console"/>
     </root>
 

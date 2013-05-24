@@ -16,21 +16,26 @@
 
 package org.wintersleep.usermgmt.wicket;
 
-import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.Page;
-import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.PageParameters;
 import org.apache.wicket.extensions.markup.html.form.palette.Palette;
-import org.apache.wicket.validation.validator.StringValidator;
-import org.apache.wicket.markup.html.form.RequiredTextField;
-import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.Button;
-import org.wintersleep.usermgmt.model.UserProfile;
-import org.wintersleep.usermgmt.wicket.base.Saver;
-import org.wintersleep.usermgmt.wicket.base.BasePage;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.RequiredTextField;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.validation.validator.StringValidator;
 import org.hibernate.SessionFactory;
-import net.databinder.models.hib.HibernateObjectModel;
-import net.databinder.models.hib.HibernateListModel;
-import net.databinder.components.hib.DataForm;
+import org.wintersleep.usermgmt.model.Role;
+import org.wintersleep.usermgmt.model.UserProfile;
+import org.wintersleep.usermgmt.wicket.base.BasePage;
+import org.wintersleep.wicket.hibernate.Saver;
+import org.wintersleep.wicket.hibernate.HibernateListModel;
+import org.wintersleep.wicket.hibernate.HibernateObjectModel;
+
+import java.util.List;
 
 
 public class UserProfileEditPage extends BasePage {
@@ -42,13 +47,16 @@ public class UserProfileEditPage extends BasePage {
     @SpringBean
     private Saver saver;
 
-    public UserProfileEditPage(final Page backPage, HibernateObjectModel<UserProfile> model) {
-        HibernateListModel roles = new HibernateListModel("from Role order by name");
+    public UserProfileEditPage(PageParameters parameters) {
+        this(new UserProfileListPage(), new HibernateObjectModel<>(UserProfile.class, parameters.getAsLong("id")));
+    }
 
-        final DataForm form = new DataForm<UserProfile>("form", model) {
+    public UserProfileEditPage(final Page backPage, IModel<UserProfile> model) {
+        HibernateListModel<Long, Role> allRolesModel = new HibernateListModel<>("from Role order by name");
+
+        final Form<UserProfile> form = new Form<UserProfile>("form", model) {
             protected void onSubmit() {
                 UserProfile userProfile = getModelObject();
-                setPersistentObject(userProfile);
                 saver.save(userProfile);
                 //getSession().info(String.format("Saved userProfile %s %s", userProfile.getNameFirst(), userProfile.getNameLast()));
                 setResponsePage(backPage);
@@ -57,8 +65,8 @@ public class UserProfileEditPage extends BasePage {
         add(form);
 
         // TODO allow model-based validation
-        form.add(new RequiredTextField("name").add(StringValidator.maximumLength(8)));
-        form.add(new Palette("roles", new PropertyModel(model, "roles"), roles, new ChoiceRenderer("name", "id"), 10, false));
+        form.add(new RequiredTextField<>("name", new PropertyModel<String>(model, "name")).add(StringValidator.maximumLength(8)));
+        form.add(new Palette<>("roles", new PropertyModel<List<Role>>(model, "roles"), allRolesModel, new ChoiceRenderer<Role>("name", "id"), 10, false));
 
 //        form.add(new Button("new") {
 //            public void onSubmit() {

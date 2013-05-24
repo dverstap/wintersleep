@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-package org.wintersleep.usermgmt.wicket.base;
+package org.wintersleep.wicket.hibernate;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,22 +27,30 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class SaverImpl implements Saver {
 
+    private static final Logger log = LoggerFactory.getLogger(SaverImpl.class);
+
     private SessionFactory sessionFactory;
 
     public SaverImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
+    @Transactional
     public void save(Object... entities) {
         Session session = sessionFactory.getCurrentSession();
+        log.debug("flushMode={}", session.getFlushMode());
         for (Object entity : entities) {
+            log.debug("Saving {}", entity);
             session.saveOrUpdate(entity);
+            session.flush();
         }
     }
 
+    @Transactional
     public void delete(Object... entities) {
         Session session = sessionFactory.getCurrentSession();
         for (Object entity : entities) {
+            log.debug("Deleting {}", entity);
             session.delete(entity);
         }
     }
