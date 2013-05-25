@@ -15,16 +15,13 @@
  */
 package org.wintersleep.usermgmt.wicket;
 
-import org.apache.log4j.Logger;
+import org.apache.wicket.Page;
 import org.apache.wicket.protocol.http.WebApplication;
-import org.apache.wicket.request.target.coding.BookmarkablePageRequestTargetUrlCodingStrategy;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.wintersleep.usermgmt.model.User;
 import org.wintersleep.usermgmt.model.UserProfile;
 
 public class UserManagementApplication extends WebApplication {
-
-    private static final Logger m_log = Logger.getLogger(UserManagementApplication.class);
 
     @Override
     public Class<UserListPage> getHomePage() {
@@ -34,19 +31,14 @@ public class UserManagementApplication extends WebApplication {
     @Override
     protected void init() {
         super.init();
-        addComponentInstantiationListener(new SpringComponentInjector(this));
+        getComponentInstantiationListeners().add(new SpringComponentInjector(this));
 
-        //mount(new HybridUrlCodingStrategy("/user", UserEditPage.class));
-        mount(new BookmarkablePageRequestTargetUrlCodingStrategy(User.class.getSimpleName().toLowerCase(),
-                UserEditPage.class, null));
-        mount(new BookmarkablePageRequestTargetUrlCodingStrategy(UserProfile.class.getSimpleName().toLowerCase(),
-                UserProfileEditPage.class, null));
+        mountPage(User.class, UserEditPage.class);
+        mountPage(UserProfile.class, UserProfileEditPage.class);
+    }
 
-        // mount(new IndexedParamUrlCodingStrategy("/user", UserEditPage.class));
-        //mount(new IndexedParamUrlCodingStrategy("/userprofile", UserProfileEditPage.class));
-
-        //mountBookmarkablePage(User.class.getSimpleName(), UserEditPage.class);
-        //mountBookmarkablePage(UserProfile.class.getSimpleName(), UserProfileEditPage.class);
+    private void mountPage(Class<?> persistentClass, Class<? extends Page> pageClass) {
+        mountPage(persistentClass.getSimpleName().toLowerCase() + "/${id}", pageClass);
     }
 
 }

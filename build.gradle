@@ -10,7 +10,7 @@ subprojects {
     project.ext.mysqlVersion = '5.1.25'
     project.ext.slf4jVersion = '1.7.5'
     project.ext.springVersion = '3.2.2.RELEASE'
-    project.ext.wicketVersion = '1.4.21'
+    project.ext.wicketVersion = '6.7.0'
 
     apply plugin: 'java'
     apply plugin: 'project-report'
@@ -57,6 +57,7 @@ subprojects {
                 failOnVersionConflict()
 
                 forcedModules = [
+                        'com.google.guava:guava:14.0.1',
                         'com.intellij:annotations:9.0.4',
                         'com.sun.facelets:jsf-facelets:1.1.14',
                         'cglib:cglib:2.2.2',

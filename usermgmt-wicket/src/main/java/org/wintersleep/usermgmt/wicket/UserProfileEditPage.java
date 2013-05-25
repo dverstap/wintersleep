@@ -17,7 +17,6 @@
 package org.wintersleep.usermgmt.wicket;
 
 import org.apache.wicket.Page;
-import org.apache.wicket.PageParameters;
 import org.apache.wicket.extensions.markup.html.form.palette.Palette;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
@@ -25,15 +24,16 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.StringValidator;
 import org.hibernate.SessionFactory;
 import org.wintersleep.usermgmt.model.Role;
 import org.wintersleep.usermgmt.model.UserProfile;
 import org.wintersleep.usermgmt.wicket.base.BasePage;
-import org.wintersleep.wicket.hibernate.Saver;
 import org.wintersleep.wicket.hibernate.HibernateListModel;
 import org.wintersleep.wicket.hibernate.HibernateObjectModel;
+import org.wintersleep.wicket.hibernate.Saver;
 
 import java.util.List;
 
@@ -48,7 +48,7 @@ public class UserProfileEditPage extends BasePage {
     private Saver saver;
 
     public UserProfileEditPage(PageParameters parameters) {
-        this(new UserProfileListPage(), new HibernateObjectModel<>(UserProfile.class, parameters.getAsLong("id")));
+        this(new UserProfileListPage(), new HibernateObjectModel<>(UserProfile.class, parameters.get("id").toLong()));
     }
 
     public UserProfileEditPage(final Page backPage, IModel<UserProfile> model) {

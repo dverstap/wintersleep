@@ -1,5 +1,6 @@
 dependencies {
     compile project(':usermgmt-domain')
+    compile 'com.google.guava:guava'
     compile('org.apache.wicket:wicket-spring') {
         exclude group: 'org.springframework', module: 'spring'
     }

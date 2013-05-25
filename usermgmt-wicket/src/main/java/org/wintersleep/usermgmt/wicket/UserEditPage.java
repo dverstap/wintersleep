@@ -17,19 +17,19 @@
 package org.wintersleep.usermgmt.wicket;
 
 import org.apache.wicket.Page;
-import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.StringValidator;
 import org.hibernate.SessionFactory;
 import org.wintersleep.usermgmt.model.User;
 import org.wintersleep.usermgmt.model.UserProfile;
 import org.wintersleep.usermgmt.wicket.base.BasePage;
-import org.wintersleep.wicket.hibernate.Saver;
 import org.wintersleep.wicket.hibernate.HibernateListModel;
 import org.wintersleep.wicket.hibernate.HibernateObjectModel;
+import org.wintersleep.wicket.hibernate.Saver;
 
 
 public class UserEditPage extends BasePage {
@@ -42,7 +42,7 @@ public class UserEditPage extends BasePage {
     private Saver saver;
 
     public UserEditPage(PageParameters parameters) {
-        this(new UserListPage(), new HibernateObjectModel<>(User.class, parameters.getAsLong("id")));
+        this(new UserListPage(), new HibernateObjectModel<>(User.class, parameters.get("id").toLong()));
     }
 
     public UserEditPage(final Page backPage, HibernateObjectModel<Long, User> model) {

@@ -25,21 +25,21 @@ import java.util.Iterator;
 
 public class HibernateProvider<ID extends Serializable, T> implements IDataProvider<T> {
 
-    private final Class<T> clazz; // TODO replace with name
+    private final String persistentClassName;
     private final CriteriaBuilder filterCriteriaBuilder;
 
     public HibernateProvider(Class<T> clazz) {
-        this.clazz = clazz;
+        this.persistentClassName = clazz.getName();
         this.filterCriteriaBuilder = null;
     }
 
     public HibernateProvider(Class<T> clazz, CriteriaBuilder filterCriteriaBuilder) {
-        this.clazz = clazz;
+        this.persistentClassName = clazz.getName();
         this.filterCriteriaBuilder = filterCriteriaBuilder;
     }
 
     @Override
-    public Iterator<? extends T> iterator(int first, int count) {
+    public Iterator<? extends T> iterator(long first, long count) {
         Criteria criteria = createCriteria()
                 .setFirstResult((int) first)
                 .setFetchSize((int) count);
@@ -47,7 +47,7 @@ public class HibernateProvider<ID extends Serializable, T> implements IDataProvi
     }
 
     protected Criteria createCriteria() {
-        Criteria criteria = WebAppHibernateUtil.getCurrentSession().createCriteria(clazz);
+        Criteria criteria = WebAppHibernateUtil.getCurrentSession().createCriteria(getPersistentClass());
         if (filterCriteriaBuilder != null) {
             filterCriteriaBuilder.build(criteria);
         }
@@ -55,7 +55,7 @@ public class HibernateProvider<ID extends Serializable, T> implements IDataProvi
     }
 
     @Override
-    public int size() {
+    public long size() {
         Long result = (Long) createCriteria().setProjection(Projections.rowCount()).uniqueResult();
         return result.intValue();
     }
@@ -68,5 +68,13 @@ public class HibernateProvider<ID extends Serializable, T> implements IDataProvi
     @Override
     public void detach() {
         // nothing to do
+    }
+
+    public Class<T> getPersistentClass() {
+        try {
+            return (Class<T>) Class.forName(persistentClassName);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

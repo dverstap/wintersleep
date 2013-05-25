@@ -17,19 +17,29 @@
 package org.wintersleep.usermgmt.wicket.base;
 
 import org.apache.wicket.markup.html.link.IPageLink;
-import org.apache.wicket.markup.html.link.PageLink;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.wintersleep.wicket.hibernate.PageSourceLink;
 
 public class ActionsPanel extends Panel
 {
 
-	public ActionsPanel(String wicketid, PageSourceLink showLink, IPageLink editLink, IPageLink deleteLink)
+	public ActionsPanel(String wicketid, PageSourceLink showLink, final IPageLink editLink, final IPageLink deleteLink)
 	{
 		super(wicketid);
 
         add(showLink);
-        add(new PageLink("editLink", editLink));
-		add(new PageLink("deleteLink", deleteLink));
+        add(new Link("editLink") {
+            @Override
+            public void onClick() {
+                setResponsePage(editLink.getPage());
+            }
+        });
+		add(new Link("deleteLink") {
+            @Override
+            public void onClick() {
+                setResponsePage(deleteLink.getPage());
+            }
+        });
 	}
 }

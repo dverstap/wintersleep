@@ -66,6 +66,7 @@ public class PageSourceLink<T> extends BookmarkablePageLink {
      * Sets the id parameter to  the identifier given by Hibernate
      */
     protected void setParameters() {
-        setParameter(idParameter, WebAppHibernateUtil.getCurrentSession().getIdentifier(getModelObject()).toString());
+        getPageParameters().set(idParameter,
+                WebAppHibernateUtil.getCurrentSession().getIdentifier(getModelObject()).toString());
     }
 }

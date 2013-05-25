@@ -17,17 +17,27 @@
 package org.wintersleep.usermgmt.wicket.base;
 
 import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.markup.html.link.PageLink;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.wintersleep.usermgmt.wicket.UserListPage;
 import org.wintersleep.usermgmt.wicket.UserProfileListPage;
 
 public class BasePage extends WebPage {
     public BasePage() {
-        //add(new DataStyleLink("css"));
         add(new FeedbackPanel("status"));
-        add(new PageLink("userListPageLink", UserListPage.class));
-        add(new PageLink("userProfileListPageLink", UserProfileListPage.class));
+        add(new Link("userListPageLink") {
+            @Override
+            public void onClick() {
+                setResponsePage(UserListPage.class);
+            }
+        });
+
+        add(new Link("userProfileListPageLink") {
+            @Override
+            public void onClick() {
+                setResponsePage(UserProfileListPage.class);
+            }
+        });
     }
 
 }

@@ -40,6 +40,9 @@ import org.wintersleep.wicket.hibernate.HibernateObjectModel;
 import org.wintersleep.wicket.hibernate.HibernateProvider;
 import org.wintersleep.wicket.hibernate.PageSourceLink;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class UserProfileListPage extends BasePage {
 
     public UserProfileListPage() {
@@ -48,63 +51,70 @@ public class UserProfileListPage extends BasePage {
         final Form form = new Form("form");
 
         // list of columns allows table to render itself without any markup from us
-        IColumn[] columns = new IColumn[]{
+        List<IColumn<UserProfile, String>> columns = new ArrayList<>();
 
-                new FilteredAbstractColumn<UserProfile>(new Model<>("Actions")) {
+        columns.add(new FilteredAbstractColumn<UserProfile, String>(new Model<>("Actions")) {
 
-                    // add the ActionsPanel to the cell item
-                    public void populateItem(Item<ICellPopulator<UserProfile>> cellItem, String componentId, final IModel<UserProfile> model) {
-                        cellItem.add(new ActionsPanel(componentId,
-                                new PageSourceLink<>("showLink", UserProfileEditPage.class, model),
-                                new IPageLink() {
-                                    public Page getPage() {
-                                        return new UserProfileEditPage(UserProfileListPage.this, model);
-                                    }
-
-                                    public Class getPageIdentity() {
-                                        return UserProfileEditPage.class;
-                                    }
-                                },
-                                new IPageLink() {
-                                    public Page getPage() {
-                                        UserProfile userProfile = model.getObject();
-                                        return new DeletePage<>(UserProfileListPage.this, model, "User Profile: " + userProfile.getName());
-                                    }
-
-                                    public Class getPageIdentity() {
-                                        return DeletePage.class;
-                                    }
-                                }
-                        )
-                        );
-                    }
-
-                    // return the go-and-clear filter for the filter toolbar
-                    public Component getFilter(String componentId, FilterForm form) {
-                        return new GoAndClearAndNewFilter(componentId, form) {
-                            public Page createNewPage() {
-                               return new UserProfileEditPage(UserProfileListPage.this, new HibernateObjectModel<Long, UserProfile>(new UserProfile()));
+            // add the ActionsPanel to the cell item
+            public void populateItem(Item<ICellPopulator<UserProfile>> cellItem, String componentId, final IModel<UserProfile> model) {
+                cellItem.add(new ActionsPanel(componentId,
+                        new PageSourceLink<>("showLink", UserProfileEditPage.class, model),
+                        new IPageLink() {
+                            public Page getPage() {
+                                return new UserProfileEditPage(UserProfileListPage.this, model);
                             }
-                        };
+
+                            public Class<UserProfileEditPage> getPageIdentity() {
+                                return UserProfileEditPage.class;
+                            }
+                        },
+                        new IPageLink() {
+                            public Page getPage() {
+                                UserProfile userProfile = model.getObject();
+                                return new DeletePage<>(UserProfileListPage.this, model, "User Profile: " + userProfile.getName());
+                            }
+
+                            public Class<DeletePage> getPageIdentity() {
+                                return DeletePage.class;
+                            }
+                        }
+                )
+                );
+            }
+
+            // return the go-and-clear filter for the filter toolbar
+
+            public Component getFilter(String componentId, FilterForm form) {
+                return new GoAndClearAndNewFilter(componentId, form) {
+                    public Page createNewPage() {
+                        return new UserProfileEditPage(UserProfileListPage.this, new HibernateObjectModel<Long, UserProfile>(new UserProfile()));
                     }
-                },
-                new TextFilteredPropertyColumn(new Model<String>("Name"), "name", "name"),
-                //new MyChoiceFilteredPropertyColumn(new Model("Role"), "role.name", "role.name", "role", "name", roles),
+                };
+            }
+        });
+        columns.add(new TextFilteredPropertyColumn<UserProfile, UserProfile, String>(new Model<>("Name"), "name", "name"));
+        //new MyChoiceFilteredPropertyColumn(new Model("Role"), "role.name", "role.name", "role", "name", roles),
                 /*
                 new MyChoiceFilteredPropertyColumn(new Model("Birth city"), "birthCity.name", "birthCity.name", "birthCity", "name", cities),
                 new PropertyColumn(new Model("Final game"), "finalGame", "finalGame")
                 */
-        };
         HibernateProvider<Long, UserProfile> provider = new HibernateProvider<>(UserProfile.class);
-        DataTable<UserProfile> table = new DataTable<UserProfile>("table", columns, provider, 25) {
+        DataTable<UserProfile, String> table = new DataTable<UserProfile, String>("table", columns, provider, 25) {
             protected Item<UserProfile> newRowItem(String id, int index, IModel<UserProfile> model) {
                 return new OddEvenItem<>(id, index, model);
             }
         };
-        table.addTopToolbar(new NavigationToolbar(table));
+        table.addTopToolbar(new
+
+                NavigationToolbar(table)
+
+        );
+
         //table.addTopToolbar(new HeadersToolbar(table, sorter));
 //        table.addTopToolbar(new FilterToolbar(table, form, filter));
-        add(form.add(table));
+        add(form.add(table)
+
+        );
     }
 
     class MyChoiceFilteredPropertyColumn extends ChoiceFilteredPropertyColumn {
