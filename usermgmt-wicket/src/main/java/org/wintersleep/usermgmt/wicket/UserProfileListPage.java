@@ -21,6 +21,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.HeadersToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.NavigationToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.*;
@@ -95,15 +96,15 @@ public class UserProfileListPage extends BasePage {
                 new MyChoiceFilteredPropertyColumn(new Model("Birth city"), "birthCity.name", "birthCity.name", "birthCity", "name", cities),
                 new PropertyColumn(new Model("Final game"), "finalGame", "finalGame")
                 */
-        HibernateProvider<Long, UserProfile> provider = new HibernateProvider<>(UserProfile.class, filter);
+        CriteriaSorter sorter = new CriteriaSorter();
+        HibernateProvider<Long, UserProfile> provider = new HibernateProvider<>(UserProfile.class, filter, sorter);
         DataTable<UserProfile, String> table = new DataTable<UserProfile, String>("table", columns, provider, 25) {
             protected Item<UserProfile> newRowItem(String id, int index, IModel<UserProfile> model) {
                 return new OddEvenItem<>(id, index, model);
             }
         };
         table.addTopToolbar(new NavigationToolbar(table));
-
-        //table.addTopToolbar(new HeadersToolbar(table, sorter));
+        table.addTopToolbar(new HeadersToolbar<>(table, sorter));
         table.addTopToolbar(new FilterToolbar(table, form, filter));
         add(form.add(table));
     }

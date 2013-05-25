@@ -27,15 +27,20 @@ public class HibernateProvider<ID extends Serializable, T> implements IDataProvi
 
     private final String persistentClassName;
     private final CriteriaBuilder filterCriteriaBuilder;
+    private final CriteriaBuilder sortCriteriaBuilder;
 
     public HibernateProvider(Class<T> clazz) {
-        this.persistentClassName = clazz.getName();
-        this.filterCriteriaBuilder = null;
+        this(clazz, null);
     }
 
     public HibernateProvider(Class<T> clazz, CriteriaBuilder filterCriteriaBuilder) {
-        this.persistentClassName = clazz.getName();
+        this(clazz, filterCriteriaBuilder, null);
+    }
+
+    public HibernateProvider(Class persistentClass, CriteriaBuilder filterCriteriaBuilder, CriteriaBuilder sortCriteriaBuilder) {
+        this.persistentClassName = persistentClass.getName();
         this.filterCriteriaBuilder = filterCriteriaBuilder;
+        this.sortCriteriaBuilder = sortCriteriaBuilder;
     }
 
     @Override
@@ -43,6 +48,10 @@ public class HibernateProvider<ID extends Serializable, T> implements IDataProvi
         Criteria criteria = createCriteria()
                 .setFirstResult((int) first)
                 .setFetchSize((int) count);
+        // sorting is only necessary when getting the actual results, not while counting
+        if (sortCriteriaBuilder != null) {
+            sortCriteriaBuilder.build(criteria);
+        }
         return criteria.list().iterator();
     }
 

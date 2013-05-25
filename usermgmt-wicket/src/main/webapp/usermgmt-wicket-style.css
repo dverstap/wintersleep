@@ -1,0 +1,16 @@
+/* In Wicket 7.0 it should be possible to configure the up/down CSS classnames:
+   https://cwiki.apache.org/WICKET/wicket-70-roadmap.html */
+
+tr.headers th.wicket_orderDown a {
+        padding-right: 25px;
+        background-image: url(glyphicons/png/glyphicons_212_down_arrow.png);
+        background-position: right;
+        background-repeat: no-repeat;
+}
+
+tr.headers th.wicket_orderUp a {
+        padding-right: 25px;
+        background-image: url(glyphicons/png/glyphicons_213_up_arrow.png);
+        background-position: right;
+        background-repeat: no-repeat;
+}

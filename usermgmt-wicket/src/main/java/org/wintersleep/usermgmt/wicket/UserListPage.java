@@ -20,6 +20,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.HeadersToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.NavigationToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.FilterForm;
@@ -94,14 +95,15 @@ public class UserListPage extends BasePage {
 
         UserFilter filter = new UserFilter();
         final FilterForm<UserFilterState> filterForm = new FilterForm<>("form", filter);
-        HibernateProvider<Long, User> provider = new HibernateProvider<>(User.class, filter);
+        CriteriaSorter sorter = new CriteriaSorter();
+        HibernateProvider<Long, User> provider = new HibernateProvider<>(User.class, filter, sorter);
         DataTable<User, String> table = new DataTable<User, String>("table", columns, provider, 25) {
             protected Item<User> newRowItem(String id, int index, IModel<User> model) {
                 return new OddEvenItem<>(id, index, model);
             }
         };
         table.addTopToolbar(new NavigationToolbar(table));
-        //table.addTopToolbar(new HeadersToolbar(table, sorter));
+        table.addTopToolbar(new HeadersToolbar<>(table, sorter));
         table.addTopToolbar(new FilterToolbar(table, filterForm, filter));
 
         add(filterForm.add(table));
@@ -186,21 +188,4 @@ public class UserListPage extends BasePage {
     }
 */
 
-/*
-    class UserSorter implements ISortStateLocator<User>, CriteriaBuilder {
-        private SingleSortState<User> sortState = new SingleSortState<>();
-
-        public void build(Criteria criteria) {
-            SortParam<User> sort = sortState.getSort();
-            if (sort != null) {
-                criteria.addOrder(sort.isAscending() ? Order.asc(sort.getProperty()) : Order.desc(sort.getProperty()));
-            }
-        }
-
-        public ISortState<User> getSortState() {
-            return sortState;
-        }
-
-    }
-*/
 }

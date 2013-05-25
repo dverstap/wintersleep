@@ -1,16 +1,17 @@
 <html>
-	<head>
-		<title>User Management</title>
-	</head>
-	<body>
-        <table>
-            <tr>
-                <td><a wicket:id="userListPageLink">Users</a></td>
-                <td><a wicket:id="userProfileListPageLink">User Profiles</a></td>
-            </tr>
-        </table>
+<head>
+    <title>User Management</title>
+    <link rel="stylesheet" type="text/css" href="usermgmt-wicket-style.css"/>
+</head>
+<body>
+<table>
+    <tr>
+        <td><a wicket:id="userListPageLink">Users</a></td>
+        <td><a wicket:id="userProfileListPageLink">User Profiles</a></td>
+    </tr>
+</table>
 
-        <div wicket:id="status" class="status">[[status messages]]</div>
-		<wicket:child/>
-	</body>
+<div wicket:id="status" class="status">[[status messages]]</div>
+<wicket:child/>
+</body>
 </html>
