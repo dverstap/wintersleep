@@ -16,9 +16,11 @@
 
 package org.wintersleep.usermgmt.model;
 
+import com.google.common.base.Preconditions;
+import org.hibernate.annotations.NaturalId;
+import org.springframework.beans.factory.annotation.Autowire;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.beans.factory.annotation.Autowire;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -31,6 +33,7 @@ public class User implements Serializable {
     @GeneratedValue
     private Long id;
 
+    @NaturalId
     @Column(nullable = false, unique = true, length = 8)
     private String login;
 
@@ -48,13 +51,18 @@ public class User implements Serializable {
     @Autowired
     private transient UserManagementService userManagementService;
 
-
-    // TODO make protected
-    public User() {
+    protected User() {
     }
 
-    // TODO null checks
+    public User(String login) {
+        this.login = login;
+    }
+
     public User(String login, String password, String fullName, UserProfile userProfile) {
+        Preconditions.checkNotNull(login);
+        Preconditions.checkNotNull(password);
+        Preconditions.checkNotNull(fullName);
+        Preconditions.checkNotNull(userProfile);
         this.login = login;
         this.password = password;
         this.fullName = fullName;
@@ -113,6 +121,20 @@ public class User implements Serializable {
         } else {
             return msg + "it's not null";
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+        return getLogin().equals(user.getLogin());
+    }
+
+    @Override
+    public int hashCode() {
+        return getLogin().hashCode();
     }
 
     @Override

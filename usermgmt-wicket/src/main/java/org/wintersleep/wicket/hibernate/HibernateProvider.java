@@ -47,7 +47,7 @@ public class HibernateProvider<ID extends Serializable, T> implements IDataProvi
     }
 
     protected Criteria createCriteria() {
-        Criteria criteria = WebAppHibernateUtil.getCurrentSession().createCriteria(getPersistentClass());
+        Criteria criteria = WicketHibernateUtil.getCurrentSession().createCriteria(getPersistentClass());
         if (filterCriteriaBuilder != null) {
             filterCriteriaBuilder.build(criteria);
         }

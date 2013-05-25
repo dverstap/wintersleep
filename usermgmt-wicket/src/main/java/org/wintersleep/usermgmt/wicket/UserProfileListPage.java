@@ -89,7 +89,7 @@ public class UserProfileListPage extends BasePage {
             public Component getFilter(String componentId, FilterForm form) {
                 return new GoAndClearAndNewFilter(componentId, form) {
                     public Page createNewPage() {
-                        return new UserProfileEditPage(UserProfileListPage.this, new HibernateObjectModel<Long, UserProfile>(new UserProfile()));
+                        return new UserProfileEditPage(UserProfileListPage.this, new HibernateObjectModel<Long, UserProfile>(new UserProfile(WicketHibernateUtil.EMPTY_STRING)));
                     }
                 };
             }
@@ -141,7 +141,7 @@ public class UserProfileListPage extends BasePage {
     static class UserProfileFilter extends AbstractCriteriaFilter<UserProfile> {
 
         public UserProfileFilter() {
-            super(new UserProfile("", null));
+            super(new UserProfile(WicketHibernateUtil.EMPTY_STRING));
         }
 
         public void build(Criteria criteria) {

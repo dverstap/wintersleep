@@ -16,13 +16,15 @@
 
 package org.wintersleep.usermgmt.model;
 
+import com.google.common.base.Preconditions;
+import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.Sort;
 import org.hibernate.annotations.SortType;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.io.Serializable;
 
 @Entity
 public class UserProfile implements Serializable {
@@ -31,13 +33,13 @@ public class UserProfile implements Serializable {
     @GeneratedValue
     private Long id;
 
-    @Basic(optional = false)
+    @NaturalId
     @Column(nullable = false, length = 16, unique = true)
     private String name;
 
     @Sort(type = SortType.NATURAL)
     @ManyToMany
-    private SortedSet<Role> roles = new TreeSet<Role>();
+    private SortedSet<Role> roles = new TreeSet<>();
 
 /*
     @Basic(optional = false)
@@ -49,12 +51,16 @@ public class UserProfile implements Serializable {
     private boolean hidden;
 */
 
-    // TODO make protected
-    public UserProfile() {
+    protected UserProfile() {
     }
 
-    // TODO check not null
-    public UserProfile(String name, SortedSet<Role> roles) {
+    public UserProfile(String name) {
+        this(name, new TreeSet<Role>());
+    }
+
+    public UserProfile(String name, SortedSet < Role > roles) {
+        Preconditions.checkNotNull(name);
+        Preconditions.checkNotNull(roles);
         this.name = name;
         this.roles = roles;
     }
@@ -92,12 +98,11 @@ public class UserProfile implements Serializable {
         }
 
         UserProfile that = (UserProfile) o;
-
-        return name.equals(that.name);
+        return getName().equals(that.getName());
     }
 
     public int hashCode() {
-        return name.hashCode();
+        return getName().hashCode();
     }
 
     

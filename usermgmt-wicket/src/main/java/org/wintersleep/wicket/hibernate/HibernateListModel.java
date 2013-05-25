@@ -30,7 +30,7 @@ public class HibernateListModel<ID extends Serializable, T> extends LoadableDeta
 
     @Override
     protected List<T> load() {
-        return WebAppHibernateUtil.getCurrentSession().createQuery(query).list();
+        return WicketHibernateUtil.getCurrentSession().createQuery(query).list();
     }
 
 }

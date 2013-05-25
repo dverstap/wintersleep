@@ -15,15 +15,19 @@
  */
 package org.wintersleep.wicket.hibernate;
 
+import com.google.common.base.Preconditions;
 import org.apache.wicket.core.util.lang.WicketObjects;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.hibernate.Session;
+import org.hibernate.TransientObjectException;
 
 import java.io.Serializable;
 
 public class HibernateObjectModel<ID extends Serializable, T> extends LoadableDetachableModel<T> {
 
     private final String className;
-    private final ID id;
+    private ID id;
+    private T unsavedObject;
 
     public HibernateObjectModel(Class<T> clazz, ID id) {
         this.className = clazz.getName();
@@ -32,13 +36,54 @@ public class HibernateObjectModel<ID extends Serializable, T> extends LoadableDe
 
     public HibernateObjectModel(T object) {
         super(object);
-        this.className = object.getClass().getName(); // this won't work in case of a proxy ...
-        this.id = (ID) WebAppHibernateUtil.getCurrentSession().getIdentifier(object);
+        Session session = getCurrentSession();
+        this.className = determineClassName(object);
+        try {
+            this.id = (ID) session.getIdentifier(object);
+        } catch (TransientObjectException e) {
+            this.unsavedObject = object;
+        }
+        checkInvariant();
+    }
+
+    private String determineClassName(T object) {
+        try {
+            return getCurrentSession().getEntityName(object);
+        } catch (TransientObjectException e) {
+            return object.getClass().getName();
+        }
     }
 
     @Override
     protected T load() {
-        return (T) WebAppHibernateUtil.getCurrentSession().load(getPersistentClass(), id);
+        checkInvariant();
+        if (id != null) {
+            return (T) getCurrentSession().load(getPersistentClass(), id);
+        }
+        return unsavedObject;
+    }
+
+    private void checkInvariant() {
+        Preconditions.checkState((id == null && unsavedObject != null)
+                || (id != null && unsavedObject == null));
+    }
+
+    protected Session getCurrentSession() {
+        return WicketHibernateUtil.getCurrentSession();
+    }
+
+    @Override
+    protected void onDetach() {
+        checkInvariant();
+        if (id == null) {
+            try {
+                this.id = (ID) getCurrentSession().getIdentifier(unsavedObject);
+                this.unsavedObject = null;
+            } catch (TransientObjectException e) {
+                // keep the unsavedObject and serialize it
+            }
+        }
+        checkInvariant();
     }
 
     private Class<T> getPersistentClass() {

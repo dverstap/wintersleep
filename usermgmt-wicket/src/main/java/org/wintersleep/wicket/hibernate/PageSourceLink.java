@@ -67,6 +67,6 @@ public class PageSourceLink<T> extends BookmarkablePageLink {
      */
     protected void setParameters() {
         getPageParameters().set(idParameter,
-                WebAppHibernateUtil.getCurrentSession().getIdentifier(getModelObject()).toString());
+                WicketHibernateUtil.getCurrentSession().getIdentifier(getModelObject()).toString());
     }
 }

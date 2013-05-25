@@ -20,7 +20,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-public class Role implements Serializable {
+public class Role implements Serializable, Comparable<Role> {
 
     @Id
     @GeneratedValue
@@ -30,8 +30,7 @@ public class Role implements Serializable {
     @Column(nullable = false, unique = true, updatable = false, length = 32)
     private String name;
 
-    public Role() {
-        
+    protected Role() {
     }
 
     public Role(String name) {
@@ -53,4 +52,10 @@ public class Role implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
+
+    @Override
+    public int compareTo(Role o) {
+        return getName().compareTo(o.getName());
+    }
+
 }

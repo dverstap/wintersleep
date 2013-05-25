@@ -23,7 +23,20 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.ServletContext;
 
-public class WebAppHibernateUtil {
+public class WicketHibernateUtil {
+
+    /**
+     * This is typically used to pass to the constructor of new Hibernate entities:
+     * <ul>
+     *     <li>
+     *         For the natural key property/properties, so that the equals/hashCode methods don't throw NPE.
+     *     </li>
+     *     <li>
+     *         For filter state objects, again so that equals/hashCode does not throw NPE.
+     *     </li>
+     * </ul>
+     */
+    public static final String EMPTY_STRING = "";
 
     public static SessionFactory getSessionFactory() {
         ServletContext servletContext = WebApplication.get().getServletContext();

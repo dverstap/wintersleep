@@ -32,8 +32,7 @@ public abstract class AbstractCriteriaFilter<T> implements IFilterStateLocator<T
     }
 
     public void setFilterState(T filterState) {
-        //this.filterState = filterState;
-        throw new UnsupportedOperationException("Because we want to check if this is ever called");
+        this.filterState = filterState;
     }
 
 }

@@ -38,10 +38,7 @@ import org.wintersleep.usermgmt.model.User;
 import org.wintersleep.usermgmt.wicket.base.ActionsPanel;
 import org.wintersleep.usermgmt.wicket.base.BasePage;
 import org.wintersleep.usermgmt.wicket.base.GoAndClearAndNewFilter;
-import org.wintersleep.wicket.hibernate.AbstractCriteriaFilter;
-import org.wintersleep.wicket.hibernate.HibernateObjectModel;
-import org.wintersleep.wicket.hibernate.HibernateProvider;
-import org.wintersleep.wicket.hibernate.PageSourceLink;
+import org.wintersleep.wicket.hibernate.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,8 +48,6 @@ public class UserListPage extends BasePage {
     public UserListPage() {
         super();
 
-        UserFilter filter = new UserFilter();
-        final FilterForm<User> filterForm = new FilterForm<>("form", filter);
 
         // list of columns allows table to render itself without any markup from us
         List<IColumn<User, String>> columns = new ArrayList<>();
@@ -89,7 +84,7 @@ public class UserListPage extends BasePage {
             public Component getFilter(String componentId, FilterForm<?> form) {
                 return new GoAndClearAndNewFilter(componentId, form) {
                     public Page createNewPage() {
-                        return new UserEditPage(UserListPage.this, new HibernateObjectModel<Long, User>(new User()));
+                        return new UserEditPage(UserListPage.this, new HibernateObjectModel<Long, User>(new User(WicketHibernateUtil.EMPTY_STRING)));
                     }
                 };
             }
@@ -103,6 +98,8 @@ public class UserListPage extends BasePage {
                 new PropertyColumn(new Model("Final game"), "finalGame", "finalGame")
 */
 
+        UserFilter filter = new UserFilter();
+        final FilterForm<User> filterForm = new FilterForm<>("form", filter);
         HibernateProvider<Long, User> provider = new HibernateProvider<>(User.class, filter);
         DataTable<User, String> table = new DataTable<User, String>("table", columns, provider, 25) {
             protected Item<User> newRowItem(String id, int index, IModel<User> model) {
@@ -119,7 +116,7 @@ public class UserListPage extends BasePage {
     static class UserFilter extends AbstractCriteriaFilter<User> {
 
         public UserFilter() {
-            super(new User());
+            super(new User(WicketHibernateUtil.EMPTY_STRING));
         }
 
         public void build(Criteria criteria) {
@@ -138,7 +135,7 @@ public class UserListPage extends BasePage {
     // This doesn't work, because:
     // - the concrete FilterStateLocator must really store a reference to the object returned from getFilterState()
     // - and because that actual object is updated
-    // - and it seems that setFilterState is never actually called.
+    // - and it seems that setFilterState is never actually called, except when you hit the clear filter button.
     //
     // This has some nasty consequences:
     // - The FilterToolbar<T, S> forces the same T for DataTable<T, S>, FilterForm<T> and IFilterStateLocator<T>
