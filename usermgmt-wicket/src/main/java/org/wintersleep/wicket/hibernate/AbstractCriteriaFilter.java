@@ -17,6 +17,8 @@ package org.wintersleep.wicket.hibernate;
 
 import com.google.common.base.Preconditions;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.IFilterStateLocator;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Restrictions;
 
 public abstract class AbstractCriteriaFilter<T> implements IFilterStateLocator<T>, CriteriaBuilder {
 
@@ -33,6 +35,19 @@ public abstract class AbstractCriteriaFilter<T> implements IFilterStateLocator<T
 
     public void setFilterState(T filterState) {
         this.filterState = filterState;
+    }
+
+    /**
+     * 'Human-friendly' case insensitive match: accepts expression with '*' wildcards,
+     * and escapes SQL wildcard characters.
+     *
+     * @param propertyName The property of the hibernate entity to filter on
+     * @param humanExpression Expression which can contain 0 or more '*' wildcard characters
+     * @return The Hibernate Criterion
+     */
+    protected Criterion hilike(String propertyName, String humanExpression) {
+        String sqlExpression = humanExpression.replace("%", "\\%").replace('*', '%').replace("_", "\\_");
+        return Restrictions.ilike(propertyName, sqlExpression);
     }
 
 }

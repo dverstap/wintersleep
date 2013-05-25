@@ -23,7 +23,6 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.NavigationToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.FilterForm;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.FilterToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.FilteredAbstractColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.TextFilteredPropertyColumn;
 import org.apache.wicket.markup.html.link.IPageLink;
@@ -32,14 +31,13 @@ import org.apache.wicket.markup.repeater.OddEvenItem;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.hibernate.Criteria;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Restrictions;
 import org.wintersleep.usermgmt.model.User;
 import org.wintersleep.usermgmt.wicket.base.ActionsPanel;
 import org.wintersleep.usermgmt.wicket.base.BasePage;
 import org.wintersleep.usermgmt.wicket.base.GoAndClearAndNewFilter;
 import org.wintersleep.wicket.hibernate.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,12 +46,9 @@ public class UserListPage extends BasePage {
     public UserListPage() {
         super();
 
-
-        // list of columns allows table to render itself without any markup from us
         List<IColumn<User, String>> columns = new ArrayList<>();
         columns.add(new FilteredAbstractColumn<User, String>(new Model<>("Actions")) {
 
-            // add the ActionsPanel to the cell item
             public void populateItem(Item<ICellPopulator<User>> cellItem, String componentId, final IModel<User> model) {
                 cellItem.add(new ActionsPanel(componentId,
                         new PageSourceLink<>("showLink", UserEditPage.class, model),
@@ -80,7 +75,6 @@ public class UserListPage extends BasePage {
                 );
             }
 
-            // return the go-and-clear filter for the filter toolbar
             public Component getFilter(String componentId, FilterForm<?> form) {
                 return new GoAndClearAndNewFilter(componentId, form) {
                     public Page createNewPage() {
@@ -99,7 +93,7 @@ public class UserListPage extends BasePage {
 */
 
         UserFilter filter = new UserFilter();
-        final FilterForm<User> filterForm = new FilterForm<>("form", filter);
+        final FilterForm<UserFilterState> filterForm = new FilterForm<>("form", filter);
         HibernateProvider<Long, User> provider = new HibernateProvider<>(User.class, filter);
         DataTable<User, String> table = new DataTable<User, String>("table", columns, provider, 25) {
             protected Item<User> newRowItem(String id, int index, IModel<User> model) {
@@ -113,18 +107,40 @@ public class UserListPage extends BasePage {
         add(filterForm.add(table));
     }
 
-    static class UserFilter extends AbstractCriteriaFilter<User> {
+    static class UserFilterState implements Serializable {
+
+        private String login;
+        private String fullName;
+
+        String getLogin() {
+            return login;
+        }
+
+        void setLogin(String login) {
+            this.login = login;
+        }
+
+        String getFullName() {
+            return fullName;
+        }
+
+        void setFullName(String fullName) {
+            this.fullName = fullName;
+        }
+    }
+
+    static class UserFilter extends AbstractCriteriaFilter<UserFilterState> {
 
         public UserFilter() {
-            super(new User(WicketHibernateUtil.EMPTY_STRING));
+            super(new UserFilterState());
         }
 
         public void build(Criteria criteria) {
             if (filterState.getLogin() != null) {
-                criteria.add(Restrictions.ilike("login", filterState.getLogin(), MatchMode.START));
+                criteria.add(hilike("login", filterState.getLogin()));
             }
             if (filterState.getFullName() != null) {
-                criteria.add(Restrictions.ilike("fullName", filterState.getFullName(), MatchMode.START));
+                criteria.add(hilike("fullName", filterState.getFullName()));
             }
         }
 

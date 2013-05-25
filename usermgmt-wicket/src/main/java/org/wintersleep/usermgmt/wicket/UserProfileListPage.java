@@ -33,14 +33,14 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.hibernate.Criteria;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Restrictions;
 import org.wintersleep.usermgmt.model.UserProfile;
 import org.wintersleep.usermgmt.wicket.base.ActionsPanel;
 import org.wintersleep.usermgmt.wicket.base.BasePage;
 import org.wintersleep.usermgmt.wicket.base.GoAndClearAndNewFilter;
 import org.wintersleep.wicket.hibernate.*;
+import org.wintersleep.wicket.hibernate.FilterToolbar;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,14 +50,11 @@ public class UserProfileListPage extends BasePage {
         super();
 
         UserProfileFilter filter = new UserProfileFilter();
-        final FilterForm<UserProfile> form = new FilterForm<>("form", filter);
+        final FilterForm<UserProfileFilterState> form = new FilterForm<>("form", filter);
 
-        // list of columns allows table to render itself without any markup from us
         List<IColumn<UserProfile, String>> columns = new ArrayList<>();
-
         columns.add(new FilteredAbstractColumn<UserProfile, String>(new Model<>("Actions")) {
 
-            // add the ActionsPanel to the cell item
             public void populateItem(Item<ICellPopulator<UserProfile>> cellItem, String componentId, final IModel<UserProfile> model) {
                 cellItem.add(new ActionsPanel(componentId,
                         new PageSourceLink<>("showLink", UserProfileEditPage.class, model),
@@ -83,8 +80,6 @@ public class UserProfileListPage extends BasePage {
                 )
                 );
             }
-
-            // return the go-and-clear filter for the filter toolbar
 
             public Component getFilter(String componentId, FilterForm form) {
                 return new GoAndClearAndNewFilter(componentId, form) {
@@ -138,42 +133,32 @@ public class UserProfileListPage extends BasePage {
         }
     }
 
-    static class UserProfileFilter extends AbstractCriteriaFilter<UserProfile> {
+    static class UserProfileFilterState implements Serializable {
+
+        private String name;
+
+        String getName() {
+            return name;
+        }
+
+        void setName(String name) {
+            this.name = name;
+        }
+    }
+
+
+    static class UserProfileFilter extends AbstractCriteriaFilter<UserProfileFilterState> {
 
         public UserProfileFilter() {
-            super(new UserProfile(WicketHibernateUtil.EMPTY_STRING));
+            super(new UserProfileFilterState());
         }
 
         public void build(Criteria criteria) {
             if (!Strings.isNullOrEmpty(filterState.getName())) {
-                criteria.add(Restrictions.ilike("name", filterState.getName(), MatchMode.START));
+                criteria.add(hilike("name", filterState.getName()));
             }
         }
 
     }
-
-/*
-    static class UserProfileFilter implements IFilterStateLocator<UserProfile>, CriteriaBuilder {
-
-        private String name = "";
-
-        public void build(Criteria criteria) {
-            if (!Strings.isNullOrEmpty(name)) {
-                criteria.add(Restrictions.ilike("name", name, MatchMode.START));
-            }
-        }
-
-        @Override
-        public UserProfile getFilterState() {
-            return new UserProfile(name, new TreeSet<>(Collections.<Role>emptySet()));
-        }
-
-        @Override
-        public void setFilterState(UserProfile filterState) {
-            this.name = filterState.getName();
-        }
-    }
-*/
-
 
 }

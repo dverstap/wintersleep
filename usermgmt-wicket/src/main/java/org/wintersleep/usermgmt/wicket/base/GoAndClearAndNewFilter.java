@@ -34,6 +34,7 @@ public abstract class GoAndClearAndNewFilter extends GoAndClearFilter {
             }
         };
         add(newButton);
+        form.setDefaultButton(getGoButton());
     }
 
     public GoAndClearAndNewFilter(String id, FilterForm<?> form, IModel<String> goModel, IModel<String> clearModel, IModel<String> newModel) {
