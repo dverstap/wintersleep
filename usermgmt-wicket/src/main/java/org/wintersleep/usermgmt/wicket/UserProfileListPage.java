@@ -16,6 +16,7 @@
 
 package org.wintersleep.usermgmt.wicket;
 
+import com.google.common.base.Strings;
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
@@ -24,7 +25,6 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.NavigationToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.*;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.link.IPageLink;
 import org.apache.wicket.markup.repeater.Item;
@@ -32,13 +32,14 @@ import org.apache.wicket.markup.repeater.OddEvenItem;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Restrictions;
 import org.wintersleep.usermgmt.model.UserProfile;
 import org.wintersleep.usermgmt.wicket.base.ActionsPanel;
 import org.wintersleep.usermgmt.wicket.base.BasePage;
 import org.wintersleep.usermgmt.wicket.base.GoAndClearAndNewFilter;
-import org.wintersleep.wicket.hibernate.HibernateObjectModel;
-import org.wintersleep.wicket.hibernate.HibernateProvider;
-import org.wintersleep.wicket.hibernate.PageSourceLink;
+import org.wintersleep.wicket.hibernate.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +49,8 @@ public class UserProfileListPage extends BasePage {
     public UserProfileListPage() {
         super();
 
-        final Form form = new Form("form");
+        UserProfileFilter filter = new UserProfileFilter();
+        final FilterForm<UserProfile> form = new FilterForm<>("form", filter);
 
         // list of columns allows table to render itself without any markup from us
         List<IColumn<UserProfile, String>> columns = new ArrayList<>();
@@ -98,23 +100,17 @@ public class UserProfileListPage extends BasePage {
                 new MyChoiceFilteredPropertyColumn(new Model("Birth city"), "birthCity.name", "birthCity.name", "birthCity", "name", cities),
                 new PropertyColumn(new Model("Final game"), "finalGame", "finalGame")
                 */
-        HibernateProvider<Long, UserProfile> provider = new HibernateProvider<>(UserProfile.class);
+        HibernateProvider<Long, UserProfile> provider = new HibernateProvider<>(UserProfile.class, filter);
         DataTable<UserProfile, String> table = new DataTable<UserProfile, String>("table", columns, provider, 25) {
             protected Item<UserProfile> newRowItem(String id, int index, IModel<UserProfile> model) {
                 return new OddEvenItem<>(id, index, model);
             }
         };
-        table.addTopToolbar(new
-
-                NavigationToolbar(table)
-
-        );
+        table.addTopToolbar(new NavigationToolbar(table));
 
         //table.addTopToolbar(new HeadersToolbar(table, sorter));
-//        table.addTopToolbar(new FilterToolbar(table, form, filter));
-        add(form.add(table)
-
-        );
+        table.addTopToolbar(new FilterToolbar(table, form, filter));
+        add(form.add(table));
     }
 
     class MyChoiceFilteredPropertyColumn extends ChoiceFilteredPropertyColumn {
@@ -141,5 +137,43 @@ public class UserProfileListPage extends BasePage {
             return cf;
         }
     }
+
+    static class UserProfileFilter extends AbstractCriteriaFilter<UserProfile> {
+
+        public UserProfileFilter() {
+            super(new UserProfile("", null));
+        }
+
+        public void build(Criteria criteria) {
+            if (!Strings.isNullOrEmpty(filterState.getName())) {
+                criteria.add(Restrictions.ilike("name", filterState.getName(), MatchMode.START));
+            }
+        }
+
+    }
+
+/*
+    static class UserProfileFilter implements IFilterStateLocator<UserProfile>, CriteriaBuilder {
+
+        private String name = "";
+
+        public void build(Criteria criteria) {
+            if (!Strings.isNullOrEmpty(name)) {
+                criteria.add(Restrictions.ilike("name", name, MatchMode.START));
+            }
+        }
+
+        @Override
+        public UserProfile getFilterState() {
+            return new UserProfile(name, new TreeSet<>(Collections.<Role>emptySet()));
+        }
+
+        @Override
+        public void setFilterState(UserProfile filterState) {
+            this.name = filterState.getName();
+        }
+    }
+*/
+
 
 }

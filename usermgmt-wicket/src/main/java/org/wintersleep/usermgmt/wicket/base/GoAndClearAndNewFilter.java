@@ -26,7 +26,7 @@ public abstract class GoAndClearAndNewFilter extends GoAndClearFilter {
 
     private Button newButton;
 
-    public GoAndClearAndNewFilter(String id, FilterForm form) {
+    public GoAndClearAndNewFilter(String id, FilterForm<?> form) {
         super(id, form);
         newButton = new Button("new") {
             public void onSubmit() {
@@ -37,7 +37,7 @@ public abstract class GoAndClearAndNewFilter extends GoAndClearFilter {
 
     }
 
-    public GoAndClearAndNewFilter(String id, FilterForm form, IModel goModel, IModel clearModel, IModel newModel) {
+    public GoAndClearAndNewFilter(String id, FilterForm<?> form, IModel<String> goModel, IModel<String> clearModel, IModel<String> newModel) {
         super(id, form, goModel, clearModel);
 
         newButton = new Button("new", newModel) {

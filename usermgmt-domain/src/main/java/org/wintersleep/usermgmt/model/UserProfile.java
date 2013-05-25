@@ -49,9 +49,11 @@ public class UserProfile implements Serializable {
     private boolean hidden;
 */
 
+    // TODO make protected
     public UserProfile() {
     }
 
+    // TODO check not null
     public UserProfile(String name, SortedSet<Role> roles) {
         this.name = name;
         this.roles = roles;

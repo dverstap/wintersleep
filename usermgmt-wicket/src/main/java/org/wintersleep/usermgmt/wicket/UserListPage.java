@@ -22,7 +22,10 @@ import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulato
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.NavigationToolbar;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.*;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.FilterForm;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.FilterToolbar;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.FilteredAbstractColumn;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.TextFilteredPropertyColumn;
 import org.apache.wicket.markup.html.link.IPageLink;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.OddEvenItem;
@@ -35,7 +38,7 @@ import org.wintersleep.usermgmt.model.User;
 import org.wintersleep.usermgmt.wicket.base.ActionsPanel;
 import org.wintersleep.usermgmt.wicket.base.BasePage;
 import org.wintersleep.usermgmt.wicket.base.GoAndClearAndNewFilter;
-import org.wintersleep.wicket.hibernate.CriteriaBuilder;
+import org.wintersleep.wicket.hibernate.AbstractCriteriaFilter;
 import org.wintersleep.wicket.hibernate.HibernateObjectModel;
 import org.wintersleep.wicket.hibernate.HibernateProvider;
 import org.wintersleep.wicket.hibernate.PageSourceLink;
@@ -83,7 +86,7 @@ public class UserListPage extends BasePage {
             }
 
             // return the go-and-clear filter for the filter toolbar
-            public Component getFilter(String componentId, FilterForm form) {
+            public Component getFilter(String componentId, FilterForm<?> form) {
                 return new GoAndClearAndNewFilter(componentId, form) {
                     public Page createNewPage() {
                         return new UserEditPage(UserListPage.this, new HibernateObjectModel<Long, User>(new User()));
@@ -106,25 +109,18 @@ public class UserListPage extends BasePage {
                 return new OddEvenItem<>(id, index, model);
             }
         };
-        table.addTopToolbar(new
-
-                NavigationToolbar(table)
-
-        );
+        table.addTopToolbar(new NavigationToolbar(table));
         //table.addTopToolbar(new HeadersToolbar(table, sorter));
-        table.addTopToolbar(new
+        table.addTopToolbar(new FilterToolbar(table, filterForm, filter));
 
-                FilterToolbar(table, filterForm, filter)
-
-        );
-
-        add(filterForm.add(table)
-
-        );
+        add(filterForm.add(table));
     }
 
-    class UserFilter implements IFilterStateLocator<User>, CriteriaBuilder {
-        private User filterState = new User();
+    static class UserFilter extends AbstractCriteriaFilter<User> {
+
+        public UserFilter() {
+            super(new User());
+        }
 
         public void build(Criteria criteria) {
             if (filterState.getLogin() != null) {
@@ -135,16 +131,47 @@ public class UserListPage extends BasePage {
             }
         }
 
+    }
+
+/*
+
+    // This doesn't work, because:
+    // - the concrete FilterStateLocator must really store a reference to the object returned from getFilterState()
+    // - and because that actual object is updated
+    // - and it seems that setFilterState is never actually called.
+    //
+    // This has some nasty consequences:
+    // - The FilterToolbar<T, S> forces the same T for DataTable<T, S>, FilterForm<T> and IFilterStateLocator<T>
+    // - The filterState is cloned using serialization by GoAndClearFilter, so it must be Serializable
+    // - And since the filterState T has to be the entity, this forces our entity class to implement Serializable
+    // - Which is something we'd like to avoid, because that would help us to prevent us from accidentally
+    // - serializing it in the wicket stores etc
+
+    static class UserFilter implements IFilterStateLocator<User>, CriteriaBuilder {
+        private String login;
+        private String fullName;
+
+        public void build(Criteria criteria) {
+            if (!Strings.isNullOrEmpty(login)) {
+                criteria.add(Restrictions.ilike("login", login, MatchMode.START));
+            }
+            if (!Strings.isNullOrEmpty(fullName)) {
+                criteria.add(Restrictions.ilike("fullName", fullName, MatchMode.START));
+            }
+        }
+
         @Override
         public User getFilterState() {
-            return filterState;
+            return new User(login, null, fullName, null);
         }
 
         @Override
         public void setFilterState(User filterState) {
-            this.filterState = filterState;
+            this.login = filterState.getLogin();
+            this.fullName = filterState.getFullName();
         }
     }
+*/
 
 /*
     class UserSorter implements ISortStateLocator<User>, CriteriaBuilder {

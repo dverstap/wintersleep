@@ -15,13 +15,25 @@
  */
 package org.wintersleep.wicket.hibernate;
 
+import com.google.common.base.Preconditions;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.filter.IFilterStateLocator;
-import org.hibernate.Criteria;
 
-import java.io.Serializable;
+public abstract class AbstractCriteriaFilter<T> implements IFilterStateLocator<T>, CriteriaBuilder {
 
-public interface CriteriaFilterStateLocator<T> extends Serializable, IFilterStateLocator<T> {
+    protected T filterState;
 
-    void build(Criteria criteria);
+    public AbstractCriteriaFilter(T filterState) {
+        Preconditions.checkNotNull(filterState);
+        this.filterState = filterState;
+    }
+
+    public T getFilterState() {
+        return filterState;
+    }
+
+    public void setFilterState(T filterState) {
+        //this.filterState = filterState;
+        throw new UnsupportedOperationException("Because we want to check if this is ever called");
+    }
 
 }

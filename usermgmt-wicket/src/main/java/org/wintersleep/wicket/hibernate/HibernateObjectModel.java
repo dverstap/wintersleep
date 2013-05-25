@@ -15,6 +15,7 @@
  */
 package org.wintersleep.wicket.hibernate;
 
+import org.apache.wicket.core.util.lang.WicketObjects;
 import org.apache.wicket.model.LoadableDetachableModel;
 
 import java.io.Serializable;
@@ -41,11 +42,7 @@ public class HibernateObjectModel<ID extends Serializable, T> extends LoadableDe
     }
 
     private Class<T> getPersistentClass() {
-        try {
-            return (Class<T>) Class.forName(className);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        return WicketObjects.resolveClass(className);
     }
 
     @Override

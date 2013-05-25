@@ -48,9 +48,12 @@ public class User implements Serializable {
     @Autowired
     private transient UserManagementService userManagementService;
 
+
+    // TODO make protected
     public User() {
     }
 
+    // TODO null checks
     public User(String login, String password, String fullName, UserProfile userProfile) {
         this.login = login;
         this.password = password;
